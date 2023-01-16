@@ -18,7 +18,7 @@ There are several different types of routes that can be added to a route table, 
 
 * <b>Transit Gateway route:</b> This route directs all traffic for the VPC or subnet to a Transit Gateway, allowing instances in the VPC or subnet to access multiple VPCs and on-premises networks.
 
-#### It is important to note that the traffic flow to each of these destinations, can be further fine-tuned via CIDR block, IP address or security group filtering
+> It is important to note that the traffic flow to each of these destinations, can be further fine-tuned via CIDR block, IP address or security group filtering
 
 ---
 
@@ -42,7 +42,7 @@ There are several different types of records that can be added to a DNS zone, in
 
 * <b>TXT record (Text record):</b> This record is used to store any text-based information, such as SPF data, DKIM, DMARC, etc.
 
-#### It is important to note that each record type has different attributes and is used for specific purposes, and depending on the DNS provider there can be more record types available.
+> It is important to note that each record type has different attributes and is used for specific purposes, and depending on the DNS provider there can be more record types available.
 
 ---
 
@@ -57,7 +57,7 @@ When a client makes a request for the alias hostname, the DNS server returns the
 * Service migration: By using a CNAME record, you can change the IP address of the server without affecting the hostname.
 * Separation of concerns: By using CNAME records, you can separate the management of the domain names from the management of the IP addresses.
 
-It is important to note that CNAME records must always point to a hostname, never to an IP address. Also, CNAME records can not coexist with any other record types such as A, AAAA, MX, etc. on the same hostname.
+> It is important to note that CNAME records must always point to a hostname, never to an IP address. Also, CNAME records can not coexist with any other record types such as A, AAAA, MX, etc. on the same hostname.
 
 CNAME records also have a few limitations:
 
@@ -65,7 +65,7 @@ CNAME records also have a few limitations:
 * They can not be used with certain services such as email servers (MX records)
 * Some providers or software may have additional limitations
 
-#### CNAME records are used to create an alias for a domain or subdomain, pointing to another domain or subdomain. This allows you to use the same IP address and server resources for multiple domain names. This can be useful in situations such as load balancing, service migration, and separation of concerns.
+> CNAME records are used to create an alias for a domain or subdomain, pointing to another domain or subdomain. This allows you to use the same IP address and server resources for multiple domain names. This can be useful in situations such as load balancing, service migration, and separation of concerns.
 
 ---
 
@@ -93,7 +93,7 @@ ELB can be used in several different ways to balance the load of incoming traffi
 
 * <b>Autoscaling:</b> ELB can be integrated with AWS Auto Scaling, which allows you to automatically scale the number of instances based on the incoming traffic and the performance of your application.
 
-In summary, ELB is an AWS service that allows you to distribute incoming traffic across multiple instances to increase the availability and scalability of your application. It can be used in high-traffic enterprise applications to provide high availability, scalability, security, monitoring, and logging capabilities. Additionally, it can be integrated with other AWS services to provide additional functionality such as autoscaling and security.
+> In summary, ELB is an AWS service that allows you to distribute incoming traffic across multiple instances to increase the availability and scalability of your application. It can be used in high-traffic enterprise applications to provide high availability, scalability, security, monitoring, and logging capabilities. Additionally, it can be integrated with other AWS services to provide additional functionality such as autoscaling and security.
 
 
 
