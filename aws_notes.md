@@ -69,6 +69,31 @@ CNAME records also have a few limitations:
 
 ---
 
+### What is AWS ELB? How does it work in Enterprise applications?
+
+Amazon Web Services (AWS) Elastic Load Balancer (ELB) is a service that automatically distributes incoming traffic across multiple Amazon Elastic Compute Cloud (EC2) instances. It allows you to increase the availability and scalability of your application.
+
+ELB can be used in several different ways to balance the load of incoming traffic:
+
+* <b>Application Load Balancer (ALB):</b> This type of ELB routes incoming traffic based on the content of the request, such as the hostname or the path. It is best suited for routing HTTP and HTTPS traffic.
+
+* <b>Network Load Balancer (NLB):</b> This type of ELB routes incoming traffic based on the IP protocol data, such as the IP address and the port. It is best suited for routing TCP and UDP traffic.
+
+* <b>Classic Load Balancer:</b> This is the original type of ELB and it routes incoming traffic based on either the IP protocol data or the application-level data. It is best suited for routing both HTTP and TCP traffic.
+
+#### ELB can be used in high-traffic enterprise applications in several ways:
+
+* <b>High availability:</b> ELB automatically distributes incoming traffic across multiple instances, which can increase the availability of your application by providing failover capabilities.
+
+* <b>Scalability:</b> ELB can automatically scale the number of instances based on the incoming traffic, which can help to ensure that your application can handle high traffic loads.
+
+* <b>Security:</b> ELB can be integrated with AWS security services such as Amazon Certificate Manager (ACM) and AWS Identity and Access Management (IAM) to provide secure access to your application.
+
+* <b>Monitoring and logging:</b> ELB provides monitoring and logging capabilities, allowing you to track the performance of your application and to troubleshoot issues.
+
+* <b>Autoscaling:</b> ELB can be integrated with AWS Auto Scaling, which allows you to automatically scale the number of instances based on the incoming traffic and the performance of your application.
+
+In summary, ELB is an AWS service that allows you to distribute incoming traffic across multiple instances to increase the availability and scalability of your application. It can be used in high-traffic enterprise applications to provide high availability, scalability, security, monitoring, and logging capabilities. Additionally, it can be integrated with other AWS services to provide additional functionality such as autoscaling and security.
 
 
 
