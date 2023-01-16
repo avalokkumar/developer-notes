@@ -20,7 +20,7 @@ There are several different types of routes that can be added to a route table, 
 
 #### It is important to note that the traffic flow to each of these destinations, can be further fine-tuned via CIDR block, IP address or security group filtering
 
-
+---
 
 ### What are some different types of record that can be added to a DNS Zone?
 
@@ -43,3 +43,33 @@ There are several different types of records that can be added to a DNS zone, in
 * <b>TXT record (Text record):</b> This record is used to store any text-based information, such as SPF data, DKIM, DMARC, etc.
 
 #### It is important to note that each record type has different attributes and is used for specific purposes, and depending on the DNS provider there can be more record types available.
+
+---
+
+### Explain CNAME record.
+
+A CNAME (Canonical Name) record is a type of DNS record that maps an alias hostname to the true or canonical hostname. It is used to resolve a domain name to another domain name, rather than to an IP address.
+
+When a client makes a request for the alias hostname, the DNS server returns the canonical hostname to the client, and the client then makes a request for the canonical hostname. This allows multiple hostnames to point to the same IP address or resource, which can be useful in several ways:
+
+* Redirection of traffic: By using a CNAME record, you can redirect traffic from one hostname to another without having to change the IP address of the server.
+* Load balancing: By using multiple CNAME records, you can distribute traffic across multiple servers for load balancing.
+* Service migration: By using a CNAME record, you can change the IP address of the server without affecting the hostname.
+* Separation of concerns: By using CNAME records, you can separate the management of the domain names from the management of the IP addresses.
+
+It is important to note that CNAME records must always point to a hostname, never to an IP address. Also, CNAME records can not coexist with any other record types such as A, AAAA, MX, etc. on the same hostname.
+
+CNAME records also have a few limitations:
+
+* They can not be used at the root of a domain.
+* They can not be used with certain services such as email servers (MX records)
+* Some providers or software may have additional limitations
+
+#### CNAME records are used to create an alias for a domain or subdomain, pointing to another domain or subdomain. This allows you to use the same IP address and server resources for multiple domain names. This can be useful in situations such as load balancing, service migration, and separation of concerns.
+
+---
+
+
+
+
+
