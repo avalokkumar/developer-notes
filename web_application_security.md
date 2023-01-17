@@ -100,6 +100,52 @@ When the victim clicks on the link and visits the page, the browser will automat
 ?>
 ```
 
+---
 
+### Denial of Service (DoS)
 
+A Denial of Service (DoS) attack is a type of security vulnerability that is designed to make a web application or network resource unavailable to legitimate users. This can be done by overwhelming the resource with a high volume of requests, traffic, or connections, or by exploiting a vulnerability in the resource to cause a crash or malfunction.
 
+There are many different types of DoS attacks, but some common examples include:
+
+1. Distributed Denial of Service (DDoS) attack: This type of attack uses a network of compromised computers, known as a botnet, to generate a high volume of traffic to a targeted web application or network resource. This can be done using a tool such as LOIC (Low Orbit Ion Cannon).
+
+2. SYN flood: This type of attack exploits a vulnerability in the TCP/IP protocol by sending a large number of SYN packets to a targeted web application or network resource, without completing the connection. This can cause the resource to become overwhelmed and unavailable to legitimate users.
+
+3. Application-layer DoS attack: This type of attack targets a specific application or service, such as a web server, by overwhelming it with a high volume of requests or by exploiting a vulnerability in the application.
+
+#### Here is an example of how a simple DoS attack could be implemented using a tool like LOIC:
+</br>`LOIC -target=http://example.com -port=80 -method=POST`
+
+> This command will send a large volume of HTTP POST requests to the targeted website http://example.com on port 80, which can cause the website to become unavailable to legitimate users.
+
+#### Another example, an attacker can perform a SYN flood attack by sending a large number of SYN packets to a targeted web application or network resource using a tool like hping3
+
+`hping3 -S -p 80 --flood example.com`
+
+> This command sends a large number of SYN packets to the targeted website example.com on port 80, which can cause the website to become unavailable to legitimate users.
+
+It's important to note that, DoS attacks are illegal and can cause significant harm to targeted organizations, individuals, or systems. It's also important to keep in mind
+
+---
+### Distributed Denial of Service (DDoS)
+
+A Distributed Denial of Service (DDoS) attack is a type of DoS attack in which a network of compromised computers, known as a botnet, is used to generate a high volume of traffic to a targeted web application or network resource. The goal of a DDoS attack is to overload the targeted resource and make it unavailable to legitimate users.
+
+DDoS attacks are typically launched by sending a large number of requests, traffic, or connections to the targeted resource. This can be done using a variety of techniques, such as HTTP floods, SYN floods, UDP floods, and ICMP floods.
+
+A common example of a DDoS attack is a botnet-based HTTP flood attack. In this attack, the botnet is used to send a large number of HTTP requests to the targeted web application. This can be done using a tool such as LOIC (Low Orbit Ion Cannon).
+
+> Here is an example of how a simple DDoS attack could be implemented using a tool like LOIC:
+
+`LOIC -target=http://example.com -port=80 -method=POST -drones=50`
+
+#### This command will send a large volume of HTTP POST requests to the targeted website http://example.com on port 80, using 50 drones (or compromised computers in the botnet). This can cause the website to become unavailable to legitimate users.
+
+> Another example of DDoS attack is a UDP Flood, an attacker can use a tool such as hping3 to send a large number of UDP packets to the targeted web application or network resource
+
+`hping3 -2 -p 80 -i u10000 example.com`
+
+#### This command sends a large number of UDP packets to the targeted website example.com on port 80, with a packet interval of 10000 microseconds. This can cause the website to become unavailable to legitimate users.
+
+It's important to note that, DDoS attacks can cause significant harm to targeted organizations, individuals, or systems and also it's illegal. To protect against DDoS attacks, organizations can use DDoS mitigation solutions such as using Cloud-based DDoS protection services, using Load balancers, using Firewalls and intrusion detection systems and also regularly monitoring the network for unusual activity.
