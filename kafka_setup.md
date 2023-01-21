@@ -1,3 +1,5 @@
+### Apache Kafka
+
 > Apache Kafka is an open-source streaming platform that is used to build real-time data pipelines and streaming applications. It is a distributed system that runs on a cluster of machines and is designed to handle large volumes of data with low latency. Kafka allows for the storage and processing of streams of records in a fault-tolerant way, and it is often used in big data and real-time data streaming scenarios.
 
 
