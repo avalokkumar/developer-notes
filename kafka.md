@@ -64,7 +64,7 @@ public class KafkaConsumerExample {
 ---
 
 ### Partitioning stream of data in Kafka into Substreams
-
+</br>
 In Kafka, streams of data are represented as topics, and you can split a stream of data into substreams by using the concept of a "topic partition."
 
 > A partition is a unit of parallelism in Kafka, and each partition can be consumed independently by a separate consumer. When you produce a message to a topic, it gets assigned to a partition based on the partitioning strategy. By default, messages are round-robin assigned to partitions.
@@ -82,3 +82,36 @@ On the consumer side, you can use the Kafka Consumer API to read data from speci
 You can also use the Kafka Streams API to split a stream of data into substreams. The Streams API provides a high-level abstraction for working with streams of data, and it allows you to create a topology of stream processors that can be used to filter, transform, and aggregate data.
 
 > It's also worth noting that topic partitioning also allows you to scale out the consumption of data, by allowing multiple consumers to read from a topic in parallel. Each consumer group can read from a specific set of partitions, making it possible to process data in parallel and scale out the number of consumers as needed.
+
+---
+
+### Merging multiple data stream into single stream in Kafka
+</br>
+In Kafka, you can merge multiple streams of data into a single stream by using a technique called "topic merging."
+
+One way to merge multiple streams is to use the Kafka Connect API to create a "sink connector" that reads data from multiple sources and writes it to a single destination topic. A sink connector can be configured to read data from multiple topics and write it to a single topic.
+
+Another way to merge multiple streams is to use the Kafka Streams API. The Streams API provides a high-level abstraction for working with streams of data and it allows you to create a topology of stream processors that can be used to filter, transform, and aggregate data.
+
+You can use the KStream#merge method to combine multiple KStreams into a single KStream. The merge method accepts a variable number of KStreams and returns a new KStream that contains all the records from the input streams.
+
+Here's an example:
+```
+KStream<String, String> stream1 = ...;
+KStream<String, String> stream2 = ...;
+KStream<String, String> mergedStream = stream1.merge(stream2);
+```
+
+This will create a new stream, mergedStream, that contains all the records from both stream1 and stream2.
+
+Alternatively, you can use the KStream#through method to write the output of one stream to another stream.
+
+```
+KStream<String, String> inputStream = ...;
+KStream<String, String> outputStream = ...;
+inputStream.through("output-topic");
+```
+
+This will write the output of inputStream to outputStream
+
+> It's also worth noting that merging streams can be an intensive process, and it can introduce additional complexity to your data pipeline. It's important to understand the requirements of your use case, and to carefully consider the trade-offs between merging streams and maintaining separate streams.
