@@ -81,6 +81,103 @@
 ---
 ### TCP/IP Model: 
 > The Transmission Control Protocol/Internet Protocol (TCP/IP) model is a framework used to describe how data is transmitted over a network. It consists of five layers: Application, Transport, Network, Data Link, and Physical. Data flows from the top layer (Application) to the bottom layer (Physical), passing through each layer and receiving services from each layer along the way.
+
+**An example of how the TCP/IP model works is as follows:**
+
+> A user wants to visit a web page using a web browser. The web browser is at the Application Layer and sends a request to the Transport Layer using the HTTP protocol. The Transport Layer then uses the TCP protocol to ensure reliable delivery of the data to the Network Layer. The Network Layer uses the IP protocol to address and deliver the data packets to the correct network. The Link Layer then physically transmits the data over the network using a protocol such as Ethernet.
+
+The TCP/IP (Transmission Control Protocol/Internet Protocol) model is a set of protocols and standards that define how data is transmitted over the internet. It is the foundation of the internet and provides the underlying communication infrastructure for all internet applications.
+
+#### The TCP/IP model is divided into four layers:
+
+1. **Application Layer:** This is the topmost layer of the TCP/IP model, and it provides services and protocols that are used by applications. Examples of protocols at this layer include HTTP (Hypertext Transfer Protocol), FTP (File Transfer Protocol), and SMTP (Simple Mail Transfer Protocol).
+
+* > The Application Layer is the topmost layer of the TCP/IP Model and is responsible for enabling end-user applications to access network services and resources. It provides the necessary protocols and services to enable users to access network resources, such as file servers, web servers, email servers, and other network-based applications.
+
+* > The Application Layer provides the interface between the end-user applications and the underlying network infrastructure. It is responsible for managing the communication between applications and the transport layer, which is responsible for delivering data over the network.
+
+**Examples of protocols and services that operate at the Application Layer include:**
+
+* - HTTP (Hypertext Transfer Protocol): Used for transmitting data over the World Wide Web. This protocol is used by web browsers to communicate with web servers to request and receive web pages.
+
+* - FTP (File Transfer Protocol): Used for transferring files over the Internet. This protocol enables users to upload and download files from a remote server.
+
+* - SMTP (Simple Mail Transfer Protocol): Used for sending and receiving email messages. This protocol enables email clients to send and receive messages from email servers.
+
+* - DNS (Domain Name System): Used for translating domain names into IP addresses. This protocol enables users to access network resources using human-readable domain names, rather than IP addresses.
+
+* - Telnet: Used for remote terminal emulation. This protocol enables users to access and control remote computers as if they were physically connected to the computer.
+
+
+2. **Transport Layer:** This layer provides the reliable delivery of data between applications running on different hosts. The two main protocols at this layer are TCP (Transmission Control Protocol) and UDP (User Datagram Protocol). TCP provides reliable, ordered delivery of data, while UDP provides fast, unreliable delivery of data.
+
+> The Transport Layer is the fourth layer of the TCP/IP Model, and is responsible for providing reliable, end-to-end delivery of data between applications running on different devices. The Transport Layer is responsible for managing the communication between the Application Layer and the Network Layer, which is responsible for delivering data over the network.
+
+> The Transport Layer provides the necessary protocols and services to ensure that data is delivered reliably and in order between devices. It is responsible for splitting data into smaller units called segments, reassembling the segments into the original data at the destination, and ensuring that all segments are delivered correctly. The Transport Layer is also responsible for flow control, which ensures that data is transmitted at a rate that the receiving device can handle.
+
+**Examples of protocols that operate at the Transport Layer include:** 
+
+* - TCP (Transmission Control Protocol): This protocol provides reliable, ordered delivery of data over the network. It is used by applications that require reliable delivery of data, such as email, file transfers, and web browsing.
+* - Examples:
+* - - HTTP (Hypertext Transfer Protocol) uses TCP to provide a reliable and ordered delivery of web pages from a server to a client.
+* - - FTP (File Transfer Protocol) uses TCP to provide reliable and ordered delivery of files between a client and a server.
+
+* - UDP (User Datagram Protocol): This protocol provides an unreliable, connectionless delivery of data over the network. It is used by applications that do not require reliable delivery of data, such as streaming media and online gaming.
+* - Examples:
+* - - DNS (Domain Name System) uses UDP to provide fast and efficient resolution of domain names to IP addresses.
+* - - Streaming media applications, such as video and audio streaming, use UDP to provide fast and efficient delivery of multimedia data over the network.
+* - - Online gaming applications use UDP to provide low-latency communication between gaming clients and servers.
+
+3. **Network Layer:** This layer provides routing and forwarding of data between networks. The main protocol at this layer is IP (Internet Protocol), which provides the addressing and delivery of data packets between networks.
+
+> The Network Layer is the third layer of the TCP/IP Model, and is responsible for routing data over a network and managing the logical addressing of devices. The Network Layer is responsible for delivering data from one device to another device over the network, and ensuring that data is delivered to the correct destination device.
+
+> The Network Layer provides the necessary protocols and services to ensure that data is routed correctly and efficiently over the network. It is responsible for logical addressing of devices, known as IP addressing, and uses routing tables and algorithms to determine the best path for data to take over the network. The Network Layer also provides error handling, flow control, and congestion control to ensure that data is transmitted effectively over the network.
+
+**Examples of protocols that operate at the Network Layer include:**
+
+* - IP (Internet Protocol): This protocol provides the basic services for routing data over a network and managing the logical addressing of devices. IP provides the services necessary to ensure that data is delivered to the correct destination device and provides error handling, flow control, and congestion control.
+
+* - ICMP (Internet Control Message Protocol): This protocol is used to manage network error conditions and provides information about network conditions to other devices.
+
+* - ARP (Address Resolution Protocol): This protocol is used to map an IP address to a physical address, such as a MAC address.
+
+* - Examples:
+
+* - 1. A user wants to access a website on the Internet.
+
+* - 2. The user's device, such as a computer or smartphone, sends a request to access the website using the Application Layer protocol, such as HTTP.
+
+* - 3. The request is passed down to the Transport Layer, which provides the necessary services, such as flow control and error handling, to ensure that the request is transmitted over the network.
+
+* - 4. The Transport Layer passes the request down to the Network Layer, which uses the IP protocol to determine the best path for the request to take over the network. The Network Layer uses routing tables and algorithms to determine the best path for the request to take, and uses logical addressing (IP addressing) to ensure that the request is delivered to the correct destination device.
+
+* - 5. The Network Layer passes the request to the Data Link Layer, which provides the necessary services to ensure that the request is transmitted over the physical network. The Data Link Layer uses physical addressing (MAC addresses) to ensure that the request is delivered to the correct device on the network.
+
+* - 6. The request is transmitted over the network, and reaches the destination device, which is the web server hosting the website.
+
+* - 7. The web server responds to the request, and the response is transmitted back to the user's device, following the same steps as described above, but in reverse order.
+
+* - > This example shows how the Network Layer works in conjunction with the other layers of the TCP/IP Model to provide end-to-end communication between devices over a network. The Network Layer provides the necessary services to ensure that data is routed correctly and efficiently over the network, and provides error handling, flow control, and congestion control to ensure that data is transmitted effectively over the network.
+
+4. **Data Link Layer:** This is the bottommost layer of the TCP/IP model, and it provides the physical transmission of data over a network. Examples of protocols at this layer include Ethernet, Wi-Fi, and ATM (Asynchronous Transfer Mode).
+
+The Data Link Layer is the second layer of the OSI (Open Systems Interconnection) model, and it is responsible for providing reliable delivery of data over the physical network. It provides the necessary services to ensure that data is transmitted over the physical network, and that the data is received by the intended recipient.
+
+**The Data Link Layer is responsible for:**
+
+* - - Framing: The Data Link Layer divides the data received from the Network Layer into smaller units called frames, which are then transmitted over the physical network. The Data Link Layer ensures that each frame is properly formatted and contains the necessary information to ensure reliable delivery over the network.
+
+* - - Error detection and correction: The Data Link Layer provides error detection and correction mechanisms to ensure that the data is transmitted accurately over the network. This includes mechanisms such as checksums, parity bits, and cyclic redundancy checks (CRC).
+
+* - - Flow control: The Data Link Layer provides flow control mechanisms to ensure that the data is transmitted over the network at a rate that the recipient can handle. This is important to prevent the sender from overwhelming the recipient with too much data, causing lost or corrupted data.
+
+* - - Access control: The Data Link Layer provides access control mechanisms to ensure that only one device can transmit data over the network at any given time. This is important to prevent data collisions, which can cause lost or corrupted data.
+
+* - - Physical addressing: The Data Link Layer provides physical addressing, which is used to identify the devices on the network. The most commonly used physical addressing scheme is Media Access Control (MAC) addressing, which is a unique identifier assigned to each device on the network.
+
+* - > Examples of Data Link Layer technologies include Ethernet, Wi-Fi, and token ring. Each of these technologies provides the necessary services to ensure that data is transmitted accurately and reliably over the physical network.
+
 ---
 ### DNS: 
 > The Domain Name System (DNS) is a hierarchical distributed naming system used to translate domain names into IP addresses. When a user types a URL into a web browser, the browser sends a request to a DNS server to translate the domain name into an IP address. This IP address is then used to communicate with the server hosting the website.
