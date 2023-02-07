@@ -180,7 +180,66 @@ The Data Link Layer is the second layer of the OSI (Open Systems Interconnection
 
 ---
 ### DNS: 
-> The Domain Name System (DNS) is a hierarchical distributed naming system used to translate domain names into IP addresses. When a user types a URL into a web browser, the browser sends a request to a DNS server to translate the domain name into an IP address. This IP address is then used to communicate with the server hosting the website.
+
+#### The Domain Name System (DNS) is a hierarchical and decentralized naming system for computers, services, or any resource connected to the Internet or a private network. It translates human-readable domain names into numerical IP addresses, allowing computers to communicate with each other over the Internet.
+
+> The basic concept of the DNS is to store information about domain names and their associated IP addresses in a centralized database that can be queried by users and other systems to translate domain names into IP addresses. This eliminates the need for users to remember complex numerical IP addresses, and instead, they can use easy-to-remember domain names.
+
+A typical DNS resolution process works as follows:
+
+1. A user types a domain name into a web browser.
+
+2. The browser contacts the local DNS resolver, which is usually provided by the user's Internet Service Provider (ISP).
+
+3. The DNS resolver starts the process of resolving the domain name to an IP address.
+
+4. The DNS resolver first checks its local cache to see if the domain name to IP address mapping has been stored previously.
+
+5. If the information is not in the cache, the DNS resolver queries the root nameserver to find the top-level domain (TLD) name server associated with the domain name.
+
+6. The TLD nameserver returns the IP address of the authoritative nameserver for the domain.
+
+7. The DNS resolver queries the authoritative nameserver to get the IP address associated with the domain name.
+
+8. The authoritative nameserver returns the IP address to the DNS resolver.
+
+9. The DNS resolver stores the domain name to IP address mapping in its cache for a specified period of time.
+
+10. The DNS resolver returns the IP address to the browser, which can now establish a connection with the server at that IP address to retrieve the requested information.
+
+> DNS has a hierarchical structure, with multiple levels of domain names and nameservers. This structure allows for a scalable and distributed system that can handle billions of domain name to IP address mappings.
+
+> In addition to domain name resolution, DNS can also provide other services, such as email routing, load balancing, and security features, such as DNSSEC (Domain Name System Security Extensions).
+
+
+#### An example of using DNS:
+
+* A user types "www.google.com" into a web browser.
+
+* The browser contacts the local DNS resolver, which is provided by the user's ISP.
+
+* The DNS resolver starts the process of resolving the domain name to an IP address.
+
+* The DNS resolver first checks its cache and finds that it doesn't have the IP address for "www.google.com".
+
+* The DNS resolver queries the root nameserver and finds the TLD nameserver for ".com" domains.
+
+* The TLD nameserver returns the IP address of the authoritative nameserver for "google.com".
+
+* The DNS resolver queries the authoritative nameserver for "google.com" and finds the IP address for "www.google.com".
+
+* The authoritative nameserver returns the IP address of "www.google.com" to the DNS resolver.
+
+* The DNS resolver stores the domain name to IP address mapping in its cache.
+
+* The DNS resolver returns the IP address of "www.google.com" to the browser.
+
+* The browser uses the IP address to establish a connection with the server at "www.google.com" and retrieve the requested information.
+
+> So, in this example, the user wanted to access the website "www.google.com" but instead of typing the numerical IP address, they were able to use the human-readable domain name. The DNS system resolved the domain name to an IP address and provided it to the browser, allowing the browser to establish a connection with the server and retrieve the requested information.
+
+
+
 ---
 ### Routing: 
 > Routing is the process of forwarding data from one network to another. Routing is accomplished using routing protocols and routing tables, which determine the best path for data to take based on network conditions. The goal of routing is to find the most efficient path for data to travel from its source to its destination.
