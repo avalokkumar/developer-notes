@@ -243,6 +243,51 @@ A typical DNS resolution process works as follows:
 ---
 ### Routing: 
 > Routing is the process of forwarding data from one network to another. Routing is accomplished using routing protocols and routing tables, which determine the best path for data to take based on network conditions. The goal of routing is to find the most efficient path for data to travel from its source to its destination.
+
+Here's an example of how routing works:
+
+* A data packet is generated on a host computer and needs to be sent to another host computer on a different network.
+
+* The data packet is passed to the local router, which acts as the gateway between the local network and the larger network.
+
+* The router checks its routing table to determine the best path for the data packet to take.
+
+* The routing table lists the available paths to reach the destination network and the metrics used to determine the best path, such as the hop count, delay, and bandwidth.
+
+* Based on the information in the routing table, the router forwards the data packet to the next hop along the best path.
+
+* Each hop along the way updates the routing information in the data packet's header, which is used by the next hop to make its routing decision.
+
+* The data packet continues to be forwarded from one hop to the next until it reaches its destination network.
+
+* The final router in the destination network passes the data packet to the host computer.
+
+> In this example, the routing process was responsible for finding the best path for the data packet to take and forwarding it along that path to its destination. The routing table and the routers themselves play crucial roles in this process, as they determine the path the data packet takes and make sure it reaches its destination.
+
+
+#### The components of routing can be divided into two categories: hardware components and software components.
+
+#### Hardware Components:
+
+* **Routers:** Physical devices that interconnect networks and forward data packets based on their IP addresses. Routers have routing tables that store information about the best path for data to take.
+
+* **Switches:** Devices that connect multiple devices on a local network and forward data based on the devices' MAC addresses. Switches can also act as routers if they have routing capabilities.
+
+* **WAN (Wide Area Network) links:** Physical connections between routers that allow them to communicate and exchange routing information. Examples of WAN links include leased lines, satellite links, and microwave links.
+
+#### Software Components:
+
+* **Routing protocols:** Protocols that define the methods by which routers communicate with each other and exchange routing information. Examples of routing protocols include OSPF, BGP, and EIGRP.
+
+* **Routing algorithms:** Algorithms that determine the best path for data to take based on specific criteria, such as the shortest path or the path with the most bandwidth. Examples of routing algorithms include Dijkstra's Algorithm and Bellman-Ford Algorithm.
+
+* **Routing tables:** Tables that store information about the best path for data to take based on the information received from routing protocols and algorithms.
+
+* **Forwarding tables:** Tables that store information about the next hop for data packets based on their IP addresses.
+
+> These are the main components of routing. A comprehensive routing system typically involves the interaction of multiple hardware and software components to ensure the efficient and effective forwarding of data packets from one network to another.
+
+
 ---
 ### Network protocols: 
 > Network protocols are standard rules for transmitting data over a network. Examples of common network protocols include HTTP (Hypertext Transfer Protocol), HTTPS (Hypertext Transfer Protocol Secure), FTP (File Transfer Protocol), SMTP (Simple Mail Transfer Protocol), TCP (Transmission Control Protocol), and UDP (User Datagram Protocol). Each protocol specifies how data should be formatted, transmitted, and processed at each end of the communication.
