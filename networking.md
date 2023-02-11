@@ -291,6 +291,23 @@ Here's an example of how routing works:
 ---
 ### Network protocols: 
 > Network protocols are standard rules for transmitting data over a network. Examples of common network protocols include HTTP (Hypertext Transfer Protocol), HTTPS (Hypertext Transfer Protocol Secure), FTP (File Transfer Protocol), SMTP (Simple Mail Transfer Protocol), TCP (Transmission Control Protocol), and UDP (User Datagram Protocol). Each protocol specifies how data should be formatted, transmitted, and processed at each end of the communication.
+
+There are many different types of network protocols, but some of the most important ones are:
+
+1. TCP (Transmission Control Protocol): This is a transport layer protocol that is responsible for ensuring reliable and ordered delivery of data packets between devices. TCP uses flow control and error-checking mechanisms to ensure data is transmitted accurately.
+
+2. IP (Internet Protocol): This is a network layer protocol that is responsible for routing data packets from one device to another based on their IP addresses. IP is the fundamental protocol that enables communication between devices on the internet.
+
+3. HTTP (HyperText Transfer Protocol): This is an application layer protocol that is used for transmitting web pages and other types of data over the internet. HTTP is a stateless protocol, which means that each request is treated as an isolated transaction.
+
+4. FTP (File Transfer Protocol): This is an application layer protocol that is used for transferring files between devices over a network. FTP uses two channels, a control channel and a data channel, to transfer files.
+
+5. SMTP (Simple Mail Transfer Protocol): This is an application layer protocol that is used for transmitting email over the internet. SMTP is used to send email messages from one email server to another.
+
+6. DHCP (Dynamic Host Configuration Protocol): This is an application layer protocol that is used to automatically assign IP addresses to devices on a network. DHCP eliminates the need for manual IP address configuration.
+
+7. DNS (Domain Name System): This is an application layer protocol that is used to translate domain names into IP addresses. DNS is essential for internet communication as it allows users to access websites and other internet resources using human-readable names instead of IP addresses.
+
 ---
 ### Network Security: 
 > Network security is the practice of protecting a computer network from unauthorized access, theft, and damage. Common security threats include viruses, malware, and hackers. To protect networks, various technologies are used, such as firewalls, encryption, and virtual private networks (VPNs).
