@@ -24,7 +24,7 @@ We can define a gRPC service to provide this information, with a single method t
 
 **Proto File for the Service:**
 
-```
+```proto
 syntax = "proto3";
 
 service WeatherService {
@@ -48,7 +48,7 @@ message WeatherConditions {
 
 **Server Side Implementation:**
 
-```
+```java
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
@@ -115,7 +115,7 @@ public class WeatherServer {
 
 **Client Side Implementation:**
 
-```
+```java
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
@@ -211,11 +211,11 @@ Finally, we call the shutdown method to gracefully shutdown the client.
 
 ### The basic components of gRPC are:
 
-* Protocol Buffers: gRPC uses Protocol Buffers (also known as protobufs) as the data serialization format for transmitting data between the client and the server. Protobufs are a compact binary format that are easy to serialize and deserialize and are highly efficient in terms of bandwidth and CPU utilization.
+* **Protocol Buffers:** gRPC uses Protocol Buffers (also known as protobufs) as the data serialization format for transmitting data between the client and the server. Protobufs are a compact binary format that are easy to serialize and deserialize and are highly efficient in terms of bandwidth and CPU utilization.
 
 > To use protobufs in gRPC, you first define a service and its methods in a .proto file. The .proto file specifies the data structures used for the request and response messages and the service interface. Here is a simple example of a .proto file that defines a weather service:
 
-```
+```proto
 syntax = "proto3";
 
 service WeatherService {
@@ -242,12 +242,149 @@ When a client sends a request to the server, the client-side stub serializes the
 > Protobufs provide a number of benefits over other data serialization formats, such as JSON or XML. For example, protobufs are more efficient in terms of bandwidth and CPU utilization, as they are compact binary formats that are easy to serialize and deserialize. Additionally, protobufs provide a type-safe mechanism for defining the data structures used in the request and response messages, making it easier to catch errors and ensure compatibility between the client and the server.
 
 
-* Service Definitions: gRPC defines the service interfaces and methods using a .proto file. The .proto file is used to generate the necessary code for both the client and the server, allowing for type-safe communication between the two.
+* **Service Definitions**: gRPC defines the service interfaces and methods using a .proto file. The .proto file is used to generate the necessary code for both the client and the server, allowing for type-safe communication between the two.
 
-* Stub: The client-side stub is responsible for sending requests to the server and receiving responses. The stub is generated from the service definition in the .proto file and is used by the client to invoke the remote methods.
+> Service Definitions in gRPC are a way to describe the structure and behavior of a gRPC service. They define the types of requests and responses that can be made to a gRPC service, as well as the operations that the service supports. Service definitions are typically written in Protocol Buffers, which is a compact binary format for data serialization.
 
-* Server: The server is responsible for handling incoming requests from clients and sending responses back to the clients. The server is also generated from the service definition in the .proto file and implements the service interface defined in the .proto file.
+Here's a simple example of a gRPC service definition in Protocol Buffers:
 
-* Channel: The channel is the underlying communication mechanism that allows the client and server to communicate with each other. The channel is responsible for establishing and maintaining the connection between the client and the server, as well as for transmitting data between the two.
+```proto
+syntax = "proto3";
 
-* Load Balancer: The load balancer is used to distribute incoming client requests across multiple servers in order to improve the performance and scalability of the system. The load balancer can be implemented using various load balancing algorithms, such as round-robin, least connections, and random selection.
+service GreetingService {
+  rpc SayHello (HelloRequest) returns (HelloResponse) {}
+}
+
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloResponse {
+  string message = 1;
+}
+
+```
+In this example, we have defined a gRPC service called GreetingService, which has a single operation called SayHello. The SayHello operation takes a HelloRequest message as its input and returns a HelloResponse message as its output.
+
+The HelloRequest message has a single field, name, which is a string. The HelloResponse message has a single field, message, which is also a string.
+
+Once you have defined your gRPC service definition in Protocol Buffers, you can use gRPC tools to generate client and server code in your desired programming language. This makes it easy to implement a gRPC service and to create client applications that can interact with the service
+
+
+* **Stub:** The client-side stub is responsible for sending requests to the server and receiving responses. The stub is generated from the service definition in the .proto file and is used by the client to invoke the remote methods.
+
+> Stubs in gRPC refer to client-side objects that allow you to interact with a gRPC service. Stubs provide a high-level API for making remote procedure calls to the service, and handle the low-level details such as message serialization and network communication.
+
+```java
+GreetingServiceGrpc.GreetingServiceBlockingStub blockingStub = 
+  GreetingServiceGrpc.newBlockingStub(channel);
+
+HelloRequest request = HelloRequest.newBuilder().setName("John").build();
+HelloResponse response = blockingStub.sayHello(request);
+System.out.println("Response: " + response.getMessage());
+```
+
+In this example, we first create an instance of a blocking stub for the GreetingService gRPC service. We then create a HelloRequest message and use the stub to make a remote procedure call to the sayHello operation on the service. The call blocks until it receives a response, which is stored in the HelloResponse message.
+
+Stubs in gRPC can be either blocking or non-blocking. Blocking stubs are designed for simple, synchronous communication patterns, where the client waits for a response from the server before continuing. Non-blocking stubs allow for asynchronous communication, where the client can continue processing while waiting for a response from the server.
+
+* **Server:** The server is responsible for handling incoming requests from clients and sending responses back to the clients. The server is also generated from the service definition in the .proto file and implements the service interface defined in the .proto file.
+
+> A gRPC server is the counterpart of a gRPC client. It is responsible for exposing a set of services that can be accessed remotely by clients over a network. The server listens for incoming requests, decodes them, and executes the corresponding service method. Once the service method has been executed, the server serializes the response and sends it back to the client.
+
+Here's an example of a gRPC server in Java:
+
+```java
+public class GreetingServer {
+  public static void main(String[] args) throws IOException, InterruptedException {
+    Server server = ServerBuilder.forPort(50051)
+      .addService(new GreetingServiceImpl())
+      .build();
+
+    server.start();
+
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      System.out.println("Received shutdown request");
+      server.shutdown();
+      System.out.println("Successfully stopped the server");
+    }));
+
+    server.awaitTermination();
+  }
+}
+
+class GreetingServiceImpl extends GreetingServiceGrpc.GreetingServiceImplBase {
+  @Override
+  public void sayHello(HelloRequest request, StreamObserver<HelloResponse> responseObserver) {
+    HelloResponse response = HelloResponse.newBuilder()
+      .setMessage("Hello " + request.getName())
+      .build();
+
+    responseObserver.onNext(response);
+    responseObserver.onCompleted();
+  }
+}
+```
+
+> In this example, we create an instance of a gRPC server using the ServerBuilder class. We specify the port that the server should listen on, and add the GreetingServiceImpl service implementation to the server. We then start the server and add a shutdown hook to cleanly stop the server when it receives a shutdown request. Finally, we call awaitTermination to block the main thread until the server has been stopped.
+
+The `GreetingServiceImpl` class extends the auto-generated `GreetingServiceGrpc.GreetingServiceImplBase` class and implements the `sayHello` method. This method takes in a `HelloRequest` message and a StreamObserver of `HelloResponse` messages. It creates a `HelloResponse` message and sends it to the client using the `onNext` and `onCompleted` methods on the StreamObserver.
+
+
+* **Channel:** The channel is the underlying communication mechanism that allows the client and server to communicate with each other. The channel is responsible for establishing and maintaining the connection between the client and the server, as well as for transmitting data between the two.
+
+> In gRPC, a channel is a virtual connection between a client and a server. A channel is used to send and receive messages between a client and a server. Channels are created on the client side, and are used to initiate calls to services exposed by the server. Channels provide an abstract layer on top of the underlying transport protocol, such as TCP or UDP, allowing the client and server to communicate in a reliable and efficient manner.
+
+Here's an example of creating a gRPC channel in Java:
+
+```java
+ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50051)
+  .usePlaintext()
+  .build();
+
+GreetingServiceGrpc.GreetingServiceBlockingStub blockingStub = GreetingServiceGrpc.newBlockingStub(channel);
+
+HelloRequest request = HelloRequest.newBuilder()
+  .setName("John")
+  .build();
+
+HelloResponse response = blockingStub.sayHello(request);
+
+System.out.println(response.getMessage());
+
+channel.shutdown();
+```
+
+> In this example, we create a gRPC channel using the ManagedChannelBuilder class. We specify the address and port of the server we want to connect to. The usePlaintext method indicates that we want to use plaintext communication, and not an encrypted transport protocol. Once the channel is created, we use it to create a blocking stub for the GreetingService. We then create a HelloRequest message and send it to the server using the sayHello method on the blocking stub. The response from the server is then printed to the console. Finally, we shut down the channel when we're done with it.
+
+
+* **Load Balancer:** The load balancer is used to distribute incoming client requests across multiple servers in order to improve the performance and scalability of the system. The load balancer can be implemented using various load balancing algorithms, such as round-robin, least connections, and random selection.
+
+> In gRPC, a load balancer is a component that distributes incoming requests to multiple instances of a server in a manner that ensures high availability and performance. A load balancer can be used to balance incoming requests across multiple instances of a server, providing redundancy and improved performance.
+
+gRPC provides built-in support for load balancing using the Name Resolver component. The Name Resolver component is responsible for discovering the address of the server instances and returning them to the client. The client can then use the addresses returned by the Name Resolver to create channels to the server instances, and send requests to them.
+
+There are two types of load balancing supported by gRPC: round-robin and pick first. Round-robin load balancing distributes incoming requests to the server instances in a round-robin manner, while pick first load balancing selects the first available instance and sends all requests to it.
+
+Here's an example of using round-robin load balancing in Java:
+
+```java
+ManagedChannel channel = ManagedChannelBuilder.forTarget("dns:///localhost:50051")
+  .usePlaintext()
+  .build();
+
+GreetingServiceGrpc.GreetingServiceBlockingStub blockingStub = GreetingServiceGrpc.newBlockingStub(channel);
+
+HelloRequest request = HelloRequest.newBuilder()
+  .setName("John")
+  .build();
+
+HelloResponse response = blockingStub.sayHello(request);
+
+System.out.println(response.getMessage());
+
+channel.shutdown();
+```
+
+
+> In this example, we create a gRPC channel using the ManagedChannelBuilder class. We specify the target as dns:///localhost:50051, which tells gRPC to use the Name Resolver component to resolve the server address. The usePlaintext method indicates that we want to use plaintext communication, and not an encrypted transport protocol. Once the channel is created, we use it to create a blocking stub for the GreetingService. We then create a HelloRequest message and send it to the server using the sayHello method on the blocking stub. The response from the server is then printed to the console. Finally, we shut down the channel when we're done with it.
