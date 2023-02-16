@@ -54,6 +54,27 @@ Enter your name: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
 In the above example, the long input overwrites the return address on the stack with the address of the attacker's shellcode. When the vulnerable function returns, it jumps to the address of the shellcode and executes it. This allows the attacker to gain control of the program and potentially execute arbitrary code with the privileges of the compromised process.
 
+#### Example: 2
+
+```java
+public class BufferOverflow {
+  public static void main(String[] args) {
+    String input = args[0];
+    byte[] buffer = new byte[10];
+    for (int i = 0; i < input.length(); i++) {
+      buffer[i] = (byte) input.charAt(i);
+    }
+    // ...
+  }
+}
+
+```
+This program takes a single command-line argument and copies it into a fixed-size buffer of 10 bytes. If the input string is longer than 10 bytes, the program will try to write beyond the bounds of the buffer, leading to a buffer overflow.
+
+> To exploit this vulnerability, an attacker would need to pass a command-line argument that is longer than 10 bytes, and contains executable code that the attacker wants to run. The code could be a shellcode that launches a command shell, downloads and executes a remote malware, or performs any other arbitrary action.
+
+> To prevent buffer overflow attacks in Java, developers should follow secure coding practices, such as avoiding fixed-size buffers, validating user input, using array bounds checking, and using security tools like static analyzers and vulnerability scanners.
+
 ---
 * **SQL injection:** SQL injection is a type of vulnerability that occurs when a web application fails to properly validate user input, allowing attackers to inject malicious SQL statements into the application's database. This can allow an attacker to access sensitive data, modify data, or execute arbitrary commands.
 ---
