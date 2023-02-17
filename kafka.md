@@ -1,6 +1,6 @@
 ### Kafka Producer
 
-```
+```java
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -29,7 +29,7 @@ public class KafkaProducerExample {
 
 ### Kafka Consumer
 
-```
+```java
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -96,7 +96,7 @@ Another way to merge multiple streams is to use the Kafka Streams API. The Strea
 You can use the KStream#merge method to combine multiple KStreams into a single KStream. The merge method accepts a variable number of KStreams and returns a new KStream that contains all the records from the input streams.
 
 Here's an example:
-```
+```java
 KStream<String, String> stream1 = ...;
 KStream<String, String> stream2 = ...;
 KStream<String, String> mergedStream = stream1.merge(stream2);
@@ -106,7 +106,7 @@ This will create a new stream, mergedStream, that contains all the records from 
 
 Alternatively, you can use the KStream#through method to write the output of one stream to another stream.
 
-```
+```java
 KStream<String, String> inputStream = ...;
 KStream<String, String> outputStream = ...;
 inputStream.through("output-topic");
