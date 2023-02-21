@@ -294,7 +294,89 @@ Here's an example of how routing works:
 
 There are many different types of network protocols, but some of the most important ones are:
 
-1. TCP (Transmission Control Protocol): This is a transport layer protocol that is responsible for ensuring reliable and ordered delivery of data packets between devices. TCP uses flow control and error-checking mechanisms to ensure data is transmitted accurately.
+1. TCP (Transmission Control Protocol): This is a transport layer protocol that is responsible for ensuring reliable and ordered delivery of data packets between devices. TCP uses flow control and error-checking mechanisms to ensure data is transmitted accurately. TCP is a connection-oriented protocol, which means that before data can be transmitted, a connection must be established between the sending and receiving devices.
+
+#### When a connection is established, TCP uses a three-way handshake to synchronize the sending and receiving devices. The three-way handshake involves the following steps:
+
+> The TCP three-way handshake is the process by which two devices establish a TCP connection. The three steps in this process are:
+
+* SYN: The first device sends a SYN (synchronize) packet to the second device. The SYN packet includes a random sequence number that is used to help ensure the reliability of the connection.
+
+* SYN-ACK: The second device receives the SYN packet and responds with a SYN-ACK (synchronize-acknowledge) packet. The SYN-ACK packet includes an acknowledgment number that is equal to the SYN sequence number plus one, indicating that the second device has received the first device's SYN packet.
+
+* ACK: The first device receives the SYN-ACK packet and sends an ACK (acknowledge) packet back to the second device. The ACK packet includes an acknowledgment number that is equal to the second device's SYN sequence number plus one, indicating that the first device has received the second device's SYN-ACK packet.
+
+Once the three-way handshake is complete, the two devices are said to be "connected" and can begin to exchange data.
+
+> Let's look at an example of the three-way handshake in action. Suppose that Device A wants to establish a TCP connection with Device B. The process would look like this:
+
+* Device A sends a SYN packet to Device B. The SYN packet includes a random sequence number, let's say 100.
+
+* Device B receives the SYN packet and responds with a SYN-ACK packet. The SYN-ACK packet includes an acknowledgment number of 101 (100 + 1), indicating that Device B has received the SYN packet from Device A.
+
+* Device A receives the SYN-ACK packet and sends an ACK packet back to Device B. The ACK packet includes an acknowledgment number of 101 (101 + 1), indicating that Device A has received the SYN-ACK packet from Device B.
+
+At this point, the three-way handshake is complete, and Devices A and B are connected. They can now begin to exchange data over the TCP connection.
+
+The TCP three-way handshake is an essential part of the TCP protocol and is used whenever two devices need to establish a connection. It helps to ensure that data is transmitted reliably and accurately between the devices.
+
+
+#### Once the connection is established, data can be transmitted between the devices. TCP uses a sliding window protocol to ensure that data is transmitted in order and without errors. This protocol involves the following steps:
+
+> The TCP sliding window protocol is a technique used to optimize the performance of TCP transmission by allowing multiple packets to be sent before waiting for acknowledgment. The idea behind this protocol is to reduce the delay in the transmission of data by allowing the sender to send a batch of packets before waiting for an acknowledgment from the receiver.
+
+The sender maintains a window of packets that it can send before waiting for an acknowledgment from the receiver. The size of the window is determined by the receiver and can be dynamically adjusted during the transmission of data. When the sender sends a packet, it removes the packet from the window and adds a new packet to the window. The receiver acknowledges the receipt of packets in the window and sends an acknowledgment message to the sender, indicating the next packet it expects to receive.
+
+Let's look at an example to understand how the TCP sliding window protocol works. Suppose that Device A wants to send a file to Device B, and the window size is set to 3 packets.
+
+* 1. Device A sends the first three packets to Device B, packets 1, 2, and 3.
+
+* 2. Device B receives the first three packets and sends an acknowledgment message to Device A, indicating that it has received packets 1, 2, and 3.
+
+* 3. Device A receives the acknowledgment message from Device B and sends the next three packets, packets 4, 5, and 6.
+
+* 4. Device B receives the next three packets and sends an acknowledgment message to Device A, indicating that it has received packets 4, 5, and 6.
+
+* 5. Device A receives the acknowledgment message from Device B and sends the next three packets, packets 7, 8, and 9.
+
+* 6. Device B receives the next three packets and sends an acknowledgment message to Device A, indicating that it has received packets 7, 8, and 9.
+
+This process continues until all packets have been transmitted and acknowledged.
+
+The TCP sliding window protocol helps to optimize the performance of TCP transmission by reducing the delay in the transmission of data. It allows the sender to send a batch of packets before waiting for an acknowledgment from the receiver, which can help to improve the overall efficiency of the transmission.
+
+
+> **Example**
+
+```java
+// Sender side
+private static final int WINDOW_SIZE = 3;
+
+public void sendPackets(Socket socket, byte[][] packets) throws IOException {
+    int nextPacketIndex = 0;
+    while (nextPacketIndex < packets.length) {
+        // Send packets within the window
+        for (int i = nextPacketIndex; i < Math.min(nextPacketIndex + WINDOW_SIZE, packets.length); i++) {
+            OutputStream outputStream = socket.getOutputStream();
+            outputStream.write(packets[i]);
+        }
+        
+        // Receive acknowledgements
+        InputStream inputStream = socket.getInputStream();
+        byte[] ackBytes = new byte[1];
+        int numAcksReceived = 0;
+        while (numAcksReceived < WINDOW_SIZE) {
+            inputStream.read(ackBytes);
+            if (ackBytes[0] == 1) {
+                numAcksReceived++;
+                nextPacketIndex++;
+            }
+        }
+    }
+}
+```
+> In this example, sendPackets method takes a Socket object and an array of packets as input. The method sends the packets in the window size (which is 3 in this case) and waits for acknowledgements from the receiver. The acknowledgements are 1-byte messages that indicate whether the corresponding packet has been received successfully or not. Once all packets in the window have been acknowledged, the sender slides the window forward and sends the next set of packets. This process continues until all packets have been sent and acknowledged.
+
 
 2. IP (Internet Protocol): This is a network layer protocol that is responsible for routing data packets from one device to another based on their IP addresses. IP is the fundamental protocol that enables communication between devices on the internet.
 
