@@ -380,6 +380,90 @@ public void sendPackets(Socket socket, byte[][] packets) throws IOException {
 
 2. IP (Internet Protocol): This is a network layer protocol that is responsible for routing data packets from one device to another based on their IP addresses. IP is the fundamental protocol that enables communication between devices on the internet.
 
+* > It is a protocol used for sending and receiving data packets across a network. IP is a network layer protocol, which means it operates at the third layer of the OSI (Open Systems Interconnection) model.
+
+* > One of the main tasks of IP is to route data packets to their destination. When a packet is sent from a source device to a destination device, it may need to pass through several intermediate devices (such as routers) to reach its final destination. Each intermediate device uses the IP address in the packet header to determine where to forward the packet next. This process continues until the packet reaches its final destination.
+
+The IP protocol has two main versions: IPv4 and IPv6. IPv4 is the older version and uses 32-bit addresses, which are represented in dotted decimal notation (e.g. 192.168.0.1). IPv6 is the newer version and uses 128-bit addresses, which are represented in hexadecimal notation (e.g. 2001:0db8:85a3:0000:0000:8a2e:0370:7334).
+
+**Here's an example of an IPv4 packet header:**
+
+```
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|Version|  IHL  |Type of Service|          Total Length           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         Identification        |Flags|      Fragment Offset      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|  Time to Live |    Protocol   |         Header Checksum         |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                       Source Address                          |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    Destination Address                        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                            Data ...                           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+
+**And here's an example of an IPv6 packet header:**
+
+```
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|Version| Traffic Class |           Flow Label                  |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         Payload Length        |  Next Header  |   Hop Limit    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+|                         Source Address                        |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+|                      Destination Address                      |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                            Data ...                           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+
+In both cases, the packet header contains various fields that are used for routing and other purposes. These fields include the source and destination IP addresses, protocol number, time to live (TTL), and header checksum.
+
+In addition to routing, IP provides other important features such as fragmentation, which allows large packets to be broken up into smaller packets for transmission, and reassembly, which allows the smaller packets to be reassembled into the original larger packet at the destination.
+
+#### IP (Internet Protocol) header and their significance:
+
+* - **Source and Destination IP Addresses:** These fields specify the source and destination IP addresses of the packet. The source IP address is the address of the device that sent the packet, while the destination IP address is the address of the device that the packet is intended for. For example, if you're sending an email, the source IP address will be the address of your computer, while the destination IP address will be the address of the email server.
+
+* - **Protocol Number:** This field specifies the protocol used in the payload of the packet. For example, if the payload is a TCP segment, the protocol number will be 6, while if it's a UDP datagram, the protocol number will be 17.
+
+* - **Time to Live (TTL):** This field specifies the number of hops that the packet is allowed to take before it's discarded. Each router that forwards the packet decrements the TTL by 1, and when the TTL reaches 0, the packet is discarded. This prevents packets from looping indefinitely in the network. For example, if the TTL is set to 64, the packet can take up to 64 hops before it's discarded.
+
+* - **Header Checksum:** This field contains a checksum of the IP header, which is used to detect errors in the header. The checksum is calculated by adding up all the 16-bit words in the header, with overflow bits wrapping around, and taking the one's complement of the result. The receiving device recalculates the checksum and compares it to the value in the packet to verify the integrity of the header.
+
+#### Here's an example of an IP header with some sample values:
+
+```
+0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|Version|  IHL  |Type of Service|          Total Length         |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         Identification        |Flags|      Fragment Offset    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|  Time to Live |    Protocol   |         Header Checksum       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                       Source IP Address                       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    Destination IP Address                     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    Options                    |    Padding    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+
+In this example, the source IP address is 192.168.0.1, the destination IP address is 8.8.8.8, the protocol is TCP (protocol number 6), the TTL is 64, and the header checksum is a 16-bit value calculated over the entire header.
+
+#### TO Add Next
+IP provides other important features such as fragmentation, which allows large packets to be broken up into smaller packets for transmission, and reassembly, which allows the smaller packets to be reassembled into the original larger packet at the destination.
+
+
 3. HTTP (HyperText Transfer Protocol): This is an application layer protocol that is used for transmitting web pages and other types of data over the internet. HTTP is a stateless protocol, which means that each request is treated as an isolated transaction.
 
 4. FTP (File Transfer Protocol): This is an application layer protocol that is used for transferring files between devices over a network. FTP uses two channels, a control channel and a data channel, to transfer files.
