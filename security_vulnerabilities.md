@@ -211,9 +211,136 @@ When this file is uploaded to the server, the vulnerable code on the server exec
 > It's important for organizations to stay vigilant and take proactive measures to prevent these types of attacks, such as implementing strong access controls, regularly updating software and patching vulnerabilities, and performing regular security assessments and penetration testing.
 
 ---
-* **Privilege escalation:** Privilege escalation is a vulnerability that allows an attacker to gain additional privileges on a system or network beyond what they were initially granted. This can allow an attacker to bypass security controls, access sensitive data, or execute arbitrary code.
+#### Privilege escalation:
+Privilege escalation is a vulnerability that allows an attacker to gain additional privileges on a system or network beyond what they were initially granted. This can allow an attacker to bypass security controls, access sensitive data, or execute arbitrary code.
+
+> This can occur through various means, such as exploiting a vulnerability in the software, leveraging user error or ignorance, or through a combination of both. Once an attacker has escalated their privileges, they may be able to perform actions that are not intended or permitted, such as stealing data, modifying or deleting files, or even taking control of the entire system.
+
+There are two main types of privilege escalation: vertical and horizontal.
+
+**Vertical Privilege Escalation:**
+Vertical Privilege Escalation is a security vulnerability that occurs when a user is granted higher-level permissions or access than what they are authorized for. It is also known as privilege elevation. In this type of attack, an attacker tries to gain higher-level access privileges on the system by exploiting vulnerabilities.
+
+##### > A common example of vertical privilege escalation is when a low-level user account is granted administrative privileges. Suppose a user account is created to access a particular application or system, but that account is also granted administrator-level access. In this scenario, an attacker could potentially gain access to the entire system by exploiting the privileges of that account.
+
+> Here's an example of how vertical privilege escalation can happen in a web application:
+
+- Suppose a web application has two user roles: regular user and administrator. The regular user has limited permissions and can only access certain pages, while the administrator has full access to all pages and functions.
+
+- Now imagine that a user discovers a vulnerability in the application that allows them to bypass the access controls and gain access to the administrative pages. The user can then exploit this vulnerability to access sensitive information or perform actions that they shouldn't be able to do, such as creating new user accounts with administrative privileges.
+
+- This type of attack can be prevented by following security best practices, such as implementing proper access controls and limiting user permissions to only what is necessary for their role. It's also important to regularly patch and update applications to prevent vulnerabilities from being exploited.
+
+> Example: An attacker may exploit a vulnerability in a piece of software that allows them to execute arbitrary code with elevated privileges, giving them access to system files, network resources, and sensitive data.
+
+**Horizontal Privilege Escalation:**
+
+Horizontal privilege escalation occurs when a user with one level of access gains unauthorized access to another user's account with the same level of access. This can occur due to a vulnerability in the authentication or authorization mechanisms of an application or system.
+
+> Here are a few examples of horizontal privilege escalation:
+
+* Session Fixation: An attacker can use session fixation to hijack a user's session after logging in by providing the user with a pre-determined session ID. The attacker then logs in using that same session ID and gains access to the user's account.
+
+* Password Guessing: If a user's account credentials are weak or easily guessable, an attacker can use brute-force techniques to guess the password and gain access to the account.
+
+* Insecure Direct Object Reference: Insecure Direct Object Reference (IDOR) occurs when an application fails to properly validate user input, allowing an attacker to manipulate input parameters and access resources or data that they are not authorized to access. For example, an attacker could change the ID parameter in a URL to gain access to another user's account or data.
+
+* Broken Access Controls: Broken access controls can allow an attacker to bypass restrictions and gain access to resources or data that they are not authorized to access. For example, if an application does not properly enforce user permissions or roles, an attacker can access restricted areas of the application.
+
+* Cookie Tampering: An attacker can modify a user's cookies to impersonate that user and gain access to their account. This can be done by intercepting and modifying cookies using tools such as a web proxy or browser extension.
+
+> Overall, horizontal privilege escalation can be a serious security issue, as it can allow attackers to gain access to sensitive information or resources that they are not authorized to access. It is important for applications and systems to properly validate user input, enforce access controls, and use secure authentication mechanisms to prevent these types of attacks.
+
+> Example: A user may accidentally leave their computer unlocked, allowing an attacker to gain access to their account and perform actions that are not authorized for that user.
+
+Privilege escalation vulnerabilities can have severe consequences, especially in sensitive environments such as financial institutions, healthcare organizations, and government agencies. Attackers can use this type of vulnerability to gain access to sensitive data, execute malicious code, or take control of critical systems.
+
+Some common examples of privilege escalation vulnerabilities include:
+
+* SQL injection attacks, which can allow attackers to execute arbitrary SQL commands with elevated privileges.
+
+* Cross-site scripting (XSS) attacks, which can allow attackers to inject malicious code into web pages, allowing them to steal user credentials or perform actions with elevated privileges.
+
+* Buffer overflow vulnerabilities, which can allow attackers to execute arbitrary code with elevated privileges by overflowing a buffer in memory.
+
+* Improperly configured access control mechanisms, which can allow attackers to bypass authentication and gain access to sensitive data or resources.
+
+> To prevent privilege escalation vulnerabilities, it is important to keep software and systems up to date with security patches, use strong access control mechanisms such as role-based access control (RBAC), and implement security best practices such as password complexity requirements, multi-factor authentication, and auditing/logging. Additionally, user education and awareness training can help prevent horizontal privilege escalation by teaching users about the importance of strong passwords, locking their computers, and avoiding phishing scams.
+
+
 ---
-* **Denial of service (DoS):** Denial of service is a vulnerability that occurs when an attacker floods a network or system with traffic, causing it to become overwhelmed and unresponsive. This can disrupt critical services, cause system downtime, and make it difficult for users to access resources.
+#### Denial of service (DoS):
+
+Denial of service is a vulnerability that occurs when an attacker floods a network or system with traffic, causing it to become overwhelmed and unresponsive. This can disrupt critical services, cause system downtime, and make it difficult for users to access resources.
+
+> Denial of Service (DoS) is a type of attack where the attacker seeks to make a service or network unavailable by overwhelming it with traffic or other resource-intensive activities. The goal of the attacker is to consume all the available resources, such as bandwidth, memory, or CPU cycles, so that legitimate users cannot access the service or network.
+
+##### There are several types of DoS attacks, including:
+
+1. Flood attacks: These attacks involve overwhelming the target with a huge volume of traffic, such as network packets, HTTP requests, or DNS queries. Flood attacks can be carried out using botnets or other means, and can easily bring down a poorly protected service or network.
+
+2. Amplification attacks: These attacks exploit vulnerabilities in protocols or services that allow the attacker to send a small amount of traffic that is then amplified by the target. For example, the attacker can send a DNS query to a vulnerable DNS server, which then sends a large amount of data to the target in response, overwhelming it with traffic.
+
+3. Application-layer attacks: These attacks target specific vulnerabilities in web applications, such as buffer overflow or SQL injection attacks, to crash the application or overload the server.
+
+4. Distributed Denial of Service (DDoS) attacks: These attacks are similar to flood attacks, but are carried out by a large number of computers or devices, often controlled by a botnet, to overwhelm the target. DDoS attacks are often more difficult to mitigate than other types of DoS attacks.
+
+##### Examples of DoS attacks include:
+
+1. Ping of Death: This is a type of flood attack where an attacker sends an oversized ping packet to a target computer, causing it to crash or freeze.
+
+2. Smurf attack: This is another type of flood attack where an attacker sends a ping packet with a spoofed source IP address to a network's broadcast address, causing all the hosts on the network to respond to the target with a flood of traffic.
+
+3. DNS amplification attack: In this type of amplification attack, the attacker sends a small DNS query to a vulnerable DNS server, which then responds with a much larger DNS response to the target, overwhelming it with traffic.
+
+4. SYN flood attack: This is a type of flood attack that exploits the TCP protocol's three-way handshake mechanism. The attacker sends a large number of SYN packets to the target, but never completes the handshake, tying up the target's resources and making it unavailable to legitimate users.
+
+> To prevent DoS attacks, it is important to implement strong security measures, such as firewalls, intrusion detection systems, and load balancers. It is also important to regularly update and patch software and systems to prevent vulnerabilities from being exploited by attackers. Additionally, cloud-based DDoS protection services are available to mitigate DoS attacks by filtering traffic and blocking malicious traffic from reaching the target.
+
+---
+#### Distributed Denial of service (DDoS):
+
+Distributed Denial of Service (DDoS) is a type of cyber attack where a large number of computers or devices are infected with malware and used to flood a network or website with traffic, causing it to become unavailable to users. The main objective of a DDoS attack is to overwhelm the targeted server or network with so much traffic that it cannot function properly, resulting in a denial of service for legitimate users.
+
+> DDoS attacks are more powerful and dangerous than traditional DoS attacks because they involve multiple devices or machines, making it much harder to mitigate them. DDoS attacks are usually carried out by botnets, which are networks of infected devices controlled by a single attacker or group of attackers.
+
+##### Some examples of DDoS attacks include:
+
+* UDP Flood attack: This type of DDoS attack targets the User Datagram Protocol (UDP) and sends a large number of UDP packets to the target server, causing it to become overwhelmed and unable to respond to legitimate requests.
+
+* HTTP Flood attack: This type of DDoS attack targets web servers by sending a large number of HTTP requests, causing the server to become overwhelmed and unresponsive.
+
+* DNS Amplification attack: This type of DDoS attack exploits weaknesses in the Domain Name System (DNS) to flood the target server with a large number of DNS requests, causing it to become overwhelmed and unable to respond to legitimate requests.
+
+* Smurf attack: This type of DDoS attack uses ICMP (Internet Control Message Protocol) to flood the target server with a large number of ping requests, causing it to become overwhelmed and unresponsive.
+
+> DDoS attacks can be very harmful and have severe consequences. They can disrupt business operations, cause financial losses, and damage the reputation of the targeted organization. To protect against DDoS attacks, organizations should implement security measures such as firewalls, intrusion detection and prevention systems, and content delivery networks.
+
+##### Preventing Distributed Denial of Service (DDoS) attacks can be challenging, as they often involve a large number of compromised machines. However, there are several steps that organizations can take to mitigate the risk of DDoS attacks:
+
+1. Use Anti-DDoS solutions: Organizations can use dedicated Anti-DDoS solutions such as firewalls, load balancers, and intrusion prevention systems to identify and block malicious traffic.
+
+2. Increase Bandwidth: Increasing the bandwidth of your network can help you to absorb a large volume of traffic during an attack.
+
+3. Implement Traffic Filtering: Traffic filtering can help you to filter out traffic from known bad sources, such as known botnets and malicious IP addresses.
+
+4. Use Content Delivery Networks (CDNs): CDNs can help to distribute traffic across multiple servers, which can help to reduce the impact of DDoS attacks.
+
+5. Keep Systems Updated: Organizations should ensure that all their systems are up to date with the latest security patches and software updates, as attackers often exploit known vulnerabilities in outdated software.
+
+6. Conduct Regular Security Audits: Regular security audits can help to identify vulnerabilities and weaknesses in your systems, which can be addressed before they can be exploited by attackers.
+
+7. Use Cloud-based DDoS Mitigation Services: Cloud-based DDoS mitigation services can help to protect your network by providing a distributed network of servers that can absorb DDoS traffic.
+
+> There have been several high-profile DDoS attacks that have caused significant downtime for major organizations. Here are a few examples:
+
+* Dyn DDoS Attack (2016): In October 2016, a massive DDoS attack targeted the DNS provider Dyn, which is responsible for managing domain names and routing internet traffic. The attack disrupted access to major websites such as Twitter, Spotify, and GitHub for several hours. The attack used a botnet of compromised IoT devices, such as internet-connected cameras and routers, to flood Dyn's servers with traffic.
+
+* GitHub DDoS Attack (2018): In February 2018, GitHub, a popular code hosting platform, was hit by a massive DDoS attack that lasted several days. The attack used a technique called memcached amplification, in which the attacker sends a small request to a vulnerable memcached server, which then responds with a much larger data packet. By spoofing the source address of the request, the attacker can direct the amplified response to the target, flooding it with traffic.
+
+* Amazon Web Services DDoS Attack (2020): In August 2020, Amazon Web Services (AWS), one of the largest cloud computing providers, was hit by a DDoS attack that disrupted access to several of its services, including AWS Shield, a service designed to protect against DDoS attacks. The attack lasted for several hours and used a technique called Connectionless Lightweight Directory Access Protocol (CLDAP) reflection, in which the attacker sends a request to a CLDAP server, which then responds with a much larger data packet, flooding the target with traffic.
+
+
 ---
 * **Zero-day vulnerability:** A zero-day vulnerability is a flaw in software or hardware that is unknown to the vendor or developer. Attackers can exploit these vulnerabilities before they are discovered and patched, which can allow them to steal sensitive data, take control of systems, or launch additional attacks.
 ---
