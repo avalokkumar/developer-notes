@@ -1000,9 +1000,156 @@ To prevent social engineering attacks, be vigilant and cautious. Here are some t
 
 
 ---
-* **Clickjacking:** Clickjacking is a vulnerability that allows an attacker to trick a user into clicking on a hidden or disguised link on a website or email. This can allow the attacker to steal sensitive information or perform unauthorized actions on the user's behalf.
+#### Clickjacking:
+
+Clickjacking, also known as UI redressing or UI overlay attacks, is a type of attack where a user is tricked into clicking on something they did not intend to click on. This is accomplished by overlaying an invisible or opaque layer over a legitimate website or application, which can be used to mislead the user into clicking on something that they did not intend to.
+
+Clickjacking attacks are typically carried out in the following steps:
+
+* - An attacker creates a malicious website or injects malicious code into a legitimate website.
+
+* - The attacker creates an invisible or opaque layer on top of the legitimate website, so that the user cannot see it.
+
+* - The attacker places a button or link on the malicious layer that is designed to look like a legitimate button or link on the underlying website.
+
+* - When the user clicks on the button or link, they are actually clicking on the malicious layer, which can lead to unintended consequences such as downloading malware, giving away personal information, or unknowingly executing transactions.
+
+Here are some examples of how clickjacking attacks can be carried out:
+
+* - An attacker creates a fake login form on their own website and places an invisible layer on top of a legitimate website's login form. When the user enters their login information into the fake form, they are actually submitting their login information to the attacker.
+
+* - An attacker creates an invisible button on top of a legitimate website's "submit" button for a financial transaction. When the user clicks on the invisible button, they unknowingly initiate a transfer of funds to the attacker's account.
+
+To protect against clickjacking attacks, there are a few steps that users can take:
+
+* - Use a web browser that supports clickjacking protection, such as Google Chrome or Mozilla Firefox.
+
+* - Keep your web browser and operating system updated to ensure that you have the latest security patches.
+
+* - Be wary of clicking on links or buttons on websites that you do not trust, especially if they look suspicious or unexpected.
+
+* - Use anti-malware software to help detect and block malicious code.
+
+##### Prevention: 
+Educate yourself and your employees about the dangers of clickjacking and how to spot it.
+
+##### Example:
+
+Clickjacking attacks are typically carried out using HTML and CSS code to create an invisible or opaque layer over a legitimate website or application. Here is an example of how a basic clickjacking attack could be constructed using HTML and CSS:
+
+```html
+<html>
+<head>
+<title>Clickjacking Attack</title>
+<style>
+#legit_button {
+position: absolute;
+left: 0px;
+top: 0px;
+opacity: 0;
+z-index: 100;
+width: 200px;
+height: 100px;
+}
+
+#malicious_button {
+position: absolute;
+left: 0px;
+top: 0px;
+z-index: 101;
+width: 200px;
+height: 100px;
+background-color: red;
+opacity: 0.5;
+}
+</style>
+</head>
+<body>
+
+<!-- Legitimate button that the user wants to click -->
+<button id="legit_button">Click me!</button>
+
+<!-- Malicious button that is invisible or opaque, placed over the legitimate button -->
+<button id="malicious_button"></button>
+
+</body>
+</html>
+```
+
+> In this example, the attacker has created a webpage that contains two buttons: a legitimate button that the user wants to click, and a malicious button that is invisible or opaque and placed over the legitimate button. The malicious button is styled using CSS to make it appear like it is part of the legitimate button, and to make it difficult for the user to distinguish between the two.
+
+> When the user clicks on the visible portion of the legitimate button, they are actually clicking on the malicious button that is overlaid on top of it. Depending on the attacker's goals, this could result in a number of different actions, such as submitting a form, downloading malware, or executing an unintended action.
+
+> Clickjacking attacks can be much more complex than this basic example, and can involve multiple layers of malicious code and complex social engineering tactics to deceive the user.
+
 ---
-* **DNS spoofing:** DNS spoofing is a technique used by attackers to manipulate the Domain Name System (DNS) to redirect traffic to a malicious website. This can allow the attacker to steal sensitive information or perform unauthorized actions on the user's behalf.
+#### DNS spoofing:
+DNS spoofing, also known as DNS cache poisoning or DNS hijacking, is a type of cyber attack that involves manipulating the Domain Name System (DNS) to redirect users to a malicious website. DNS is the system that translates domain names (such as google.com) into IP addresses (such as 216.58.194.174) that computers use to communicate with each other on the internet.
+
+DNS spoofing is performed by an attacker who gains access to a DNS server or network device and modifies the DNS records stored there. The attacker then sends out fake DNS responses to users requesting information about a particular domain name, leading them to a malicious website instead of the intended destination.
+
+One way DNS spoofing can be performed is by using a tool like Cain and Abel or Ettercap to intercept and modify DNS queries and responses between the user and the DNS server. Another method is to use a malware-infected computer to alter the DNS settings of the local network and redirect traffic to a malicious website.
+
+Here is an example of how DNS spoofing could be performed:
+
+* - The attacker gains access to a DNS server or network device and modifies the DNS records stored there to point to a malicious IP address.
+
+* - The user types in a legitimate URL, such as "google.com", into their web browser.
+
+* - The user's computer sends a DNS query to the DNS server, requesting the IP address for "google.com".
+
+* - The attacker intercepts the DNS query and sends a fake DNS response back to the user's computer, containing the malicious IP address instead of the legitimate one.
+
+* - The user's computer connects to the malicious IP address instead of the legitimate website, and the attacker can then carry out their malicious activities, such as stealing login credentials or installing malware.
+
+> DNS spoofing can have serious consequences for both individuals and organizations. In addition to stealing sensitive information, attackers can also use DNS spoofing to carry out phishing attacks or distribute malware to unsuspecting users.
+
+##### Prevention
+To protect against DNS spoofing, individuals and organizations can take several steps, such as using secure DNS servers, regularly updating DNS software, and implementing DNSSEC (DNS Security Extensions) to authenticate DNS responses. It's also important to be wary of clicking on links or entering sensitive information on websites that look suspicious or unfamiliar.
+
+##### Note:
+There are numerous tools available that can be used for testing and educational purposes, such as Ettercap or DNSChef. Using such tools on any system or network without explicit permission is illegal and unethical. It's always best to use these tools in a safe and controlled environment with appropriate legal and ethical considerations.
+
+> Please note that this should only be used for educational purposes in a safe and controlled environment and not on a real network without permission.
+
+###### DNS spoofing with Ettercap:
+
+* Step 1: Install Ettercap on your system. Ettercap is a command-line tool and can be installed on Linux, Windows, and macOS.
+
+* Step 2: Launch Ettercap and select the appropriate network interface to sniff traffic.
+
+* Step 3: Click on "Hosts" and select "Scan for hosts" to scan the network for active hosts.
+
+* Step 4: Select the target host whose DNS requests you want to spoof.
+
+* Step 5: Click on "Mitm" and select "ARP poisoning" to perform a Man-in-the-Middle attack.
+
+* Step 6: Click on "Plugins" and select "DNS spoof" to enable DNS spoofing.
+
+* Step 7: Enter the domain name you want to spoof and the IP address of the fake website you want to redirect the user to.
+
+* Step 8: Start the attack by clicking on "Start" and wait for the target user to make a DNS request.
+
+* Step 9: The DNS response from the attacker will be intercepted and the user will be redirected to the fake website.
+
+###### DNS spoofing with DNSChef:
+
+* Step 1: Install DNSChef on your system. DNSChef is a Python-based tool and can be installed on Linux, Windows, and macOS.
+
+* Step 2: Launch DNSChef and select the appropriate network interface to listen for DNS requests.
+
+* Step 3: Click on "Filters" and select "Blacklist" to prevent any legitimate DNS requests from being resolved.
+
+* Step 4: Click on "DNS" and select "Add record" to add a fake DNS record.
+
+* Step 5: Enter the domain name you want to spoof and the IP address of the fake website you want to redirect the user to.
+
+* Step 6: Start the attack by clicking on "Start" and wait for the target user to make a DNS request.
+
+* Step 7: The DNS response from DNSChef will be intercepted and the user will be redirected to the fake website.
+
+###### Note: Using these tools for malicious purposes is illegal and unethical. Only use them for educational purposes in a safe and controlled environment.
+
 ---
 * **File inclusion vulnerability:** File inclusion vulnerabilities occur when an application fails to properly sanitize user input, allowing an attacker to include arbitrary files in the application. This can allow the attacker to execute arbitrary code, steal sensitive information, or access files they should not be able to access.
 ---
