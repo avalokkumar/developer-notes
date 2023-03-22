@@ -56,3 +56,20 @@ if __name__ == '__main__':
 
 > You can adjust the workload by changing the range of the loop in the worker() function. You can also modify the program to perform other types of work, such as I/O-bound work, by using different worker functions.
 
+---
+### Google Chrome Hacks
+
+* #### Tab Groups: 
+If you frequently have many tabs open, the Tab Groups flag can be a lifesaver. Enabling this flag allows you to organize your tabs into groups, which can be collapsed and expanded as needed. To enable this flag, go to `"chrome://flags/#tab-groups"` and select "Enabled" from the dropdown menu.
+
+* #### Scrollable Tab Strip: 
+By default, Chrome's tab strip only shows a limited number of tabs, and you have to click on the arrow buttons to see more. However, the Scrollable Tab Strip flag allows you to scroll through all your tabs with a mouse wheel or trackpad gesture. To enable this flag, go to `"chrome://flags/#scrollable-tabstrip"` and select "Enabled" from the dropdown menu.
+
+* #### Reader Mode: 
+If you often find yourself reading articles on the web, the Reader Mode flag can make the experience much more pleasant. Enabling this flag removes ads and other distractions, and presents the article in a clean, easy-to-read format. To enable this flag, go to `"chrome://flags/#enable-reader-mode"` and select "Enabled" from the dropdown menu.
+
+* #### Smooth Scrolling:
+If you find Chrome's scrolling to be too jarring, the Smooth Scrolling flag can make it more fluid. Enabling this flag applies a smooth animation when you scroll, which can be easier on the eyes. To enable this flag, go to `"chrome://flags/#smooth-scrolling"` and select `"Enabled"` from the dropdown menu.
+
+* #### Experimental QUIC protocol: 
+QUIC (Quick UDP Internet Connections) is a protocol that can improve website loading times and make connections more secure. Enabling this flag allows Chrome to use the experimental QUIC protocol instead of the traditional TCP protocol. To enable this flag, go to `"chrome://flags/#enable-quic"` and select `"Enabled"` from the dropdown menu.
