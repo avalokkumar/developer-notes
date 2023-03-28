@@ -139,13 +139,75 @@ Here are some examples of how you can use kubectl rollout:
 
 
 
-* kubectl cluster-info: This command displays information about the Kubernetes cluster, including the API server, the Kubernetes version, and the Kubernetes dashboard URL.
-* kubectl config: This command is used to manage Kubernetes configuration files, including contexts, clusters, and users. You can use it to switch between different clusters or contexts.
-* kubectl rollout history: This command displays the revision history for a deployment, including the date and time of each revision and the reason for the revision.
-* kubectl edit: This command opens a Kubernetes resource in your default editor, allowing you to modify its configuration. You can use it to make quick changes to a resource without having to create a new YAML file.
-* kubectl label: This command is used to add or remove labels from Kubernetes resources. Labels are used to categorize resources and make it easier to manage them.
-* kubectl taint: This command is used to apply a taint to a node in the Kubernetes cluster. Taints are used to repel pods from nodes, preventing them from running on nodes that don't meet certain requirements.
-* kubectl annotate: This command is used to add or modify annotations on Kubernetes resources. Annotations are used to attach arbitrary metadata to resources and can be used to provide additional information about a resource.
+* kubectl cluster-info:
+This command displays information about the Kubernetes cluster. It provides information about the Kubernetes API server, the Kubernetes version, and the Kubernetes dashboard URL. This command is useful for getting a quick overview of the cluster and its current state.
+
+Example usage:
+```
+$ kubectl cluster-info
+```
+
+Kubernetes master is running at https://kubernetes.example.com
+CoreDNS is running at https://kubernetes.example.com/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+* kubectl config:
+This command is used to manage Kubernetes configuration files, including contexts, clusters, and users. You can use it to switch between different clusters or contexts. A context is a set of access parameters for a Kubernetes cluster, including the cluster's URL, authentication information, and namespace. The config command can be used to create, modify, or delete context configurations.
+
+Example usage:
+
+```
+$ kubectl config view # show the current configuration
+$ kubectl config get-contexts # list all available contexts
+$ kubectl config use-context prod-cluster # switch to the prod-cluster context
+```
+
+* kubectl rollout history:
+This command displays the revision history for a deployment, including the date and time of each revision and the reason for the revision. You can use it to view the status of a deployment and roll back to a previous version if needed.
+
+Example usage:
+
+```
+$ kubectl rollout history deployment/my-deployment # show the revision history for my-deployment
+$ kubectl rollout undo deployment/my-deployment # rollback to the previous revision
+```
+
+* kubectl edit:
+This command opens a Kubernetes resource in your default editor, allowing you to modify its configuration. You can use it to make quick changes to a resource without having to create a new YAML file. This command is useful for making small changes to resources such as pods or deployments.
+
+Example usage:
+
+```
+$ kubectl edit deployment/my-deployment # edit the configuration for my-deployment
+```
+
+kubectl label:
+This command is used to add or remove labels from Kubernetes resources. Labels are used to categorize resources and make it easier to manage them. You can use labels to organize resources by team, application, or environment.
+
+Example usage:
+
+```
+$ kubectl label pod/my-pod env=prod # add the 'env=prod' label to my-pod
+$ kubectl label pod/my-pod env- # remove the 'env' label from my-pod
+```
+
+* kubectl taint:
+This command is used to apply a taint to a node in the Kubernetes cluster. Taints are used to repel pods from nodes, preventing them from running on nodes that don't meet certain requirements. You can use taints to mark nodes as unsuitable for certain workloads, such as workloads that require a lot of CPU or memory.
+
+Example usage:
+
+```
+$ kubectl taint nodes my-node key=value:NoSchedule # add the 'key=value' taint to my-node
+```
+
+* kubectl annotate:
+This command is used to add or modify annotations on Kubernetes resources. Annotations are used to attach arbitrary metadata to resources and can be used to provide additional information about a resource. You can use annotations to store information about a resource that is not part of its core configuration.
+
+Example usage:
+
+```
+$ kubectl annotate deployment/my-deployment my-annotation=value # add the 'my-annotation=value' annotation to my-deployment
+```
+
 * kubectl exec -it: This command is similar to kubectl exec, but it opens an interactive shell in the container, allowing you to run multiple commands within the container.
 * kubectl top: This command displays resource usage statistics for nodes, pods, and containers in the Kubernetes cluster.
 * kubectl apply -f: This command is used to apply a Kubernetes resource definition from a YAML or JSON file. You can use it to create, update, or delete resources from the file.
