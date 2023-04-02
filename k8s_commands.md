@@ -57,6 +57,8 @@
 * kubectl explain
 
 ---
+******
+---
 ### kubectl create:
 
 
@@ -67,6 +69,7 @@ kubectl create deployment nginx --image=nginx
 
 > This command creates a new deployment named nginx using the official nginx Docker image. You can then use the kubectl get command to see the status of the deployment.
 
+---
 ### kubectl get:
 The kubectl get command is used to retrieve information about Kubernetes resources. You can use it to get information about nodes, pods, services, deployments, and more. Here's an example of how to get information about all the pods in the default namespace:
 
@@ -75,7 +78,7 @@ kubectl get pods
 ```
 
 > This command will return a list of all the pods in the default namespace, along with their status, age, and other details.
-
+---
 ### kubectl describe:
 The kubectl describe command provides detailed information about a specific Kubernetes resource. For example, you can use it to get information about a specific pod or service. Here's an example of how to describe a pod:
 
@@ -84,7 +87,7 @@ kubectl describe pod nginx-abc123
 ```
 
 > This command will return detailed information about the pod with the name nginx-abc123, including its status, IP address, and other details.
-
+---
 ### kubectl apply:
 The kubectl apply command is used to apply changes to a Kubernetes resource. For example, you can use it to update a deployment or change the configuration of a pod. Here's an example of how to apply a new configuration to a deployment:
 
@@ -93,14 +96,14 @@ kubectl apply -f nginx-deployment.yaml
 ```
 
 > This command will apply the configuration in the nginx-deployment.yaml file to the deployment named nginx.
-
+---
 ### kubectl delete:
 The kubectl delete command is used to delete a Kubernetes resource. You can use it to delete pods, services, deployments, and more. Here's an example of how to delete a deployment:
 ```bash
 kubectl delete deployment nginx
 ```
 > This command will delete the deployment named nginx, along with all the pods associated with it.
-
+---
 ### kubectl logs:
 The kubectl logs command is used to retrieve logs from a pod. You can use it to view logs for a specific container within a pod, or for the entire pod. Here's an example of how to get the logs for a specific container within a pod:
 
@@ -109,7 +112,7 @@ kubectl logs mypod -c mycontainer
 ```
 
 > This command will return the logs for the container named mycontainer within the pod named mypod.
-
+---
 ### kubectl exec:
 The kubectl exec command is used to execute a command inside a container running in a pod. You can use it to run commands such as bash or sh to interact with the container. Here's an example of how to execute a command inside a container:
 
@@ -118,7 +121,7 @@ kubectl exec mypod -c mycontainer -- ls
 ```
 
 > This command will execute the ls command inside the container named mycontainer within the pod named mypod.
-
+---
 ### kubectl port-forward:
 The kubectl port-forward command is used to forward a local port to a port on a pod. You can use it to access services running inside the pod, such as a web application. Here's an example of how to forward port 8080 on your local machine to port 80 on a pod:
 
@@ -138,7 +141,7 @@ Here are some examples of how you can use kubectl rollout:
 * To view the history of a rollout, you can use the kubectl rollout history command. For example, kubectl rollout history deployment/myapp will show you the history of the myapp deployment, including the revisions and the changes made in each revision.
 
 
-
+---
 ### kubectl cluster-info:
 This command displays information about the Kubernetes cluster. It provides information about the Kubernetes API server, the Kubernetes version, and the Kubernetes dashboard URL. This command is useful for getting a quick overview of the cluster and its current state.
 
@@ -147,9 +150,9 @@ Example usage:
 $ kubectl cluster-info
 ```
 
-Kubernetes master is running at https://kubernetes.example.com
-CoreDNS is running at https://kubernetes.example.com/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
-
+> Kubernetes master is running at https://kubernetes.example.com
+> CoreDNS is running at https://kubernetes.example.com/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+---
 ###  kubectl config:
 This command is used to manage Kubernetes configuration files, including contexts, clusters, and users. You can use it to switch between different clusters or contexts. A context is a set of access parameters for a Kubernetes cluster, including the cluster's URL, authentication information, and namespace. The config command can be used to create, modify, or delete context configurations.
 
@@ -160,7 +163,7 @@ $ kubectl config view # show the current configuration
 $ kubectl config get-contexts # list all available contexts
 $ kubectl config use-context prod-cluster # switch to the prod-cluster context
 ```
-
+---
 ###  kubectl rollout history:
 This command displays the revision history for a deployment, including the date and time of each revision and the reason for the revision. You can use it to view the status of a deployment and roll back to a previous version if needed.
 
@@ -170,7 +173,7 @@ Example usage:
 $ kubectl rollout history deployment/my-deployment # show the revision history for my-deployment
 $ kubectl rollout undo deployment/my-deployment # rollback to the previous revision
 ```
-
+---
 ###  kubectl edit:
 This command opens a Kubernetes resource in your default editor, allowing you to modify its configuration. You can use it to make quick changes to a resource without having to create a new YAML file. This command is useful for making small changes to resources such as pods or deployments.
 
@@ -179,7 +182,7 @@ Example usage:
 ```
 $ kubectl edit deployment/my-deployment # edit the configuration for my-deployment
 ```
-
+---
 ### kubectl label:
 This command is used to add or remove labels from Kubernetes resources. Labels are used to categorize resources and make it easier to manage them. You can use labels to organize resources by team, application, or environment.
 
@@ -189,7 +192,7 @@ Example usage:
 $ kubectl label pod/my-pod env=prod # add the 'env=prod' label to my-pod
 $ kubectl label pod/my-pod env- # remove the 'env' label from my-pod
 ```
-
+---
 ###  kubectl taint:
 This command is used to apply a taint to a node in the Kubernetes cluster. Taints are used to repel pods from nodes, preventing them from running on nodes that don't meet certain requirements. You can use taints to mark nodes as unsuitable for certain workloads, such as workloads that require a lot of CPU or memory.
 
@@ -198,7 +201,7 @@ Example usage:
 ```
 $ kubectl taint nodes my-node key=value:NoSchedule # add the 'key=value' taint to my-node
 ```
-
+---
 ###  kubectl annotate:
 This command is used to add or modify annotations on Kubernetes resources. Annotations are used to attach arbitrary metadata to resources and can be used to provide additional information about a resource. You can use annotations to store information about a resource that is not part of its core configuration.
 
@@ -207,36 +210,253 @@ Example usage:
 ```
 $ kubectl annotate deployment/my-deployment my-annotation=value # add the 'my-annotation=value' annotation to my-deployment
 ```
+---
+###  kubectl exec -it:
 
-* kubectl exec -it: This command is similar to kubectl exec, but it opens an interactive shell in the container, allowing you to run multiple commands within the container.
-* kubectl top: This command displays resource usage statistics for nodes, pods, and containers in the Kubernetes cluster.
-* kubectl apply -f: This command is used to apply a Kubernetes resource definition from a YAML or JSON file. You can use it to create, update, or delete resources from the file.
+The kubectl exec -it command allows you to run an interactive shell session in a container running in a pod. This allows you to execute commands within the container and troubleshoot issues.
 
-* kubectl config view: This command displays the current Kubernetes configuration. It shows the list of contexts, clusters, and users that are configured on your system.
-* kubectl rollout restart: This command restarts a deployment by creating a new revision of the deployment with the same configuration as the current revision. This is useful if you need to apply a configuration change that requires a restart.
-* kubectl logs --tail: This command allows you to retrieve the last N lines of logs from a pod. You can use it to view recent log entries without having to retrieve the entire log.
-* kubectl rollout undo: This command rolls back a deployment to the previous revision. This is useful if a deployment has a problem that needs to be fixed quickly.
-* kubectl exec -p: This command is similar to kubectl exec, but it attaches to the last container that was started in a pod. This is useful if you have a multi-container pod and you want to interact with a specific container.
-* kubectl rollout status: This command displays the status of a deployment rollout, including the current revision, the desired revision, and the status of the replica set for each revision.
-* kubectl get events: This command displays the recent events in the Kubernetes cluster. It can be useful for troubleshooting issues and identifying problems.
-* kubectl apply --dry-run: This command performs a dry run of the kubectl apply command, showing what changes would be made without actually applying them. This is useful for testing changes before applying them to a live environment.
-* kubectl top pod: This command displays the CPU and memory usage of a specific pod. You can use it to monitor the resource usage of a pod over time.
-* kubectl api-resources: This command displays the available API resources and their short names. It's useful for discovering the Kubernetes resources that are available to you.
-* kubectl rollout pause: This command pauses a rollout by scaling down the deployment's replicas to zero. This is useful if you need to temporarily halt a rollout for maintenance or troubleshooting.
-* kubectl rollout resume: This command resumes a paused rollout by scaling up the deployment's replicas to the desired count. This is useful if you need to restart a rollout that was paused for maintenance or troubleshooting.
-* kubectl explain: This command displays detailed information about a Kubernetes resource, including its fields, their types, and their default values. It's useful for understanding the structure of Kubernetes resources and their configuration options.
-* kubectl delete pod --force: This command forcefully deletes a pod without waiting for it to terminate gracefully. This is useful if a pod is stuck in a terminating state and needs to be forcefully deleted.
-* kubectl get nodes --show-labels: This command displays the list of nodes in the Kubernetes cluster and their labels. Labels are key-value pairs that can be used to tag nodes with additional metadata.
-* kubectl rollout history undo: This command undoes a specific revision of a deployment. This is useful if you need to roll back a deployment to a specific revision rather than the
+Example:
 
+```
+kubectl exec -it my-pod -- /bin/bash
+```
+> This command starts an interactive shell session within the container running in the my-pod pod.
 
-* kubectl apply --prune: This command applies a configuration change to a Kubernetes resource, but also removes any previously created resources that are no longer specified in the new configuration. This can be useful for cleaning up unused resources.
-* kubectl apply --prune -l: This command applies a configuration change to all resources that match a specified label selector, and also removes any previously created resources that are no longer specified in the new configuration. This can be useful for cleaning up unused resources across multiple deployments.
-* kubectl get --watch: This command displays real-time updates for a specified Kubernetes resource. It can be useful for monitoring the status of a resource as it changes over time.
-* kubectl edit -f -: This command opens the most recently applied configuration for a Kubernetes resource in your default editor. This can be useful for quickly making changes to a resource that was recently applied.
+---
+###  kubectl top:
+The kubectl top command allows you to view resource usage statistics for nodes, pods, and containers in the Kubernetes cluster.
 
+Example:
+```
+kubectl top nodes
+```
+> This command displays resource usage statistics for all the nodes in the Kubernetes cluster.
 
-* kubectl create secret: This command creates a new Kubernetes secret. You can use it to store sensitive data like passwords or API keys that your application needs to access.
-* kubectl cp: This command allows you to copy files to and from a Kubernetes pod. You can use it to transfer data between your local machine and a running pod.
-* kubectl uncordon: This command removes the "unschedulable" taint from a node in a Kubernetes cluster. You can use it to bring a previously marked node back into service.
-* kubectl attach: This command attaches to a running container in a Kubernetes pod. You can use it to interact with the container's console or run commands inside the container.
+```
+kubectl top pods
+```
+This command displays resource usage statistics for all the pods in the Kubernetes cluster.
+
+```
+kubectl top pods --containers
+```
+> This command displays resource usage statistics for all the containers in all the pods in the Kubernetes cluster.
+
+---
+###  kubectl apply -f:
+The kubectl apply -f command is used to apply a Kubernetes resource definition from a YAML or JSON file. This can be used to create, update, or delete resources from the file.
+
+Example:
+```
+kubectl apply -f my-deployment.yaml
+```
+This command applies the Kubernetes deployment configuration defined in the my-deployment.yaml file.
+---
+###  kubectl config view:
+The kubectl config view command displays the current Kubernetes configuration. It shows the list of contexts, clusters, and users that are configured on your system.
+
+Example:
+```
+kubectl config view
+```
+> This command displays the current Kubernetes configuration on your system.
+---
+###  kubectl rollout restart:
+The kubectl rollout restart command restarts a deployment by creating a new revision of the deployment with the same configuration as the current revision. This is useful if you need to apply a configuration change that requires a restart.
+
+Example:
+```
+kubectl rollout restart deployment/my-deployment
+```
+
+> This command restarts the deployment named my-deployment by creating a new revision with the same configuration as the current revision.
+
+---
+###  kubectl logs --tail:
+The kubectl logs --tail command allows you to retrieve the last N lines of logs from a pod. This is useful for troubleshooting issues in pods and viewing recent log entries without having to retrieve the entire log.
+
+Example:
+```
+kubectl logs my-pod --tail=10
+```
+> This command retrieves the last 10 lines of logs from the my-pod pod.
+---
+###  kubectl rollout undo:
+The kubectl rollout undo command rolls back a deployment to the previous revision. This is useful if a deployment has a problem that needs to be fixed quickly.
+
+Example:
+```
+kubectl rollout undo deployment/my-deployment
+```
+> This command rolls back the deployment named my-deployment to the previous revision.
+---
+###  kubectl exec -p:
+The kubectl exec -p command is similar to kubectl exec, but it attaches to the last container that was started in a pod. This is useful if you have a multi-container pod and you want to interact with a specific container.
+
+Example:
+```
+kubectl exec -p my-pod my-container -- /bin/bash
+```
+> This command attaches to the last container that was started in the my-pod pod and starts an interactive shell session within the my-container container.
+
+---
+###  kubectl rollout status:
+The kubectl rollout status command displays the status of a deployment rollout, including the current revision, the desired revision, and the status of the replica set for each revision.
+
+Example:
+```
+kubectl rollout status deployment/my-deployment
+```
+> This command displays the rollout status of the deployment named my-deployment.
+---
+###  kubectl get events:
+The kubectl get events command displays the recent events in the Kubernetes cluster. It can be useful for troubleshooting issues and identifying problems.
+
+Example:
+```
+kubectl get events
+```
+> This command displays the recent events in the Kubernetes cluster.
+---
+###  kubectl apply --dry-run:
+The kubectl apply --dry-run command performs a dry run of the kubectl apply command, showing what changes would be made without actually applying them. This is useful for testing changes before applying them to a live environment.
+
+Example:
+```
+kubectl apply --dry-run -f my-deployment.yaml
+```
+> This command performs a dry run of the kubectl apply command using the Kubernetes deployment configuration defined in the my-deployment.yaml file.
+---
+### kubectl top pod: 
+This command is used to monitor the resource usage of a specific pod in a Kubernetes cluster. It displays the CPU and memory usage of a pod over time. For example, the following command displays the resource usage of the pod named my-pod in the my-namespace namespace:
+
+```
+kubectl top pod my-pod -n my-namespace
+````
+
+### kubectl api-resources: 
+This command displays the available API resources and their short names in a Kubernetes cluster. It's useful for discovering the Kubernetes resources that are available to you. For example, the following command lists all the available API resources:
+
+```
+kubectl api-resources
+```
+
+### kubectl rollout pause: 
+This command pauses a rollout by scaling down the deployment's replicas to zero. It's useful if you need to temporarily halt a rollout for maintenance or troubleshooting. For example, the following command pauses the rollout of the deployment named my-deployment:
+
+```
+kubectl rollout pause deployment/my-deployment
+```
+---
+### kubectl rollout resume: 
+This command resumes a paused rollout by scaling up the deployment's replicas to the desired count. It's useful if you need to restart a rollout that was paused for maintenance or troubleshooting. For example, the following command resumes the rollout of the deployment named my-deployment:
+
+```
+kubectl rollout resume deployment/my-deployment
+```
+---
+### kubectl explain: 
+This command displays detailed information about a Kubernetes resource, including its fields, their types, and their default values. It's useful for understanding the structure of Kubernetes resources and their configuration options. For example, the following command displays the detailed information about the Pod resource:
+
+```
+kubectl explain pod
+```
+---
+### kubectl delete pod --force: 
+This command forcefully deletes a pod without waiting for it to terminate gracefully. It's useful if a pod is stuck in a terminating state and needs to be forcefully deleted. For example, the following command forcefully deletes the pod named my-pod:
+
+```
+kubectl delete pod my-pod --force
+```
+---
+### kubectl get nodes --show-labels: 
+This command displays the list of nodes in the Kubernetes cluster and their labels. Labels are key-value pairs that can be used to tag nodes with additional metadata. For example, the following command lists all the nodes in the cluster along with their labels:
+
+```
+kubectl get nodes --show-labels
+```
+
+---
+### kubectl rollout history undo: 
+This command undoes a specific revision of a deployment. It's useful if you need to roll back a deployment to a specific revision rather than the most recent one. For example, the following command rolls back the deployment named my-deployment to the revision number 2:
+
+```
+kubectl rollout undo deployment/my-deployment --to-revision=2
+```
+---
+
+### kubectl apply --prune:
+This command applies a configuration change to a Kubernetes resource and also removes any previously created resources that are no longer specified in the new configuration. This helps in cleaning up unused resources. For example, to apply a configuration change to a deployment and remove any previously created resources that are no longer specified in the new configuration, use the following command:
+```
+kubectl apply --prune -f deployment.yaml
+```
+This will apply the changes to the deployment specified in deployment.yaml file and remove any previously created resources that are no longer specified in the new configuration.
+
+### kubectl apply --prune -l:
+This command applies a configuration change to all resources that match a specified label selector and also removes any previously created resources that are no longer specified in the new configuration. For example, to apply a configuration change to all resources with the label app=nginx and remove any previously created resources that are no longer specified in the new configuration, use the following command:
+
+```
+kubectl apply --prune -l app=nginx -f nginx.yaml
+```
+This will apply the changes to all resources with the label app=nginx specified in nginx.yaml file and remove any previously created resources that are no longer specified in the new configuration.
+
+### kubectl get --watch:
+This command displays real-time updates for a specified Kubernetes resource. This is useful for monitoring the status of a resource as it changes over time. For example, to monitor the pods in the default namespace, use the following command:
+
+```
+kubectl get pods --watch
+```
+This will display real-time updates for all the pods in the default namespace.
+
+### kubectl edit -f -:
+This command opens the most recently applied configuration for a Kubernetes resource in your default editor. This is useful for quickly making changes to a resource that was recently applied. For example, to edit the configuration of the most recently applied deployment, use the following command:
+
+```
+kubectl edit -f deployment.yaml
+```
+This will open the most recently applied configuration for the deployment specified in deployment.yaml file in your default editor.
+
+### kubectl create secret:
+This command creates a new Kubernetes secret that can be used to store sensitive data like passwords or API keys that your application needs to access. For example, to create a secret that contains a password, use the following command:
+
+```
+kubectl create secret generic mysecret --from-literal=password=mypassword
+```
+This will create a new secret named mysecret that contains a key-value pair where the key is password and the value is mypassword.
+
+### kubectl cp:
+This command allows you to copy files to and from a Kubernetes pod. This is useful for transferring data between your local machine and a running pod. For example, to copy a file named myfile.txt from a pod named mypod in the default namespace to your local machine, use the following command:
+
+```
+kubectl cp default/mypod:/path/to/myfile.txt ./myfile.txt
+```
+
+This will copy the file named myfile.txt from the pod named mypod in the default namespace to your local machine.
+
+### kubectl uncordon:
+This command removes the "unschedulable" taint from a node in a Kubernetes cluster. This is useful for bringing a previously marked node back into service. For example, to remove the unschedulable taint from a node named mynode, use the following command:
+
+```
+kubectl uncordon mynode
+```
+
+This will remove the unschedulable taint from the node named mynode.
+
+###  kubectl attach: 
+This command attaches to a running container in a Kubernetes pod. You can use it to interact with the container's console or run commands inside the container.
+Example:
+
+Suppose you have a pod named "nginx" running a container named "nginx-container". You can attach to the container's console using the following command:
+
+```
+kubectl attach nginx -c nginx-container
+```
+This will attach your terminal to the console of the nginx-container in the nginx pod. From there, you can interact with the container's shell or run commands inside the container.
+
+If the container is running multiple processes, you can specify which process to attach to using the --process flag. For example, if the container is running both an nginx web server and a shell, you can attach to the shell using the following command:
+
+```
+kubectl attach nginx -c nginx-container --process sh
+```
+
+This will attach your terminal to the shell process inside the nginx-container. You can then interact with the shell as if you were logged into the container.
