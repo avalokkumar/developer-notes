@@ -1179,9 +1179,110 @@ In this example, the attacker is manipulating the "url" parameter to include a r
 > To prevent file inclusion vulnerabilities, sanitize user input, validate file paths, and restrict access to sensitive files. Developers should also avoid using user input to construct file paths and use absolute paths instead. Finally, using web application firewalls and monitoring tools can help detect and mitigate file inclusion attacks.
 
 ---
-* **Insecure direct object references:** Insecure direct object references occur when an application exposes a reference to an internal object, such as a file or database record, without proper access control. This can allow an attacker to access or modify data they should not be able to access.
+#### Insecure direct object references:
+
+Insecure Direct Object References (IDOR) is a vulnerability in web applications that allows an attacker to access or manipulate data that they should not be able to access. This vulnerability occurs when an application uses user-supplied input to directly reference an object such as a file, directory or database record, without verifying that the user has permission to access that object.
+
+> For example, let's say a web application has a page that displays a user's account information, and the URL for that page is `"http://example.com/user.php?id=123"`. If the application does not check whether the user who is logged in is authorized to view the account information for user ID 123, an attacker could simply change the ID parameter in the URL to access another user's account information.
+
+The following are the steps an attacker might take to perform an IDOR attack:
+
+1. Identify a vulnerable web application that uses user input to reference objects:
+The first step in an IDOR attack is to identify a web application that uses user input to reference objects, such as IDs or filenames. These could be used in functions like "view user details" or "download a file," and the application may use a GET request to retrieve this information.
+
+2. Craft a request that includes a different user ID or object reference than the current user is authorized to access:
+Once a vulnerable web application has been identified, the attacker needs to craft a request that includes a different user ID or object reference than the current user is authorized to access. This could involve modifying the ID parameter in the URL, or changing the filename in the request body.
+
+For example, suppose there is a vulnerable web application that allows users to view their own account details using a URL like: https://example.com/account?id=123. An attacker could change the ID parameter to a different user's ID (e.g., https://example.com/account?id=456) in an attempt to access their account details.
+
+3. Submit the request to the server, bypassing any authorization checks and accessing data or functionality that the attacker should not have access to:
+Once the attacker has crafted a request with a different user ID or object reference, they need to submit it to the server. If the application is not properly secured, the server may accept the request and provide the attacker with access to data or functionality that they should not have access to.
+For example, suppose the vulnerable web application described in step 2 does not properly check user authorization before displaying account details. In this case, the attacker could use the modified request to access another user's account details.
+
+Here is an example of an IDOR vulnerability in PHP code:
+
+```php
+<?php
+  $id = $_GET['id'];
+  $query = "SELECT * FROM users WHERE id = $id";
+  // execute query and display results
+?>
+```
+
+In this example, the PHP code retrieves a user's information from a database based on the "id" parameter in the GET request. An attacker could exploit this vulnerability by submitting a request with a different user ID:
+
+```bash
+http://example.com/user.php?id=456
+```
+
+If the application does not check whether the currently logged in user is authorized to view the account information for user ID 456, the attacker would be able to access that information.
+
+> To prevent IDOR vulnerabilities, applications should avoid using user-supplied input to reference objects directly. Instead, they should use a separate identifier that is not visible or guessable by the user, and validate that the user is authorized to access the corresponding object.
+
 ---
-* **Broken access control:** Broken access control occurs when an application fails to properly enforce access controls, allowing an attacker to access sensitive data or perform unauthorized actions. This can be caused by misconfigured permissions, improper validation of user input, or other factors.
+#### Broken access control:
+Broken Access Control is a type of security vulnerability that occurs when a web application or system allows unauthorized users to access sensitive data or functionality. This vulnerability is often the result of poor access control mechanisms that are not properly implemented, allowing attackers to bypass authentication and authorization checks.
+
+The following are some common examples of Broken Access Control vulnerabilities:
+
+1. Directory traversal attacks: In this type of attack, the attacker tries to access files and directories outside the web application's root directory. This can be done by manipulating URLs or using special characters to bypass file path restrictions.
+For example, if a web application is designed to allow users to access files in the /files/ directory, an attacker may be able to access files outside this directory by entering "..//" or "../" in the URL.
+
+2. Horizontal privilege escalation: This occurs when an attacker is able to access the resources or functionality of another user with the same level of privilege.
+For example, if a web application has a "view user profile" feature that allows users to view their own profile information, an attacker may be able to view another user's profile by manipulating the user ID parameter in the request.
+
+3. Vertical privilege escalation: This occurs when an attacker is able to access the resources or functionality of a user with a higher level of privilege.
+For example, if a web application has an administrator panel that allows administrators to manage user accounts, an attacker may be able to access this panel by manipulating the user role parameter in the request to grant themselves administrator privileges.
+
+The following are the steps an attacker might take to perform a Broken Access Control attack:
+
+1. Identify the web application's access control mechanisms and how they are implemented.
+
+2. Analyze the application's requests and responses to identify any access control weaknesses or inconsistencies.
+
+3. Attempt to bypass access controls by manipulating parameters or URLs to gain unauthorized access to data or functionality.
+
+4. Exploit any successful access to sensitive data or functionality for malicious purposes.
+
+##### Example of a broken access control vulnerability, where an attacker can bypass authorization checks and access resources or data that they should not have access to.:
+
+Suppose we have a web application that allows users to view their profile page. Each user has a unique ID associated with their account, which is used to retrieve their profile data from the server. The web application has an endpoint /profile that takes the user ID as a parameter and returns the profile data.
+
+The server-side code might look something like this:
+```javascript
+function getProfileData(userId) {
+  // Check if user is authenticated
+  if (!currentUser || currentUser.id !== userId) {
+    throw new Error('Unauthorized');
+  }
+
+  // Fetch profile data from database
+  const profileData = db.fetchProfileData(userId);
+
+  // Return profile data
+  return profileData;
+}
+
+app.get('/profile', (req, res) => {
+  const userId = req.query.userId;
+
+  // Get profile data for specified user
+  const profileData = getProfileData(userId);
+
+  // Send profile data as JSON response
+  res.json(profileData);
+});
+
+```
+In this code, the `getProfileData()` function checks if the current user is authorized to access the profile data for the specified user ID. If not, it throws an error. The `/profile` endpoint takes the user ID as a query parameter and calls `getProfileData()` to retrieve the profile data. If the user is not authorized to access the profile data, the server will return an error response.
+
+However, suppose an attacker discovers that the currentUser variable is not properly initialized or can be manipulated. The attacker can then craft a request that includes a different user ID than their own, bypassing the authorization check and accessing the profile data for that user.
+
+For example, the attacker might send a request to `/profile?userId=123`, where 123 is the user ID of another user. If the server does not properly validate the currentUser variable, it will assume that the attacker is authorized to access the profile data for user 123 and return it as a response.
+
+
+> To prevent Broken Access Control vulnerabilities, developers should implement secure access control mechanisms, such as role-based access control, and conduct regular security testing to identify and fix any vulnerabilities. Additionally, access control mechanisms should be designed to properly enforce access controls and prevent unauthorized access.
+
 ---
 * **Bluetooth vulnerability:** Bluetooth vulnerabilities can allow attackers to eavesdrop on conversations, steal sensitive data, or take control of devices. Bluetooth vulnerabilities can also be used to launch other types of attacks, such as ransomware attacks or phishing attacks.
 ---
