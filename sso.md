@@ -43,7 +43,61 @@ Here's a high-level overview of how SAML works:
 ---
 ### OpenID Connect:
 
-> OpenID Connect is a simple and lightweight protocol built on top of OAuth 2.0. It is widely used for web and mobile applications and supports both authentication and authorization.
+OpenID Connect is an authentication protocol built on top of OAuth 2.0 that allows users to authenticate with an identity provider (IdP) and access multiple service providers (SPs) without having to create separate accounts or remember multiple usernames and passwords. OpenID Connect is widely used in web and mobile applications and provides a simple and standardized way to implement SSO (Single Sign-On).
+
+#### Here's a high-level overview of how OpenID Connect works:
+
+* The user attempts to access a resource on an SP.
+* The SP redirects the user to the IdP for authentication.
+* The user enters their credentials on the IdP's login page.
+* The IdP authenticates the user and generates an ID token containing information about the user's identity and authentication status.
+* The user is redirected back to the SP with the ID token.
+* The SP verifies the ID token and grants the user access to the requested resource.
+
+#### OpenID Connect provides several benefits over traditional SSO protocols like SAML:
+
+* Simplicity: OpenID Connect is built on top of OAuth 2.0, which is a widely used and well-understood protocol. This makes it easier to implement and integrate with existing systems.
+
+* Mobile-friendly: OpenID Connect is designed to work well with mobile devices and provides a streamlined authentication flow that works seamlessly across different platforms.
+
+* Standardization: OpenID Connect is a standardized protocol that is supported by many vendors and providers, making it easier to implement and maintain.
+
+#### Here's an example scenario of how OpenID Connect might be used in a web application:
+
+* The user attempts to access a protected resource on a web application.
+* The web application redirects the user to the IdP's authorization endpoint, passing along information about the requested resource.
+* The user is presented with a login page on the IdP's server, where they enter their credentials.
+* The IdP authenticates the user and generates an ID token containing information about the user's identity and authentication status.
+* The user is redirected back to the web application with the ID token.
+* The web application verifies the ID token and grants the user access to the requested resource.
+
+#### Here's a more detailed breakdown of how OIDC works:
+
+1. The user attempts to access a protected resource on an SP.
+
+2. The SP redirects the user to the OIDC authorization endpoint on the IdP, along with the client ID and any required scopes.
+
+* - Client ID: A unique identifier for the client (i.e., the SP) registered with the IdP.
+* - Scopes: A set of permissions that the client is requesting from the IdP to access the user's information.
+
+3. The IdP displays a login page to the user, asking them to enter their credentials.
+
+4. The user enters their credentials, and the IdP authenticates them.
+
+5. The IdP generates an identity token (ID token) that contains information about the user, such as their name, email address, and other attributes.
+
+* - ID Token: A JWT (JSON Web Token) that contains information about the user and their authentication status. The ID token is signed by the IdP and can be used by the SP to verify the user's identity.
+
+6. The IdP redirects the user back to the SP with the ID token.
+
+7. The SP verifies the ID token to ensure that it was issued by a trusted IdP and that the information it contains is valid.
+
+* - Token Validation: The process by which the SP verifies the signature and contents of the ID token to ensure that it was issued by a trusted IdP and that the user's information is valid.
+
+8. If the ID token is valid, the SP grants the user access to the requested resource.
+
+* - Access Token: An OAuth 2.0 token that represents the user's authorization to access a protected resource on the SP.
+
 ---
 ### OAuth:
 > OAuth is an authorization framework used to grant third-party access to resources without sharing passwords. It is often used in social media and cloud-based applications.
