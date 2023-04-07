@@ -100,7 +100,51 @@ OpenID Connect is an authentication protocol built on top of OAuth 2.0 that allo
 
 ---
 ### OAuth:
-> OAuth is an authorization framework used to grant third-party access to resources without sharing passwords. It is often used in social media and cloud-based applications.
+
+OAuth is a protocol that allows a user to grant access to their data on one website or application to another website or application without giving them their login credentials. The OAuth protocol works by providing a secure and standardized way for applications to obtain authorization to access a user's data from a third-party service or application, such as Facebook or Google.
+
+There are three main actors in an OAuth flow: the user, the client, and the server. The user is the person who owns the data and is giving permission for the client to access it. The client is the application that wants to access the user's data, and the server is the service or application that stores the user's data.
+
+##### Here's how the OAuth flow works:
+
+1. The client sends a request to the server for access to the user's data. This request includes the client's credentials, which identify the client to the server.
+
+2. The server responds with an access token. This token is a unique string of characters that the client can use to access the user's data. The access token is sent back to the client securely using HTTPS.
+
+3. The client uses the access token to make requests to the server for the user's data. Each request includes the access token, which the server uses to verify that the client is authorized to access the user's data.
+
+There are two main versions of OAuth: OAuth 1.0 and OAuth 2.0. OAuth 1.0 is an older version of the protocol that is more complex and difficult to implement. OAuth 2.0 is a simpler and more widely used version of the protocol.
+
+##### OAuth 2.0 uses several different grant types to obtain an access token. The most commonly used grant types are:
+
+Authorization Code Grant: This grant type is used when the client is a web application that can securely store a client secret. The user is redirected to the server to log in and authorize the client to access their data. The server responds with an authorization code, which the client can exchange for an access token.
+
+* Implicit Grant: This grant type is used when the client is a web application that cannot securely store a client secret, such as a JavaScript application running in a browser. The user is redirected to the server to log in and authorize the client to access their data. The server responds with an access token directly, which is sent back to the client in the redirect URL.
+
+* Resource Owner Password Credentials Grant: This grant type is used when the client has direct access to the user's username and password. The client sends the user's credentials to the server, which responds with an access token.
+
+##### OAuth 2.0 also defines several roles that are involved in the flow:
+
+* Resource Owner: The user who owns the data that the client wants to access.
+
+* Client: The application that wants to access the user's data.
+
+* Resource Server: The server that stores the user's data and responds to requests for that data.
+
+* Authorization Server: The server that issues access tokens to clients after the user has authorized them to access their data.
+
+##### Here's an example of how an OAuth 2.0 flow might work in practice:
+
+* A user wants to sign up for a new website that uses Facebook for authentication.
+
+* The user clicks the "Sign up with Facebook" button on the website.
+
+* The website redirects the user to Facebook, where they are prompted to log in and authorize the website to access their data.
+
+* After the user grants authorization, Facebook responds with an access token, which the website can use to access the user's data.
+
+* The website uses the access token to retrieve the user's profile information from Facebook and create a new account for the user on the website.
+
 ---
 ### WS-Federation (Web Services Federation): 
 > WS-Federation is a standard protocol for federated identity that enables users to access multiple applications or services using a single set of login credentials.
