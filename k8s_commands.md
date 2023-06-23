@@ -2,30 +2,358 @@
 
 ### Resource Management:
 
-* kubectl create
-* kubectl get
-* kubectl describe
-* kubectl apply
-* kubectl delete
-* kubectl logs
-* kubectl exec
-* kubectl port-forward
-* kubectl rollout
-* kubectl scale
+#### kubectl create
+##### Command: kubectl create
+> Explanation: This command is used to create Kubernetes resources. It allows you to specify the type of resource and its configuration.
 
+#### kubectl create deployment:
+##### Command: `kubectl create deployment nginx-deployment --image=nginx`
+> Explanation: This command creates a deployment named "nginx-deployment" using the "nginx" container image. Deployments manage the lifecycle of pods in Kubernetes.
+
+#### kubectl create deployment with dry-run and YAML output:
+##### Command: `kubectl create deployment nginx-deployment --image=nginx --dry-run=client -o yaml`
+> Explanation: This command performs a dry run of creating a deployment with the specified image. It generates the YAML representation of the deployment configuration without actually creating it.
+
+#### kubectl create deployment with dry-run, YAML output, and file creation:
+##### Command: `kubectl create deployment nginx-deployment --image=nginx --dry-run=client -o yaml > nginx-deployment.yaml`
+> Explanation: This command performs a dry run of creating a deployment and saves the resulting YAML configuration to a file named "nginx-deployment.yaml" for later use.
+
+#### kubectl run
+##### Command: `kubectl run nginx --image=nginx`
+> Explanation: This command creates a pod named "nginx" using the "nginx" container image. Pods are the smallest and simplest unit in the Kubernetes ecosystem.
+
+#### kubectl run with dry-run and YAML output:
+##### Command: `kubectl run nginx --image=nginx --dry-run=client -o yaml`
+> Explanation: This command performs a dry run of creating a pod with the specified image. It generates the YAML representation of the pod configuration without actually creating it.
+
+#### kubectl run with dry-run, YAML output, and file creation:
+##### Command: `kubectl run nginx --image=nginx --dry-run=client -o yaml > nginx-deployment.yaml`
+>Explanation: This command performs a dry run of creating a pod and saves the resulting YAML configuration to a file  named "nginx-deployment.yaml" for later use.
+
+#### kubectl expose:
+##### Command: `kubectl expose deployment nginx-deployment --port=80 --type=NodePort`
+> Explanation: This command creates a service to expose the pods managed by the "nginx-deployment" deployment. The service makes the pods accessible from outside the cluster on a specified port.
+
+#### kubectl expose with dry-run and YAML output:
+##### Command: `kubectl expose deployment nginx-deployment --port=80 --type=NodePort --dry-run=client -o yaml`
+> Explanation: This command performs a dry run of creating a service for the "nginx-deployment" and generates the YAML representation of the service configuration without actually creating it. 
+
+#### kubectl expose with dry-run, YAML output, and file creation:
+##### Command: `kubectl expose deployment nginx-deployment --port=80 --type=NodePort --dry-run=client -o yaml > nginx-service.yaml`
+> Explanation: This command performs a dry run of creating a service and saves the resulting YAML configuration to a file named "nginx-service.yaml" for later use.
+
+#### kubectl get
+
+#### kubectl get pods:
+##### Command: `kubectl get pods`
+> Explanation: This command retrieves information about the pods running in the current namespace. Pods are the smallest and simplest unit in Kubernetes that encapsulates one or more containers.
+
+#### kubectl get pods with wide output:
+##### Command: `kubectl get pods -o wide`
+> Explanation: This command displays detailed information about the pods, including additional columns such as node name and IP address.
+
+#### kubectl get pods with YAML output:
+##### Command: `kubectl get pods -o yaml`
+> Explanation: This command retrieves the YAML representation of the pods, including their configuration, and displays it in the output.
+
+#### kubectl get pods with JSON output:
+##### Command: `kubectl get pods -o json`
+> Explanation: This command retrieves the JSON representation of the pods, including their configuration, and displays it in the output.
+
+#### kubectl get pods with custom columns:
+##### Command: `kubectl get pods -o custom-columns=POD_NAME:.metadata.name,POD_STATUS:.status.phase`
+> Explanation: This command allows you to define custom columns for the output. In this example, it displays the pod name and its current status (phase).
+
+#### kubectl get pods with JSONPath output (name):
+##### Command: `kubectl get pods -o jsonpath='{.items[0].metadata.name}'`
+> Explanation: This command uses JSONPath expressions to extract specific information from the pods. In this case, it retrieves the name of the first pod in the list.
+
+#### kubectl get pods with JSONPath output (status):
+##### Command: `kubectl get pods -o jsonpath='{.items[0].status.phase}'`
+> Explanation: This command retrieves the status phase of the first pod in the list using JSONPath expressions.
+
+#### kubectl get pods with JSONPath output (container image):
+##### Command: `kubectl get pods -o jsonpath='{.items[0].spec.containers[0].image}'`
+> Explanation: This command retrieves the image of the first container within the first pod in the list using JSONPath expressions.
+
+#### kubectl get pods with JSONPath output (container image, newline):
+##### Command: `kubectl get pods -o jsonpath='{.items[0].spec.containers[0].image}{"\n"}'`
+> Explanation: This command retrieves the image of the first container within the first pod in the list using JSONPath expressions and adds a newline after the output.
+
+#### kubectl get pods with JSONPath output (multiple container images):
+##### Command: `kubectl get pods -o jsonpath='{.items[0:2].spec.containers[0].image}{"\n"}'`
+> Explanation: This command retrieves the images of the first two containers within the first two pods in the list using JSONPath expressions and adds a newline after each image.
+
+#### kubectl get pods with JSONPath output (all container images):
+##### Command: `kubectl get pods -o jsonpath='{.items[*].spec.containers[0].image}{"\n"}'`
+> Explanation: This command retrieves the images of all containers in all pods in the list using JSONPath expressions and adds a newline after each image.
+
+#### kubectl get pods with JSONPath output (range of values - pod names):
+##### Command: `kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}'`
+> Explanation: This command retrieves the names of all pods in the list using JSONPath expressions and displays them with a newline after each name.
+
+#### kubectl get pods with JSONPath output (range of values - pod names and phases):
+##### Command: `kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.phase}{"\n"}{end}'`
+> Explanation: This command retrieves the names and phases of all pods in the list using JSONPath expressions and displays them with a tab-separated format.
+
+#### kubectl get pods with JSONPath output (range of values - pod names, phases, and container images):
+##### Command: `kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.phase}{"\t"}{.spec.containers[0].image}{"\n"}{end}'`
+> Explanation: This command retrieves the names, phases, and container images of all pods in the list using JSONPath expressions and displays them with a tab-separated format.
+
+#### kubectl get pods with JSONPath output (range of values - pod names, phases, and duplicate container images):
+##### Command: `kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.phase}{"\t"}{.spec.containers[0].image}{"\t"}{.spec.containers[0].image}{"\n"}{end}'`
+> Explanation: This command retrieves the names, phases, and duplicate container images of all pods in the list using JSONPath expressions and displays them with a tab-separated format.
+
+* kubectl describe
+  * kubectl describe pod nginx-deployment-5c7588df68-7q8q2
+  * kubectl describe pod nginx-deployment-5c7588df68-7q8q2 | grep -i image
+  * kubectl describe pod nginx-deployment-5c7588df68-7q8q2 | grep -i image | cut -f2 -d':'
+  * kubectl describe pod nginx-deployment-5c7588df68-7q8q2 | grep -i image | cut -f2 -d':' | cut -f1 -d' '
+  * kubectl describe pod nginx-deployment-5c7588df68-7q8q2 | grep -i image | cut -f2 -d':' | cut -f1 -d' ' | cut -f2 -d'/'
+  * kubectl describe pod nginx-deployment-5c7588df68-7q8q2 | grep -i image | cut -f2 -d':' | cut -f1 -d' ' | cut -f2 -d'/' | cut -f1 -d'@'
+  * kubectl describe pod nginx-deployment-5c7588df68-7q8q2 | grep -i image | cut -f2 -d':' | cut -f1 -d' ' | cut -f2 -d'/' | cut -f1 -d'@' | cut -f1 -d'.'
+  * kubectl describe pod nginx-deployment-5c7588df68-7q8q2 | grep -i image | cut -f2 -d':' | cut -f1 -d' ' | cut -f2 -d'/' | cut -f1 -d'@' | cut -f1 -d'.' | cut -f1 -d'-'
+  * kubectl describe pod nginx-deployment-5c7588df68-7q8q2 | grep -i image | cut -f2 -d':' | cut -f1 -d' ' | cut -f2 -d'/' | cut -f1 -d'@' | cut -f1 -d'.' | cut -f1 -d'-' | cut -f1 -d'_'
+
+* kubectl apply
+  * kubectl apply -f nginx-deployment.yaml
+  * kubectl apply -f nginx-service.yaml
+  * kubectl apply -f nginx-deployment.yaml --record
+  * kubectl apply -f nginx-deployment.yaml --record=true
+  * kubectl apply -f nginx-deployment.yaml --record=true --record
+  * kubectl apply -f nginx-deployment.yaml --record=true --record=true
+  * kubectl apply -f nginx-deployment.yaml --record=true --record=true --record
+
+* kubectl delete
+  * kubectl delete pod nginx-deployment-5c7588df68-7q8q2
+  * kubectl delete pod nginx-deployment-5c7588df68-7q8q2 --grace-period=0 --force
+  * kubectl delete pod nginx-deployment-5c7588df68-7q8q2 --grace-period=0 --force=true
+  
+* kubectl logs
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --tail=10
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --tail=10 --follow
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --tail=10 --follow=true
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --tail=10 --follow=true --timestamps
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --tail=10 --follow=true --timestamps=true
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --tail=10 --follow=true --timestamps=true --since=1h
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --tail=10 --follow=true --timestamps=true --since=1h --since-time="2020-01-01T00:00:00Z"
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --tail=10 --follow=true --timestamps=true --since=1h --since-time="2020-01-01T00:00:00Z" --container=nginx
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --tail=10 --follow=true --timestamps=true --since=1h --since-time="2020-01-01T00:00:00Z" --container=nginx --previous
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --tail=10 --follow=true --timestamps=true --since=1h --since-time="2020-01-01T00:00:00Z" --container=nginx --previous=true
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --tail=10 --follow=true --timestamps=true --since=1h --since-time="2020-01-01T00:00:00Z" --container=nginx --previous=true --limit-bytes=1024
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --tail=10 --follow=true --timestamps=true --since=1h --since-time="2020-01-01T00:00:00Z" --container=nginx --previous=true --limit-bytes=1024 --limit-logs=10
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --tail=10 --follow=true --timestamps=true --since=1h --since-time="2020-01-01T00:00:00Z" --container=nginx --previous=true --limit-bytes=1024 --limit-logs=10 --ignore-errors=true
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --tail=10 --follow=true --timestamps=true --since=1h --since-time="2020-01-01T00:00:00Z" --container=nginx --previous=true --limit-bytes=1024 --limit-logs=10 --ignore-errors=true --pod-running-timeout=1h
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --all-containers=true
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --all-containers=true --tail=10
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --all-containers=true --tail=10 --follow
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --all-containers=true --tail=10 --follow=true
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --all-containers=true --tail=10 --follow=true --timestamps
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --all-containers=true --tail=10 --follow=true --timestamps=true
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --all-containers=true --tail=10 --follow=true --timestamps=true --since=1h
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --all-containers=true --tail=10 --follow=true --timestamps=true --since=1h --since-time="2020-01-01T00:00:00Z"
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --all-containers=true --tail=10 --follow=true --timestamps=true --since=1h --since-time="2020-01-01T00:00:00Z" --previous
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --all-containers=true --tail=10 --follow=true --timestamps=true --since=1h --since-time="2020-01-01T00:00:00Z" --previous=true
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --all-containers=true --tail=10 --follow=true --timestamps=true --since=1h --since-time="2020-01-01T00:00:00Z" --previous=true --limit-bytes=1024
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --all-containers=true --tail=10 --follow=true --timestamps=true --since=1h --since-time="2020-01-01T00:00:00Z" --previous=true --limit-bytes=1024 --limit-logs=10
+  * kubectl logs nginx-deployment-5c7588df68-7q8q2 --all-containers=true --tail=10 --follow=true --timestamps=true --since=1h --since-time="2020-01-01T00:00:00Z" --previous=true --limit-bytes=1024 --limit-logs=10 --ignore-errors=true
+
+* kubectl exec
+  * kubectl exec nginx-deployment-5c7588df68-7q8q2 -- ls -l
+  * kubectl exec nginx-deployment-5c7588df68-7q8q2 -- ls -l /usr/share/nginx/html
+  * kubectl exec nginx-deployment-5c7588df68-7q8q2 -- ls -l /usr/share/nginx/html/index.html
+  * kubectl exec nginx-deployment-5c7588df68-7q8q2 -- cat /usr/share/nginx/html/index.html
+  * kubectl exec nginx-deployment-5c7588df68-7q8q2 -- cat /usr/share/nginx/html/index.html | grep nginx
+  * kubectl exec nginx-deployment-5c7588df68-7q8q2 -- bin/bash
+  * kubectl exec nginx-deployment-5c7588df68-7q8q2 -- bin/bash -c "ls -l /usr/share/nginx/html"
+  * kubectl exec -it nginx-deployment-5c7588df68-7q8q2 -- bin/bash
+  * kubectl exec -it nginx-deployment-5c7588df68-7q8q2 -- bin/bash -c "ls -l /usr/share/nginx/html"
+  * kubectl exec -it nginx-deployment-5c7588df68-7q8q2 -- bin/bash -c "ls -l /usr/share/nginx/html" -- /bin/sh
+  * kubectl exec -it nginx-deployment-5c7588df68-7q8q2 -- bin/bash -c "ls -l /usr/share/nginx/html" -- /bin/sh -c "ls -l /usr/share/nginx/html"
+
+* kubectl port-forward
+  * kubectl port-forward nginx-deployment-5c7588df68-7q8q2 8080:80
+  * kubectl port-forward nginx-deployment-5c7588df68-7q8q2 8080:80 --address
+
+* kubectl rollout
+  * kubectl rollout history
+  * kubectl rollout history deployment nginx-deployment
+  * kubectl rollout history deployment nginx-deployment --revision=2
+  * kubectl rollout history deployment nginx-deployment --revision=2 --record
+  * kubectl rollout undo
+  * kubectl rollout undo deployment nginx-deployment
+  * kubectl rollout undo deployment nginx-deployment --to-revision=2
+  * kubectl rollout undo deployment nginx-deployment --to-revision=2 --record
+  * kubectl rollout restart
+  * kubectl rollout restart deployment nginx-deployment
+  * kubectl rollout restart deployment nginx-deployment --record
+  * kubectl rollout status
+  * kubectl rollout status deployment nginx-deployment
+  * kubectl rollout status deployment nginx-deployment --timeout=1m
+  * kubectl rollout status deployment nginx-deployment --timeout=1m --watch=false
+  * kubectl rollout pause
+  * kubectl rollout pause deployment nginx-deployment
+  * kubectl rollout resume
+  * kubectl rollout resume deployment nginx-deployment
+  
+* kubectl scale
+  * kubectl scale --replicas=3 deployment nginx-deployment
+  * kubectl scale --replicas=3 replicaset nginx-deployment-5c7588df68
+  * kubectl scale --replicas=3 statefulset web
+  * kubectl scale --replicas=3 daemonset my-daemonset
+  * kubectl scale --replicas=3 job my-job
+  * kubectl scale --replicas=3 cronjob my-cronjob
+  * kubectl scale --replicas=3 deployment nginx-deployment --current-replicas=2
+  * kubectl scale --replicas=3 deployment nginx-deployment --current-replicas=2 --resource-version=1542
+
+    
 ### Configuration Management:
 
 * kubectl cluster-info
+  * kubectl cluster-info dump
+  * kubectl cluster-info dump --output-directory=/tmp/cluster-info
+  * kubectl cluster-info dump --output-directory=/tmp/cluster-info --namespaces=default
+  * kubectl cluster-info dump --output-directory=/tmp/cluster-info --namespaces=default --all-namespaces
+  * kubectl cluster-info dump --output-directory=/tmp/cluster-info --namespaces=default --all-namespaces --output-version=v1
+  * kubectl cluster-info dump --output-directory=/tmp/cluster-info --namespaces=default --all-namespaces --output-version=v1 --log-file=/tmp/cluster-info.log
+  * kubectl cluster-info dump --output-directory=/tmp/cluster-info --namespaces=default --all-namespaces --output-version=v1 --log-file=/tmp/cluster-info.log --log-file-max-size=10
+  * kubectl cluster-info dump --output-directory=/tmp/cluster-info --namespaces=default --all-namespaces --output-version=v1 --log-file=/tmp/cluster-info.log --log-file-max-size=10 --log-file-max-num=5
+  * kubectl cluster-info dump --output-directory=/tmp/cluster-info --namespaces=default --all-namespaces --output-version=v1 --log-file=/tmp/cluster-info.log --log-file-max-size=10 --log-file-max-num=5 --image-file=/tmp/cluster-info.tar.gz
+
 * kubectl config
+  * kubectl config view
+  * kubectl config view --minify
+  * kubectl config view --minify --flatten
+  * kubectl config view --minify --flatten --output=json
+  * kubectl config view --minify --flatten --output=yaml
+  * kubectl config view --minify --flatten --output=jsonpath='{.clusters[0].cluster.server}'
+  * kubectl config view --minify --flatten --output=jsonpath='{.clusters[0].cluster.server}' --raw
+  * kubectl config view --minify --flatten --output=jsonpath='{.clusters[0].cluster.server}' --raw --log-file=/tmp/kubectl.log
+
+* kubectl config current-context
+  * kubectl config current-context --log-file=/tmp/kubectl.log
+  * kubectl config current-context --raw
+  * kubectl config current-context --raw --log-file=/tmp/kubectl.log
+  * kubectl config current-context --output=json
+  * kubectl config current-context --output=json --log-file=/tmp/kubectl.log
+* kubectl config use-context
+  * kubectl config use-context kubernetes-admin@kubernetes
+  * kubectl config use-context kubernetes-admin@kubernetes --log-file=/tmp/kubectl.log
+  * kubectl config use-context kubernetes-admin@kubernetes --raw
+  * kubectl config use-context kubernetes-admin@kubernetes --raw --log-file=/tmp/kubectl.log
+  * kubectl config use-context kubernetes-admin@kubernetes --output=json
+  * kubectl config use-context kubernetes-admin@kubernetes --output=json --log-file=/tmp/kubectl.log
+* kubectl config set-cluster
+  * kubectl config set-cluster kubernetes --server=https://
+  * kubectl config set-cluster kubernetes --server=https:// --log-file=/tmp/kubectl.log
+* kubectl config set-credentials
+  * kubectl config set-credentials kubernetes-admin --username=admin --password=123456
+  * kubectl config set-credentials kubernetes-admin --username=admin --password=123456 --log-file=/tmp/kubectl.log
+* kubectl config set-context
+  * kubectl config set-context kubernetes-admin@kubernetes --cluster=kubernetes --user=kubernetes-admin
+  * kubectl config set-context kubernetes-admin@kubernetes --cluster=kubernetes --user=kubernetes-admin --log-file=/tmp/kubectl.log
+* kubectl config unset
+  * kubectl config unset users.kubernetes-admin
+  * kubectl config unset users.kubernetes-admin --log-file=/tmp/kubectl.log
+* kubectl config rename-context
+  * kubectl config rename-context kubernetes-admin@kubernetes kubernetes-admin@kubernetes
+  * kubectl config rename-context kubernetes-admin@kubernetes kubernetes-admin@kubernetes --log-file=/tmp/kubectl.log
 * kubectl rollout history
+  * kubectl rollout history deployment nginx-deployment
+  * kubectl rollout history deployment nginx-deployment --revision=1
+  * kubectl rollout history deployment nginx-deployment --revision=1 --output=json
+  * kubectl rollout history deployment nginx-deployment --revision=1 --output=json --log-file=/tmp/kubectl.log
+  * kubectl rollout history deployment nginx-deployment --revision=1 --output=json --log-file=/tmp/kubectl.log --log-file-max-size=10
+  * kubectl rollout history deployment nginx-deployment --revision=1 --output=json --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5
+* kubectl rollout pause
+  * kubectl rollout pause deployment nginx-deployment
+  * kubectl rollout pause deployment nginx-deployment --log-file=/tmp/kubectl.log
+* kubectl rollout resume
+  * kubectl rollout resume deployment nginx-deployment
+  * kubectl rollout resume deployment nginx-deployment --log-file=/tmp/kubectl.log
+* kubectl rollout undo
+  * kubectl rollout undo deployment nginx-deployment
+  * kubectl rollout undo deployment nginx-deployment --log-file=/tmp/kubectl.log
+  * kubectl rollout undo deployment nginx-deployment --to-revision=1
+  * kubectl rollout undo deployment nginx-deployment --to-revision=1 --log-file=/tmp/kubectl.log
+* kubectl rollout restart
+  * kubectl rollout restart deployment nginx-deployment
+  * kubectl rollout restart deployment nginx-deployment --log-file=/tmp/kubectl.log
 * kubectl edit
+  * kubectl edit deployment nginx-deployment
+  * kubectl edit deployment nginx-deployment --log-file=/tmp/kubectl.log
+  * kubectl edit deployment nginx-deployment --log-file=/tmp/kubectl.log --log-file-max-size=10
+  * kubectl edit deployment nginx-deployment --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5
+  * kubectl edit deployment nginx-deployment --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5 --log-file-max-backups=5
 * kubectl label
-* kubectl taint
+  * kubectl label deployment nginx-deployment app=nginx
+  * kubectl label deployment nginx-deployment app=nginx --log-file=/tmp/kubectl.log
+  * kubectl label deployment nginx-deployment app=nginx --log-file=/tmp/kubectl.log --log-file-max-size=10
+  * kubectl label deployment nginx-deployment app=nginx --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5
+  * kubectl label deployment nginx-deployment app=nginx --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5 --log-file-max-backups=5
+  * kubectl label deployment nginx-deployment app=nginx --overwrite
+  * kubectl label deployment nginx-deployment app=nginx --overwrite --log-file=/tmp/kubectl.log
+  * kubectl label deployment nginx-deployment app=nginx --overwrite --log-file=/tmp/kubectl.log --log-file-max-size=10
 * kubectl annotate
-* kubectl exec -it
+  * kubectl annotate deployment nginx-deployment app=nginx
+  * kubectl annotate deployment nginx-deployment app=nginx --log-file=/tmp/kubectl.log
+  * kubectl annotate deployment nginx-deployment app=nginx --log-file=/tmp/kubectl.log --log-file-max-size=10
+  * kubectl annotate deployment nginx-deployment app=nginx --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5
+  * kubectl annotate deployment nginx-deployment app=nginx --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5 --log-file-max-backups=5
+  * kubectl annotate deployment nginx-deployment app=nginx --overwrite
+  * kubectl annotate deployment nginx-deployment app=nginx --overwrite --log-file=/tmp/kubectl.log
+  * kubectl annotate deployment nginx-deployment app=nginx --overwrite --log-file=/tmp/kubectl.log --log-file-max-size=10
+* kubectl rollout status
+  * kubectl rollout status deployment nginx-deployment
+  * kubectl rollout status deployment nginx-deployment --log-file=/tmp/kubectl.log
+  * kubectl rollout status deployment nginx-deployment --log-file=/tmp/kubectl.log --log-file-max-size=10
+  * kubectl rollout status deployment nginx-deployment --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5
+  * kubectl rollout status deployment nginx-deployment --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5 --log-file-max-backups=5
+* kubectl taint
+  * kubectl taint node node1 key=value:NoSchedule
+  * kubectl taint node node1 key=value:NoSchedule --log-file=/tmp/kubectl.log
+  * kubectl taint node node1 key=value:NoSchedule --log-file=/tmp/kubectl.log --log-file-max-size=10
+  * kubectl taint node node1 key=value:NoSchedule --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5
+  * kubectl taint node node1 key=value:NoSchedule --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5 --log-file-max-backups=5
+  * kubectl taint node node1 key=value:NoSchedule --overwrite
+  * kubectl taint node node1 key=value:NoSchedule --overwrite --log-file=/tmp/kubectl.log
+  * kubectl taint node node1 key=value:NoSchedule --overwrite --log-file=/tmp/kubectl.log --log-file-max-size=10
+  * kubectl taint node node1 key=value:NoSchedule --overwrite --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5
 * kubectl top
+  * kubectl top node
+  * kubectl top node --log-file=/tmp/kubectl.log
+  * kubectl top node --log-file=/tmp/kubectl.log --log-file-max-size=10
+  * kubectl top node --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5
+  * kubectl top node --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5 --log-file-max-backups=5
+  * kubectl top pod
+  * kubectl top pod --log-file=/tmp/kubectl.log
+  * kubectl top pod --log-file=/tmp/kubectl.log --log-file-max-size=10
+  * kubectl top pod --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5
+  * kubectl top pod --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5 --log-file-max-backups=5
+* kubectl logs
+  * kubectl logs pod/nginx
+  * kubectl logs pod/nginx --log-file=/tmp/kubectl.log
+  * kubectl logs pod/nginx --log-file=/tmp/kubectl.log --log-file-max-size=10
+  * kubectl logs pod/nginx --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5
+  * kubectl logs pod/nginx --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5 --log-file-max-backups=5
+  * kubectl logs pod/nginx --tail=10
+  * kubectl logs pod/nginx --tail=10 --log-file=/tmp/kubectl.log
+  * kubectl logs pod/nginx --tail=10 --log-file=/tmp/kubectl.log --log-file-max-size=10
+  * kubectl logs pod/nginx --tail=10 --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5
+  * kubectl logs pod/nginx --tail=10 --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5 --log-file-max-backups=5
+  * kubectl logs pod/nginx --tail=10 --follow
+  * kubectl logs pod/nginx --tail=10 --follow --log-file=/tmp/kubectl.log
+  * kubectl logs pod/nginx --tail=10 --follow --log-file=/tmp/kubectl.log --log-file-max-size=10
+  * kubectl logs pod/nginx --tail=10 --follow --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5
+  * kubectl logs pod/nginx --tail=10 --follow --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5 --log-file-max-backups=5
+
+
 * kubectl apply -f
-* kubectl config view
+  * kubectl apply -f pod.yaml
+  * kubectl apply -f pod.yaml --log-file=/tmp/kubectl.log
+  * kubectl apply -f pod.yaml --log-file=/tmp/kubectl.log --log-file-max-size=10
+  * kubectl apply -f pod.yaml --log-file=/tmp/kubectl.log --log-file-max-size=10 --log-file-max-num=5
 
 ### Rollout Management:
 
@@ -42,6 +370,18 @@
 ### API Management:
 
 * kubectl api-resources
+* kubectl api-versions
+* kubectl api-versions -o json
+* kubectl api-versions -o yaml
+* kubectl api-versions -o wide
+* kubectl api-versions -o custom-columns=NAME:.name,VERSION:.version
+* kubectl api-versions -o custom-columns=NAME:.name,VERSION:.version --sort-by .name
+* kubectl api-versions -o custom-columns=NAME:.name,VERSION:.version --sort-by .version
+* kubectl api-versions -o custom-columns=NAME:.name,VERSION:.version --sort-by .version --reverse
+* kubectl api-versions -o custom-columns=NAME:.name,VERSION:.version --sort-by .version --reverse --no-headers
+* kubectl api-versions -o custom-columns=NAME:.name,VERSION:.version --sort-by .version --reverse --no-headers | head -n 1
+* kubectl api-versions -o custom-columns=NAME:.name,VERSION:.version --sort-by .version --reverse --no-headers | tail -n 1
+* kubectl api-versions -o custom-columns=NAME:.name,VERSION:.version --sort-by .version --reverse --no-headers | grep v1
 
 ### Rollout Management:
 
