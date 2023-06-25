@@ -521,6 +521,33 @@ Network security refers to the set of practices, technologies, and policies desi
 ---
 ### Network Architecture: 
 > Network architecture refers to the design and configuration of a computer network. There are several types of network architecture, including client-server, peer-to-peer, and cloud computing. In a client-server network, one or more computers act as servers and provide services to other computers, which act as clients. In a peer-to-peer network, all computers have equal responsibilities and can act as both clients and servers. In a cloud computing network, resources and services are delivered over the internet from remote servers.
+
+#### There are several types of network architectures commonly used:
+
+1. #### Client-Server Architecture:
+
+* In a client-server architecture, the network consists of a central server that provides resources and services to multiple client devices.
+* Clients make requests to the server, which processes those requests and sends back the required data or performs the requested tasks.
+* Examples of client-server architectures include web servers delivering web pages to web browsers, file servers providing file access to client devices, and database servers managing data for client applications.
+
+
+2. #### Peer-to-Peer Architecture:
+
+* In a peer-to-peer (P2P) architecture, devices (peers) in the network act both as clients and servers, sharing resources and services directly with each other.
+* Each device can request or provide data to other devices in a decentralized manner without relying on a central server.
+* P2P architecture is commonly used for file sharing, decentralized communication platforms, and distributed computing.
+
+
+3. #### Cloud Computing:
+
+* Cloud computing architecture involves accessing resources, services, and storage remotely over the internet rather than relying on local infrastructure.
+* Cloud providers offer scalable and on-demand resources, such as virtual machines, storage, and software applications, accessible to clients over the network.
+* Users can access and utilize these resources as needed, eliminating the need for extensive local hardware and infrastructure.
+
+> These network architectures can be further extended and combined to create complex network environments. For example, a cloud computing environment may use a client-server architecture within the cloud infrastructure, where clients interact with server instances hosted in the cloud.
+
+> Network architecture also involves various components, such as routers, switches, firewalls, and protocols, which govern how data is transmitted and managed within the network. Additionally, factors like network topology, security measures, scalability, and performance considerations play crucial roles in designing and configuring a network.
+
 ---
 > ### Cloud networking: 
 Cloud networking refers to the networking technologies and services used to support cloud computing. It includes the physical and virtual networking components that connect cloud computing resources, such as servers, storage, and applications. Cloud networking also includes the management and security of these resources, as well as the delivery of services to users over the internet.
