@@ -172,6 +172,7 @@
   * kubectl exec -it nginx-deployment-5c7588df68-7q8q2 -- bin/bash -c "ls -l /usr/share/nginx/html" -- /bin/sh
   * kubectl exec -it nginx-deployment-5c7588df68-7q8q2 -- bin/bash -c "ls -l /usr/share/nginx/html" -- /bin/sh -c "ls -l /usr/share/nginx/html"
 
+
 * kubectl port-forward
   * kubectl port-forward nginx-deployment-5c7588df68-7q8q2 8080:80
   * kubectl port-forward nginx-deployment-5c7588df68-7q8q2 8080:80 --address
@@ -391,7 +392,7 @@
 ### Resource Deletion:
 
 * kubectl delete pod --force
-
+---
 ### Resource Configuration:
 
 * kubectl explain
