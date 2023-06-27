@@ -62,8 +62,29 @@ if __name__ == '__main__':
 * #### Tab Groups: 
 If you frequently have many tabs open, the Tab Groups flag can be a lifesaver. Enabling this flag allows you to organize your tabs into groups, which can be collapsed and expanded as needed. To enable this flag, go to `"chrome://flags/#tab-groups"` and select "Enabled" from the dropdown menu.
 
+Tab groups in chrome can be created by right clicking on the tab and selecting `"Add to new group"`.
+You can also change the color of the tab group by right clicking on the tab group and selecting `"Color"`.
+You can also name the tab group by right clicking on the tab group and selecting `"Name group"`.
+You can also move the tabs between tab groups by dragging and dropping the tabs.
+
+* #### Tab Hover Cards:
+If you often have many tabs open, the Tab Hover Cards flag can make it easier to see what's on each tab. Enabling this flag displays a small preview of each tab when you hover over it with your mouse. To enable this flag, go to `"chrome://flags/#tab-hover-cards"` and select "Enabled" from the dropdown menu.
+
+* #### Parallel Downloading:
+If you have a fast internet connection, the Parallel Downloading flag can make your downloads much faster. Enabling this flag allows Chrome to download files in parallel, which can significantly improve download speeds. To enable this flag, go to `"chrome://flags/#enable-parallel-downloading"` and select "Enabled" from the dropdown menu.
+
+* #### Parallel Uploading:
+If you have a fast internet connection, the Parallel Uploading flag can make uploading files much faster. Enabling this flag allows Chrome to upload files in parallel, which can significantly improve upload speeds. To enable this flag, go to `"chrome://flags/#enable-parallel-uploading"` and select "Enabled" from the dropdown menu.
+
+* #### Heavy Ad Intervention:
+If you find that some websites are using too much of your CPU and battery, the Heavy Ad Intervention flag can help. Enabling this flag will block ads that use too many resources, which can improve performance and battery life. To enable this flag, go to `"chrome://flags/#enable-heavy-ad-intervention"` and select "Enabled" from the dropdown menu.
+
 * #### Scrollable Tab Strip: 
 By default, Chrome's tab strip only shows a limited number of tabs, and you have to click on the arrow buttons to see more. However, the Scrollable Tab Strip flag allows you to scroll through all your tabs with a mouse wheel or trackpad gesture. To enable this flag, go to `"chrome://flags/#scrollable-tabstrip"` and select "Enabled" from the dropdown menu.
+
+* #### Tab Scrolling Buttons:
+If you often have many tabs open, the Tab Scrolling Buttons flag can make it easier to navigate between them. Enabling this flag adds buttons to the tab strip that allow you to scroll through your tabs. To enable this flag, go to `"chrome://flags/#scrollable-tabstrip"` and select "Enabled" from the dropdown menu.
+
 
 * #### Reader Mode: 
 If you often find yourself reading articles on the web, the Reader Mode flag can make the experience much more pleasant. Enabling this flag removes ads and other distractions, and presents the article in a clean, easy-to-read format. To enable this flag, go to `"chrome://flags/#enable-reader-mode"` and select "Enabled" from the dropdown menu.
@@ -73,3 +94,18 @@ If you find Chrome's scrolling to be too jarring, the Smooth Scrolling flag can 
 
 * #### Experimental QUIC protocol: 
 QUIC (Quick UDP Internet Connections) is a protocol that can improve website loading times and make connections more secure. Enabling this flag allows Chrome to use the experimental QUIC protocol instead of the traditional TCP protocol. To enable this flag, go to `"chrome://flags/#enable-quic"` and select `"Enabled"` from the dropdown menu.
+
+
+
+---
+
+### Windows Hacks
+
+How to reset your Windows 10 password if you forget it:
+1. Boot into the Windows 10 recovery environment.
+2. Open the command prompt.
+3. Type `net user` to see a list of all the user accounts on the computer.
+4. Type `net user <username> *` to reset the password for the specified user account.
+5. Type `exit` to close the command prompt.
+6. Restart the computer and log in with the new password.
+
