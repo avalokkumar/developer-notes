@@ -148,6 +148,88 @@ Authorization Code Grant: This grant type is used when the client is a web appli
 ---
 ### WS-Federation (Web Services Federation): 
 > WS-Federation is a standard protocol for federated identity that enables users to access multiple applications or services using a single set of login credentials.
+
+##### Here's how WS-Federation works:
+
+* The user attempts to access a protected resource on an application or service.
+
+* The application or service redirects the user to the WS-Federation server, passing along information about the requested resource.
+
+* The user is presented with a login page on the WS-Federation server, where they enter their credentials.
+
+* The WS-Federation server authenticates the user and generates a security token containing information about the user's identity and authentication status.
+
+* The user is redirected back to the application or service with the security token.
+
+* The application or service verifies the security token and grants the user access to the requested resource.
+
+##### Examples of WS-Federation implementations include:
+
+* Microsoft Active Directory Federation Services (ADFS)
+- * ADFS is a Windows Server component that enables users to access multiple applications or services using a single set of login credentials.
+- * ADFS uses WS-Federation to authenticate users and generate security tokens containing information about the user's identity and authentication status.
+- * ADFS can be used to provide single sign-on (SSO) for applications and services that support WS-Federation.
+
+* Microsoft Azure Active Directory (Azure AD)
+- * Azure AD is a cloud-based identity and access management service that enables users to access multiple applications or services using a single set of login credentials.
+- * Azure AD uses WS-Federation to authenticate users and generate security tokens containing information about the user's identity and authentication status.
+- * Azure AD can be used to provide single sign-on (SSO) for applications and services that support WS-Federation.
+
+* PingFederate
+- * PingFederate is a commercial identity provider that enables users to access multiple applications or services using a single set of login credentials.
+- * PingFederate uses WS-Federation to authenticate users and generate security tokens containing information about the user's identity and authentication status.
+- * PingFederate can be used to provide single sign-on (SSO) for applications and services that support WS-Federation.
+
+* Shibboleth
+- * Shibboleth is an open-source identity provider that enables users to access multiple applications or services using a single set of login credentials.
+- * Shibboleth uses WS-Federation to authenticate users and generate security tokens containing information about the user's identity and authentication status.
+- * Shibboleth can be used to provide single sign-on (SSO) for applications and services that support WS-Federation.
+
+* OpenAM
+- * OpenAM is an open-source identity provider that enables users to access multiple applications or services using a single set of login credentials.
+- * OpenAM uses WS-Federation to authenticate users and generate security tokens containing information about the user's identity and authentication status.
+- * OpenAM can be used to provide single sign-on (SSO) for applications and services that support WS-Federation.
+
 ---
 ### Kerberos: 
 > Kerberos is a network authentication protocol used for secure communication over a non-secure network. It uses tickets to authenticate users and is widely used in enterprise environments.
+
+##### Here's how Kerberos works:
+
+* The user attempts to access a protected resource on a server.
+
+* The server sends a request to the Key Distribution Center (KDC) for a ticket-granting ticket (TGT).
+
+* The KDC responds with a TGT, which contains the user's identity and a session key.
+
+* The server sends the TGT to the user.
+
+* The user sends the TGT to the KDC, along with a request for a service ticket.
+
+* The KDC responds with a service ticket, which contains the user's identity and a session key.
+
+* The user sends the service ticket to the server.
+
+* The server verifies the service ticket and grants the user access to the requested resource.
+
+##### Kerberos is used in many enterprise environments to provide authentication and authorization for users and services. It is also used in some web applications to provide single sign-on (SSO) functionality.
+
+##### Examples of Kerberos implementations include:
+
+* Microsoft Active Directory
+- * Active Directory is a Windows Server component that provides authentication and authorization for users and services.
+- * Active Directory uses Kerberos to authenticate users and services and issue tickets that can be used to access protected resources.
+- * Active Directory can be used to provide single sign-on (SSO) for applications and services that support Kerberos.
+
+* MIT Kerberos
+- * MIT Kerberos is an open-source implementation of the Kerberos protocol.
+- * MIT Kerberos can be used to provide authentication and authorization for users and services.
+- * MIT Kerberos can be used to provide single sign-on (SSO) for applications and services that support Kerberos.
+
+* Heimdal Kerberos
+- * Heimdal Kerberos is an open-source implementation of the Kerberos protocol.
+- * Heimdal Kerberos can be used to provide authentication and authorization for users and services.
+- * Heimdal Kerberos can be used to provide single sign-on (SSO) for applications and services that support Kerberos.
+
+---
+
