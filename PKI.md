@@ -295,8 +295,233 @@ dDCCASIwDQYJKoZIhvcNAQEBBQADggEPADeCAQoCggEBAL9Z3Z7Z7Z7Z7Z7Z7Z7Z
 ---
 
 ### 3. Public-Private Key Pair: 
-Each entity in PKI possesses a pair of cryptographic keys – a public key and a private key. The public key is made freely available, while the private key is kept confidential. Data encrypted with the public key can only be decrypted using the corresponding private key, and vice versa.
+A public-private key pair is a fundamental concept in asymmetric cryptography, a cryptographic system that uses two different but mathematically related keys for encryption and decryption. Each key pair consists of two keys: a public key and a private key. These keys are used for various security-related purposes, including secure communication, digital signatures, and encryption/decryption of data.
 
+#### Public Key:
+
+The public key is intended to be shared openly and is used for encryption and verification purposes.
+It is derived from the corresponding private key using mathematical algorithms.
+Data encrypted with the public key can only be decrypted using the corresponding private key.
+While anyone can use the public key for encryption, only the holder of the private key can decrypt the data.
+
+#### Private Key:
+
+The private key is kept confidential and securely stored by the key owner.
+It is used for decryption and signing purposes.
+Data encrypted with the private key can be decrypted using the corresponding public key.
+The private key should never be shared or disclosed to others, as it is the basis for the key owner's identity and cryptographic operations.
+Key Pair Generation:
+
+#### The process of generating a public-private key pair involves several steps:
+
+##### 1. Key Generation: 
+A key generation algorithm creates a random pair of large prime numbers, which are used as the basis for the public and private keys.
+
+##### 2. Public Key Derivation: 
+The public key is derived from one of the prime numbers, along with other parameters. It is then made available to others for encryption and verification purposes.
+
+##### 3. Private Key Derivation: 
+The private key is derived from the other prime number, along with additional parameters. It is kept confidential by the key owner and used for decryption and signing operations.
+
+#### Examples of Public-Private Key Pair Usage:
+
+##### 1. Secure Communication: 
+In asymmetric encryption, a user can encrypt a message using the recipient's public key. Only the recipient, possessing the corresponding private key, can decrypt and read the message.
+
+##### 2. Digital Signatures: 
+A sender can sign a message using their private key. The recipient can verify the authenticity and integrity of the message using the sender's public key.
+
+##### 3. Secure Email Communication: 
+S/MIME uses public-private key pairs for email encryption and digital signatures, ensuring secure and authenticated email communication.
+
+##### 4. SSL/TLS Encryption: 
+In secure web communication, SSL/TLS certificates use public-private key pairs for secure key exchange and encryption of data during HTTPS sessions.
+
+##### 5. Secure File Transfer: 
+Public-private key pairs can be used to authenticate clients and servers in secure file transfer protocols like SFTP and FTPS.
+
+Authentication and Authorization: Public-private key pairs can be used for strong authentication, where users prove their identity with their private key to gain access to secure systems.
+
+#### Example of Public-Private Key Pair Generation:
+
+Let's consider an RSA key pair generation as an example:
+
+1. Key Generation: Using the RSA algorithm, two large prime numbers, p = 61 and q = 53, are chosen randomly.
+
+2. Public Key Derivation: The public key is calculated as follows:
+
+* `n = p * q = 61 * 53 = 3233 (modulus)`
+* `e = 17 (public exponent)`
+
+3. Private Key Derivation: The private key is calculated as follows:
+
+* `φ(n) = (p - 1) * (q - 1) = 60 * 52 = 3120 (Euler's totient function)`
+* `d = e^(-1) mod φ(n) = 2753 (private exponent)`
+
+4. The public key is `(n, e) = (3233, 17)`, and the private key is `(n, d) = (3233, 2753)`.
+
+
+#### Usage of Public-Private Key Pair:
+
+Let's consider an example of how a public-private key pair is used for secure communication:
+
+1. Key Generation: Alice generates a public-private key pair using the RSA algorithm. Her public key is `(n, e) = (3233, 17)`, and her private key is `(n, d) = (3233, 2753)`.
+
+2. Public Key Distribution: Alice shares her public key with Bob, who wants to send her a secure message.
+
+3. Message Encryption: Bob encrypts his message using Alice's public key. The encrypted message is `m = 1234^17 mod 3233 = 855`.
+
+4. Message Transmission: Bob sends the encrypted message to Alice.
+
+5. Message Decryption: Alice decrypts the message using her private key. The decrypted message is `m = 855^2753 mod 3233 = 1234`.
+
+#### Public-Private Key Pair File Formats:
+
+Public-private key pairs are typically stored in one of the following formats:
+
+* **DER (Distinguished Encoding Rules):**
+DER is a binary format for encoding public-private key pairs. It is widely used for RSA keys in PKI.
+
+* **PEM (Privacy-Enhanced Mail):**
+PEM is a Base64-encoded format for encoding public-private key pairs. It is widely used for RSA keys in PKI.
+
+* **PFX/PKCS12 (Personal Information Exchange):**
+PFX is a binary format for storing the public-private key pair and the corresponding certificate in a single encrypted file. It is widely used for SSL/TLS certificates.
+
+* **P7B/PKCS7 (Public-Key Cryptography Standards):**
+P7B is a Base64-encoded format for storing the public-private key pair and the corresponding certificate in a single file. It is widely used for SSL/TLS certificates.
+
+* **P7C/PKCS7 (Public-Key Cryptography Standards):**
+P7C is a Base64-encoded format for storing the public-private key pair and the corresponding certificate in a single file. It is widely used for S/MIME certificates.
+
+* **CER (Canonical Encoding Rules):**
+CER is a binary format for encoding public-private key pairs. It is widely used for RSA keys in PKI.
+
+#### Public-Private Key Pair File Extensions:
+
+Public-private key pairs are typically stored in files with one of the following extensions:
+
+* **.der/.key:**
+These extensions are used for RSA keys in PKI.
+
+* **.pem:**
+This extension is used for RSA keys in PKI.
+
+* **.pfx/.p12:**
+These extensions are used for SSL/TLS certificates.
+
+* **.p7b/.p7c:**
+These extensions are used for S/MIME certificates.
+
+#### Public-Private Key Pair File Locations:
+Public-private key pairs are typically stored in one of the following locations:
+
+* **Key Store:**
+On Windows, public-private key pairs are stored in the Windows Key Store. On Linux, they are stored in the OpenSSL Key Store.
+
+* **Key File:**
+Public-private key pairs can be stored in a file on the local file system.
+
+#### Commands to generate a public-private key pair using OpenSSL
+
+1. Generate a Private Key:
+
+```
+openssl genpkey -algorithm rsa -out private_key.pem
+```
+
+> This command will generate a private key in PEM format and save it in a file named private_key.pem.
+
+2. Extract the Public Key from the Private Key:
+
+```
+openssl rsa -pubout -in private_key.pem -out public_key.pem
+```
+
+> This command will extract the public key from the private key and save it in a file named `public_key.pem`.
+
+3. Generate a Private Key with a Specific Key Size:
+```
+openssl genpkey -algorithm rsa -out private_key.pem -pkeyopt rsa_keygen_bits:2048
+```
+
+> This command generates a private key with a key size of 2048 bits and saves it in the file `private_key.pem`.
+
+4. Generate a Private Key in a Different Format (PKCS#8):
+```
+openssl genpkey -algorithm rsa -out private_key.p8 -outform PEM -PKCS8
+```
+
+> This command generates a private key in PKCS#8 format and saves it in the file `private_key.p8`.
+
+5. Generate a Private Key in Encrypted Format:
+
+```
+openssl genpkey -algorithm rsa -out private_key_encrypted.pem -aes256
+```
+
+> This command generates an encrypted private key using AES-256 and saves it in the file `private_key_encrypted.pem`. It will prompt you to enter a passphrase to protect the private key.
+
+
+#### Example 1: RSA 2048-bit Key Pair
+
+* Private Key (private_key.pem):
+```
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAs/Pzr+1HhPRYbdGODKX5f24v2yrL82gnKl3IeDr6CxIZPHiP
+F3vIvnPNzH3j92HnYPyQ7LR0q02S6mdmjwFsbuYDQ0xKnCZz7rMlU9ayzD9WAB1T
+TnrI54FtQ+GtCU91SuyYcNo8JUeOTmn7Zy3uHFPcKjtmLDla0/HIbzRo30ljyGx2
+.... (truncated for brevity) ....
+JzqQ4TQMRk5eJizx5eGjTfekZwZUuuPDGeN1V5xJwwKBgQDnTcxTSeZAg9dI6HAp
+gwM7FCcxjwu5p7CZShTYpLzXgCrlQqvl6sgXW/hzU+dsF4zO24FcSXMCW8jBwJN8
+7IVxJgjP3egkzzsfYY/gQmHHhy4HxvDGMpFyLcrnUhPKKxKXIlbSKQjwlyT6XXof
+ylsZbEbwqWjvw4ITwFGg7N9l0QKBgQDDr/Ur+eO27e9Ro5k9WSQKz9P2zQhG/53t
+vtWGsBsk91fwU2B9EnImn2NkTfWRPQ6VFOo5Nz7wd2Qi3QVv9RX2CQlVnYSPu6I8
+tHkTS3W8QnCM9C6OhZ5/m/iP7f1Ak1mBDTqea02QcRxjLE2X1XCMspRRcL7Rk5B8
+x0MIakJjSwKBgQCCv/JfMZ/5YYLnhsuj7frjCtO3B6d3jHWavjiem2QkAByKlbah
+uBSmT9R5zXJKT8S6ICpM+dHkPcn9lGce/krQxb59Xc9BrTcY7WhUkCOeeYJUCbzU
+9Be5ePnSKDdHKFIhtzICILnBHK8Z+IwrlaQmszxzW1bhd3KTmX53eG1BqQKBgQDA
+JleF7q+1X/5wUPXlUBz19h/ZUb53SVmUNL8yIKO1s1rg6CfJefqqOrVlziXVcj9X
+CeT3RrFQAmBAKi7ST5BR36IEkjJ12C+Ar+LxGJeC/AbDxl9GqtK237Sd7au9aWcm
+kcxzj0Q0ahEjmLeJ6T78AL9qRWQd1OSFKN3UNaPQKBgQC/2KnoQHj32o3Evwcvz9
+e0klxsbJoBJd8usObx8TF84X8dYVmY2Pm4OKV2Eehbl0HQ3SOIwWudmI9G/rBsH1
+KhWBRQxl54ZxWYQvws+JqN3iIZ1k9eEK+V4xjaV/XpPzQv0QxR1+v2Eumg5E6FwZ
+h9FbAnQMCc+jo3COi7Go46EVsw==
+-----END RSA PRIVATE KEY-----
+```
+
+* Public Key (public_key.pem):
+
+```
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs/Pzr+1HhPRYbdGODKX5
+f24v2yrL82gnKl3IeDr6CxIZPHiPF3vIvnPNzH3j92HnYPyQ7LR0q02S6mdmjwFs
+buYDQ0xKnCZz7rMlU9ayzD9WAB1TTnrI54FtQ+GtCU91SuyYcNo8JUeOTmn7Zy3u
+HFPcKjtmLDla0/HIbzRo30ljyGx2TwvUmuq+TEOftpyqr2/6fCEJW62LNOpYyJPl
+iw2g7d5Dl01qNfXyTJBaxJiC/e0/cRti1zgrl8QhrAfzNGmUEW0GpxMdVtbDnryV
+MoBp8mrBgcvHfG0/ZmvU3Hlf9yqXd8PIbVBwBzgVif2qr1v8biEPHeKc94M0VjGf
+ZwIDAQAB
+-----END PUBLIC KEY-----
+```
+
+#### Example 2: ECDSA 256-bit Key Pair
+
+* Private Key (private_key_ec.pem):
+```
+-----BEGIN EC PRIVATE KEY-----
+MHcCAQEEIPKs7VJKd8xGSLJDWq6YbHwRm0L6j8adHL3+dw4DdqjpoAoGCCqGSM49
+AwEHoUQDQgAEcVDVf5F1Scpc8fHhWud36bpSZltNcJWb9gohZ7BnN8FjGPh9fMWL
+CLFLM0wzBmlQ5t9BttFQe1NKmkZ4FOzIkA==
+-----END EC PRIVATE KEY-----
+```
+
+* Public Key (public_key_ec.pem):
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEcVDVf5F1Scpc8fHhWud36bpSZltN
+cJWb9gohZ7BnN8FjGPh9fMWLCLFLM0wzBmlQ5t9BttFQe1NKmkZ4FOzIkA==
+-----END PUBLIC KEY-----
+```
 ---
 
 ### 4. Registration Authority (RA): 
