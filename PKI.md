@@ -927,22 +927,407 @@ The web browser also checks the certificate's revocation status by querying the 
 PKI has numerous applications in various domains, including:
 
 ### 1. Secure Web Communication: 
-PKI is used for SSL/TLS certificates to secure HTTPS connections between web browsers and servers, ensuring encrypted and authenticated communication.
+Public Key Infrastructure (PKI) plays a crucial role in securing web communication, especially in the context of SSL/TLS (Secure Sockets Layer/Transport Layer Security) certificates. PKI ensures the confidentiality, integrity, and authenticity of data transmitted between clients and web servers. Here are some key applications of PKI for securing web communication:
+
+#### 1.1. SSL/TLS Encryption:
+One of the primary applications of PKI is enabling SSL/TLS encryption for secure communication over the internet. SSL/TLS certificates use asymmetric encryption to secure the connection between a web server and a client's web browser. The server's SSL/TLS certificate contains its public key, which is used for encryption. The client's web browser generates a temporary symmetric session key that is encrypted using the server's public key. The server then decrypts this session key using its private key and establishes a secure, encrypted channel for data exchange.
+
+> Example: When a user visits a secure website (e.g., an online banking portal), their web browser checks the SSL/TLS certificate issued by a trusted CA. If the certificate is valid and the site's identity is confirmed, the browser establishes an encrypted connection, ensuring that sensitive information, such as login credentials and financial data, is securely transmitted.
+
+#### 1.2. Secure Email Communication:
+PKI is used to enable secure email communication using S/MIME (Secure/Multipurpose Internet Mail Extensions) certificates. S/MIME certificates provide digital signatures and encryption capabilities to ensure that email messages are not tampered with during transit and can only be read by the intended recipients.
+
+> Example: An organization uses S/MIME certificates to digitally sign and encrypt emails sent between employees. This prevents unauthorized access to sensitive email content and ensures that recipients can verify the sender's identity and message integrity.
+
+#### 1.3. Code Signing:
+PKI is utilized for code signing certificates, which are used by software developers to sign their applications and software updates. Code signing provides assurance that the software comes from a legitimate source and has not been altered or tampered with during distribution.
+
+> Example: When users download and install software from a reputable source, their operating systems or security software check the code signature against the issuing CA's public key. If the signature is valid, users can trust that the software is authentic and has not been modified by malicious parties.
+
+#### 1.4. Authentication and Single Sign-On (SSO):
+PKI enables strong authentication methods, including multi-factor authentication (MFA), for web applications and services. PKI-based Single Sign-On (SSO) solutions allow users to access multiple web applications with a single set of credentials, enhancing security and user experience.
+
+> Example: An organization implements a PKI-based SSO solution for its employees. Once users log in using their PKI-issued digital certificates or smart cards, they gain access to various internal applications and services without the need to enter separate login credentials for each one.
+
+#### 1.5. Website Identity Verification:
+PKI certificates are used to verify the identity of websites, ensuring that users interact with genuine and secure websites. Extended Validation (EV) SSL certificates provide a higher level of identity verification, displaying a green address bar in modern browsers, indicating a higher level of trust.
+
+> Example: When users shop online, they look for the green address bar (EV SSL indicator) to verify that the website has undergone strict identity verification, and they can trust their transactions with the site.
+
+#### 1.6. Document Signing:
+PKI is used for document signing, enabling users to digitally sign documents and verify their authenticity and integrity. This is especially useful for sensitive documents that require a high level of trust and security.
+
+> Example: A lawyer digitally signs a legal document using their PKI-issued digital certificate. The recipient can verify the document's authenticity and integrity by checking the digital signature against the issuing CA's public key.
+
+#### 1.7. Secure File Transfer:
+PKI is used for secure file transfer protocols like SFTP and FTPS to protect data during transmission. PKI certificates are used to authenticate the server and encrypt the data, ensuring confidentiality and integrity.
+
+> Example: An organization uses SFTP to transfer sensitive files between its servers. The servers authenticate each other using PKI-issued digital certificates and establish an encrypted connection for secure file transfer.
+
+#### 1.8. VPN and Remote Access:
+PKI is employed to authenticate users and devices accessing private networks via Virtual Private Networks (VPNs). PKI certificates are used to authenticate the VPN server and encrypt the data, ensuring confidentiality and integrity.
+
+> Example: An organization uses PKI certificates to authenticate its VPN servers and encrypt the data transmitted between the servers and remote users. This ensures that only authorized users can access the organization's private network and that the data is protected during transmission.
+
+#### 1.9. IoT Security:
+PKI plays a critical role in securing Internet of Things (IoT) devices, enabling secure communication and device authentication. PKI certificates are used to authenticate IoT devices and encrypt the data, ensuring confidentiality and integrity.
+
+> Example: A smart home system uses PKI certificates to authenticate its IoT devices and encrypt the data transmitted between the devices and the central server. This ensures that only authorized devices can access the system and that the data is protected during transmission.
+
+#### 1.10. Identity and Access Management:
+PKI is essential for strong authentication and secure access control in enterprise systems. PKI certificates are used to authenticate users and devices and encrypt the data, ensuring confidentiality and integrity.
+
+> Example: An organization uses PKI certificates to authenticate its employees and encrypt the data transmitted between the employees and the central server. This ensures that only authorized users can access the system and that the data is protected during transmission.
+
 
 ### 2. Email Security: 
-PKI is utilized for S/MIME (Secure/Multipurpose Internet Mail Extensions) to encrypt and sign email messages, ensuring confidentiality and authentication.
+Public Key Infrastructure (PKI) is widely used to enhance the security and privacy of email communication. PKI-based solutions provide encryption and digital signatures, ensuring confidentiality, integrity, and authenticity of email messages. Here are the key applications of PKI for email security:
+
+#### 2.1. Secure Email Communication:
+PKI enables the use of S/MIME (Secure/Multipurpose Internet Mail Extensions) certificates for secure email communication. S/MIME certificates are used to encrypt email messages and digitally sign them to ensure the privacy and authenticity of the sender.
+
+> Example: When a user sends an S/MIME-encrypted email to another user, the message is encrypted using the recipient's public key (from their S/MIME certificate). Only the recipient, possessing the corresponding private key, can decrypt and read the message, ensuring that sensitive information remains confidential.
+
+#### 2.2. Email Authentication:
+PKI is employed to establish email authentication mechanisms such as DomainKeys Identified Mail (DKIM) and Domain-based Message Authentication, Reporting, and Conformance (DMARC). These mechanisms prevent email spoofing and ensure that the sender's domain is genuine.
+
+> Example: A company implements DKIM and DMARC for its outgoing email servers. These mechanisms attach digital signatures to outgoing messages, verifying that they originate from legitimate servers under the company's domain. If spoofed emails are detected, they can be marked as suspicious or rejected by email receivers.
+
+#### 2.3. Message Integrity and Non-Repudiation:
+PKI provides a mechanism to ensure the integrity of email messages and prevents the sender from denying having sent a specific message.
+
+> Example: An organization uses PKI to digitally sign all outgoing email messages. This ensures that even if an employee later denies sending a particular message, the digital signature will prove the message's authenticity and prevent repudiation.
+
+#### 2.4. Secure Email Gateways:
+Organizations deploy secure email gateways that use PKI to validate incoming emails. Gateways can check the authenticity of the sender's certificate, verify digital signatures, and decrypt encrypted emails.
+
+> Example: A company's secure email gateway scans incoming emails for S/MIME encryption and digital signatures. If an email is encrypted, the gateway verifies the recipient's certificate to decrypt the message securely.
+
+#### 2.5. Secure Email Archiving:
+PKI can be utilized to secure email archives by digitally signing and encrypting archived email messages. This ensures the long-term integrity and confidentiality of archived communications.
+
+> Example: A financial institution digitally signs and encrypts all email messages before archiving them. In the future, if the institution needs to retrieve archived emails for compliance or legal purposes, the emails remain secure and unaltered.
+
 
 ### 3. Digital Signatures: 
-PKI enables the creation of digital signatures to verify the authenticity and integrity of electronic documents and transactions.
+Public Key Infrastructure (PKI) plays a crucial role in enabling secure and tamper-proof digital signatures. Digital signatures are cryptographic mechanisms used to verify the authenticity and integrity of electronic documents or messages. PKI provides the necessary infrastructure to generate and manage the keys used in digital signatures. Here are the key applications of PKI for digital signatures:
+
+#### 3.1. Document Authentication:
+PKI is used to digitally sign documents to verify their authenticity and origin. Digital signatures provide assurance that the document has not been altered since it was signed and that it came from the identified signer.
+
+> Example: A lawyer digitally signs a contract using their private key. When the contract is shared with other parties, they can verify the digital signature using the lawyer's public key to confirm that the contract is genuine and has not been modified.
+
+#### 3.2. Email Authentication:
+PKI is employed for digitally signing emails to ensure the sender's authenticity and prevent email spoofing. The digital signature provides non-repudiation, preventing the sender from denying having sent the email.
+
+> Example: A business executive digitally signs an important email before sending it to employees, clients, or partners. Recipients can verify the signature using the sender's public key and be confident that the email indeed came from the executive and hasn't been altered.
+
+#### 3.3. Code Signing:
+Software developers use PKI-based digital signatures to sign their applications and software updates. Code signing ensures that the software comes from a legitimate source and has not been altered or tampered with during distribution.
+
+> Example: Before releasing a software update, a developer signs the update using their private key. When users download and install the update, their operating systems or security software check the code signature against the issuing CA's public key. If the signature is valid, users can trust that the update is authentic and hasn't been modified by malicious parties.
+
+#### 3.4. Secure Electronic Transactions:
+PKI is used in secure electronic transactions, such as online banking and e-commerce, to provide non-repudiation and ensure the integrity of transactions.
+
+> Example: During an online banking transaction, the bank digitally signs transaction details using the bank's private key. The customer's web browser verifies the bank's digital signature using the bank's public key, confirming the transaction's authenticity and integrity.
+
+#### 3.5. Data Integrity and Non-Repudiation:
+PKI provides mechanisms for data integrity and non-repudiation in various applications, including log entries, audit trails, and legal documents.
+
+> Example: An organization digitally signs its audit log entries to ensure the integrity of recorded events. If a dispute arises, the organization can prove the authenticity of the log entries through the digital signatures, preventing repudiation.
+
+#### 3.6. Secure Document Exchange:
+PKI enables secure document exchange, where documents are signed and encrypted to protect their confidentiality and ensure their authenticity.
+
+> Example: In a government agency, officials digitally sign and encrypt sensitive documents before exchanging them with other agencies. This ensures that the documents are only accessible by authorized recipients and that their authenticity is verified through digital signatures.
 
 ### 4. VPN and Remote Access: 
-PKI is employed to authenticate users and devices accessing private networks via Virtual Private Networks (VPNs).
+Public Key Infrastructure (PKI) plays a significant role in securing Virtual Private Networks (VPNs) and enabling secure remote access to corporate networks. PKI-based solutions provide authentication, encryption, and data integrity for VPN connections, ensuring that remote users can access resources securely. Here are the key applications of PKI for VPN and remote access:
+
+#### 4.1. User Authentication:
+PKI enables strong user authentication for remote access to VPNs. Digital certificates or smart cards are used as authentication credentials, providing a more secure and reliable method than traditional username/password authentication.
+
+> Example: An employee working from home connects to the company's VPN using a digital certificate installed on their device. The VPN gateway verifies the digital certificate against the organization's PKI, ensuring that the user is authorized to access the corporate network.
+
+#### 4.2. VPN Encryption:
+PKI is used to establish secure VPN connections through encryption. Digital certificates are employed to exchange encryption keys and ensure that data transmitted between the remote user and the VPN gateway is encrypted.
+
+> Example: A remote employee establishes a VPN connection to the corporate network using their digital certificate. The VPN traffic between the employee's device and the company's VPN gateway is encrypted, ensuring that sensitive information remains secure during transmission.
+
+#### 4.3. Data Integrity and Non-Repudiation:
+PKI provides mechanisms for data integrity and non-repudiation in VPN and remote access scenarios. Digital signatures ensure that data transmitted over the VPN is not tampered with and can be traced back to the sender.
+
+> Example: An employee sends a confidential document to a colleague over the VPN. The document is digitally signed using the employee's private key, ensuring that the document's integrity is verified when received by the colleague.
+
+#### 4.4. Secure Two-Factor Authentication (2FA):
+PKI enables secure two-factor authentication for VPN and remote access. Two-factor authentication combines something the user knows (such as a password) with something the user has (such as a digital certificate or smart card).
+
+> Example: A remote employee logs in to the VPN using their username and password, followed by inserting their smart card and entering the smart card's PIN for two-factor authentication.
+
+#### 4.5. Secure Remote Device Access:
+PKI can be used to secure remote access to devices, such as routers and switches, for network administrators. Digital certificates can be installed on devices to ensure that only authorized administrators can access and manage them remotely.
+
+> Example: An IT administrator uses their digital certificate and private key to remotely log in to a network switch for configuration and management tasks.
+
+#### 4.6. Secure Communications between Remote Offices:
+PKI facilitates secure communication between remote offices and data centers by establishing encrypted site-to-site VPN connections.
+
+> Example: A company has multiple offices in different cities. Each office has a VPN gateway that establishes encrypted connections with the central data center, ensuring secure communication between the offices.
+
+
 
 ### 5. Secure File Transfer: 
-PKI is used for secure file transfer protocols like SFTP and FTPS to protect data during transmission.
+Public Key Infrastructure (PKI) plays a crucial role in securing file transfer processes, ensuring the confidentiality, integrity, and authenticity of transmitted files. PKI-based solutions provide encryption and digital signatures, enabling secure file transfer between parties. Here are the key applications of PKI for secure file transfer:
+
+#### 5.1. Secure File Encryption:
+PKI enables the encryption of files before they are transmitted over a network or stored in the cloud. Digital certificates are used to establish secure communication channels and exchange encryption keys.
+
+> Example: An organization uses PKI-based file encryption to protect sensitive documents before sending them via email or sharing them on a cloud storage platform. The files are encrypted using the recipient's public key, ensuring that only the authorized recipient can decrypt and access the files.
+
+#### 5.2. Digital Signatures for File Integrity:
+PKI is used to apply digital signatures to files to verify their integrity and authenticity. Digital signatures ensure that files have not been tampered with during transit or storage.
+
+> Example: A software developer signs software updates and patches with their digital certificate. When users download the updates, their operating systems or security software check the digital signatures against the issuing CA's public key to ensure that the files are genuine and have not been altered by attackers.
+
+#### 5.3. Secure File Transfer Protocols:
+PKI is employed to secure file transfer protocols such as Secure File Transfer Protocol (SFTP), Secure Copy (SCP), and Secure Shell (SSH). Digital certificates are used to authenticate servers and clients, ensuring secure and trusted connections.
+
+> Example: A company's IT team uses SFTP with PKI authentication to securely transfer backup files from on-premises servers to a cloud-based storage service. The SFTP server presents its digital certificate during the connection, and the client verifies its authenticity using the CA's public key.
+
+#### 5.4. Secure Cloud Storage and Sharing:
+PKI is used to secure file storage and sharing platforms in the cloud. Digital certificates ensure that data stored in the cloud is encrypted and accessible only by authorized users.
+
+> Example: A business uses a cloud storage service with PKI-based encryption to securely store and share sensitive files with its employees. Employees can access the files securely using their digital certificates or other authentication mechanisms.
+
+#### 5.5. Access Control and Authorization:
+PKI enables access control for file transfer, ensuring that only authorized users have access to specific files and directories.
+
+> Example: An organization sets up a file server with PKI-based access control. Users must present their digital certificates to access certain files or directories, preventing unauthorized access and data leakage.
+
+#### 5.6. Secure File Archiving:
+PKI can be used to secure file archiving by applying digital signatures and encryption to archived files, ensuring their integrity and confidentiality over time.
+
+> Example: A financial institution archives historical financial records with PKI-based encryption and digital signatures. This ensures that the records remain unaltered and can be securely accessed when needed for compliance or auditing purposes.
 
 ### 6. Identity and Access Management: 
-PKI is essential for strong authentication and secure access control in enterprise systems.
+Public Key Infrastructure (PKI) plays a fundamental role in Identity and Access Management (IAM) systems, providing a secure and robust framework for managing user identities, authentication, and access control. PKI-based solutions enhance the security and reliability of IAM processes. Here are the key applications of PKI for Identity and Access Management:
+
+#### 6.1. User Authentication:
+PKI enables strong user authentication through the use of digital certificates, smart cards, or other cryptographic credentials. These credentials serve as secure and reliable methods for authenticating users.
+
+> Example: In an organization, employees are issued digital certificates or smart cards. When accessing company resources, such as email or internal systems, employees use their credentials to authenticate securely.
+
+#### 6.2. Single Sign-On (SSO):
+PKI-based Single Sign-On (SSO) solutions allow users to access multiple applications and services with a single set of credentials. This improves user experience and reduces the need for remembering multiple passwords.
+
+> Example: A company implements a PKI-based SSO system. Once users log in using their PKI-issued digital certificates or smart cards, they gain access to various internal applications and services without the need to enter separate login credentials for each one.
+
+#### 6.3. Secure Remote Access:
+PKI is used to enable secure remote access to corporate resources and networks. Digital certificates or smart cards are used for strong authentication and secure communication channels, such as VPNs, are established.
+
+> Example: A remote employee uses their digital certificate to authenticate with the company's VPN gateway. The VPN connection is secured using the certificate, ensuring that sensitive data is encrypted during transmission.
+
+#### 6.4. Privileged Access Management (PAM):
+PKI is utilized in Privileged Access Management (PAM) to control and monitor access to critical and sensitive systems by privileged users.
+
+> Example: In a financial institution, system administrators are granted privileged access to servers and databases. PAM solutions use PKI-based authentication to verify the administrators' identities and enforce strict access controls.
+
+#### 6.5. Secure Web Access and Federated Identity:
+PKI is used to secure web access and enable federated identity, allowing users to access multiple web applications across different domains using a single set of credentials.
+
+> Example: A consortium of universities implements federated identity using PKI. Students and staff from any participating university can access shared resources and web applications using their university-issued digital certificates or smart cards.
+
+#### 6.6. Certificate-Based Authentication for IoT Devices:
+PKI is employed in securing Internet of Things (IoT) devices by using digital certificates for authentication, ensuring that only trusted devices can access and exchange data.
+
+> Example: An industrial IoT system uses PKI-based device authentication to ensure that only authorized sensors and devices can interact with the central control system, preventing unauthorized access or tampering.
+
 
 ### 7. IoT Security: 
-PKI plays a critical role in securing Internet of Things (IoT) devices, enabling secure communication and device authentication.
+Applications of PKI for IoT Security:
+
+Public Key Infrastructure (PKI) is crucial for securing the rapidly growing ecosystem of Internet of Things (IoT) devices. PKI provides a strong foundation for authentication, encryption, and secure communication among IoT devices and backend systems. Here are the key applications of PKI for IoT security:
+
+#### 7.1. Device Authentication:
+PKI enables strong authentication for IoT devices, ensuring that only trusted and authorized devices can connect to IoT platforms and networks.
+
+> Example: In a smart home system, IoT devices such as smart thermostats and security cameras use digital certificates for device authentication. The devices present their certificates to the central hub, allowing only authorized devices to join the network and communicate securely.
+
+#### 7.2. Secure Communication:
+PKI-based encryption ensures secure communication between IoT devices and the backend cloud platforms, preventing unauthorized access and data interception.
+
+> Example: In an industrial IoT deployment, sensors in a manufacturing plant use PKI to encrypt data before transmitting it to the central cloud server. This ensures that sensitive production data remains confidential during transmission.
+
+#### 7.3. Secure Software Updates:
+PKI is used for secure software updates in IoT devices, ensuring that only authorized and authenticated updates can be installed on devices.
+
+> Example: An IoT device manufacturer signs software updates with a digital certificate. When an update is available, the device verifies the update's digital signature against the manufacturer's public key to ensure it comes from a legitimate source.
+
+#### 7.4. Device Lifecycle Management:
+PKI facilitates device lifecycle management, including initial device provisioning, revocation, and decommissioning.
+
+> Example: In a fleet of connected vehicles, PKI is used to issue unique digital certificates to each vehicle during manufacturing. If a vehicle is sold or decommissioned, its certificate can be revoked to prevent unauthorized access to the vehicle's data and control systems.
+
+#### 7.5. Secure IoT Gateways:
+PKI is used to secure IoT gateways, which act as intermediaries between devices and cloud platforms.
+
+> Example: A smart building's IoT gateway uses PKI-based authentication to ensure that only authorized devices can connect to the building's control systems. The gateway encrypts data before forwarding it to the cloud platform, providing end-to-end security.
+
+#### 7.6. Data Integrity and Non-Repudiation:
+PKI ensures data integrity and non-repudiation in IoT environments, providing evidence of data origin and integrity.
+
+> Example: In a healthcare IoT system, medical devices use PKI-based digital signatures to sign patient data before transmission. This ensures data integrity and provides a tamper-proof record of patient information.
+
+#### 7.7. IoT Device Identity and Provisioning:
+PKI is used to manage IoT device identities during provisioning, allowing devices to securely establish their identity and trustworthiness.
+
+> Example: In an agricultural IoT system, sensors deployed in fields use PKI to obtain unique digital certificates during provisioning. The certificates allow them to securely connect to the farm's IoT network.
+
+---
+---
+
+## Commands used commonly in PKI:
+
+### 1. Generate Private Key:
+```
+openssl genpkey -algorithm <algorithm> -out <private_key_file>
+```
+
+### 2. Generate Certificate Signing Request (CSR):
+```
+openssl req -new -key <private_key_file> -out <csr_file>
+```
+
+### 3. Generate Self-Signed Certificate:
+```
+openssl req -new -x509 -key <private_key_file> -out <certificate_file>
+```
+
+### 4. View Certificate Contents:
+```
+openssl x509 -in <certificate_file> -text
+```
+
+### 5. Convert Certificate Formats:
+```
+openssl x509 -in <certificate_file> -outform <format> -out <output_certificate_file>
+```
+
+### 6. Create Certificate Chain File:
+```
+cat <certificate_file> <ca_certificate_file> > <certificate_chain_file>
+```
+
+### 7. Verify Certificate against CA:
+```
+openssl verify -CAfile <ca_certificate_file> <certificate_file>
+```
+
+### 8. Sign Certificate using CA:
+```
+openssl x509 -req -in <csr_file> -CA <ca_certificate_file> -CAkey <ca_private_key_file> -CAcreateserial -out <signed_certificate_file>
+```
+
+### 9. Convert Certificate and Private Key to PKCS#12:
+```
+openssl pkcs12 -export -out <p12_file> -inkey <private_key_file> -in <certificate_file> -certfile <ca_certificate_file>
+```
+
+### 10. Extract Private Key from PKCS#12:
+```
+openssl pkcs12 -in <p12_file> -nocerts -out <private_key_file>
+```
+
+### 11. Extract Certificate from PKCS#12:
+```
+openssl pkcs12 -in <p12_file> -clcerts -nokeys -out <certificate_file>
+```
+
+### 12. Create Certificate Revocation List (CRL):
+```
+openssl ca -config <openssl_config_file> -gencrl -out <crl_file>
+```
+
+### 13. Revoke a Certificate:
+```
+openssl ca -config <openssl_config_file> -revoke <certificate_file>
+```
+
+### 14. Convert CRL to Text Format:
+```
+openssl crl -in <crl_file> -text
+```
+
+### 15. Verify Certificate Revocation Status:
+```
+openssl verify -crl_check -CAfile <ca_certificate_file> -CRLfile <crl_file> <certificate_file>
+```
+
+### 16. Create a Certificate Signing Request (CSR) with Subject Alternative Names (SANs):
+```
+openssl req -new -key <private_key_file> -out <csr_file> -extensions san -config <openssl_config_file>
+```
+
+### 17. Convert PEM Certificate and Key to PKCS#12:
+```
+openssl pkcs12 -export -out <p12_file> -inkey <private_key_file> -in <certificate_file> -certfile <ca_certificate_file>
+```
+
+### 18. Create a Self-Signed Certificate with Subject Alternative Names (SANs):
+```
+openssl req -x509 -newkey rsa:2048 -keyout <private_key_file> -out <certificate_file> -days <validity_days> -extensions san -config 
+<openssl_config_file>
+```
+
+### 19. Generate Diffie-Hellman Parameters:
+```
+openssl dhparam -out <dhparam_file> <bits>
+```
+
+### 20. Encrypt and Decrypt Files with Symmetric Ciphers:
+```
+openssl enc -<cipher> -e -in <input_file> -out <encrypted_output_file>
+openssl enc -<cipher> -d -in <encrypted_input_file> -out <decrypted_output_file>
+```
+
+### 21. Check SSL/TLS Server Certificate Details:
+```
+openssl s_client -connect <host:port>
+```
+
+### 22. Check SSL/TLS Certificate Chain:
+```
+openssl s_client -showcerts -connect <host:port>
+```
+
+### 23. Convert DER Certificate to PEM Format:
+```
+openssl x509 -inform der -in <der_certificate_file> -out <pem_certificate_file>
+```
+
+### 24. Generate Random Data:
+```
+openssl rand -out <random_data_file> <bytes>
+```
+
+### 25. Verify Certificate Chain against Root CA:
+```
+openssl verify -CAfile <root_ca_certificate_file> <certificate_file>
+```
+
+### 26. Encrypt and Decrypt Files using Public/Private Key Pair:
+```
+openssl rsautl -encrypt -in <input_file> -out <encrypted_output_file> -pubin -inkey <public_key_file>
+openssl rsautl -decrypt -in <encrypted_input_file> -out <decrypted_output_file> -inkey <private_key_file>
+```
+
+### 27. Generate Random Passwords:
+```
+openssl rand -base64 <number_of_bytes>
+```
+
+28. Generate a Certificate Signing Request (CSR) with an Existing Private Key:
+```
+openssl req -new -key <private_key_file> -out <csr_file>
+```
