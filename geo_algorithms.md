@@ -482,13 +482,8 @@ Once the destination is reached, the algorithm can be used to backtrack the shor
 ### Example:
 Consider a map with the following road network and distances between locations:
 
-A ------ (5) ----- B ------ (7) ----- C
-|                   |                   |
-|                   |                   |
-(9)                 (8)                 (5)
-|                   |                   |
-|                   |                   |
-D ------ (2) ----- E ------ (4) ----- F
+<img width="364" alt="image" src="https://github.com/avalokkumar/developer-notes/assets/6371078/e9dd1eba-2cfb-4f8a-b3c8-5a34e03d044c">
+
 
 > Let's say we want to find the shortest path from node A to node F. We can apply Dijkstra's algorithm as follows:
 
