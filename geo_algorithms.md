@@ -435,8 +435,6 @@ The output of the smoothing algorithm provides a more accurate and continuous re
 
 ## Dijkstra's algorithm: 
 
-## Dijkstra's algorithm:
-
 Dijkstra's algorithm is a widely used graph algorithm that helps find the shortest path between nodes in a weighted graph. In map-based applications, Dijkstra's algorithm is employed to find the shortest route or path between two locations on a map, considering the distances or travel times between different points. It is a fundamental algorithm for route planning and navigation systems. Let's explore why, when, and how Dijkstra's algorithm is used in map-based applications with examples:
 
 ### 1. Why Use Dijkstra's Algorithm:
