@@ -51,6 +51,7 @@ The `Notification` interface is the abstraction. The EmailNotification, SMSNotif
 
 This design pattern allows us to easily add new notification types in the future. All we need to do is create a new NotificationType class that implements the `Notification` interface. This new class would then be responsible for formatting and delivering notifications of the new type.
 
+---
 
 ## Problem: Online Shopping Cart
 You are developing an online shopping platform. Users can add items to their cart, and the cart should calculate the total price, apply discounts, and handle shipping options. The pricing rules and discount strategies may vary over time.
@@ -97,6 +98,8 @@ The State Pattern allows an object to alter its behavior when its internal state
 
 ### Factory Method Pattern: 
 The Factory Method Pattern defines an interface for creating objects, but leaves the actual implementation of those objects to subclasses. This pattern could be used to implement the shopping cart in a way that allows different types of shopping carts to be created at runtime, such as a fixed price shopping cart, a percentage discount shopping cart, or a free shipping shopping cart.
+
+---
 
 ## Problem: Authentication System
 You are building an authentication system that supports multiple authentication methods like username-password, social media logins, and biometric authentication. The system should be easily extensible to add new authentication methods.
@@ -158,21 +161,167 @@ This design pattern allows us to easily add new authentication methods to the au
 
 In addition, the Factory Method Pattern makes it easy to change the authentication method at runtime. This could be useful if we want to change the authentication method based on the user's preferences or the security requirements of the system.
 
+---
 
 ## Problem: File System
 
 Which design pattern would you use to implement a file system that supports multiple file types like text files, image files, and video files? Explain your solution.
 
 ### Design Pattern: Composite Pattern
-### Explanation: 
-The Composite Pattern allows you to compose objects into tree structures and then work with these structures as if they were individual objects. Create a base class for files and folders, and then create subclasses for each file type. This allows you to treat files and folders in the same way.
+
+### Explanation:
+
+The Composite Pattern is a structural design pattern that allows you to compose objects into tree structures to represent part-whole hierarchies. It is particularly suitable for modeling hierarchical structures like file systems.
+
+For implementing a file system that supports multiple file types like text files, image files, and video files, the Composite Pattern can be used effectively. Here's how the pattern can be applied to this problem:
+
+#### 1. Component:
+Define an abstract component class that represents the common interface for all file types. This class will have methods to perform operations like opening, reading, and writing files. This can be an interface or an abstract class.
+
+#### 2. Leaf:
+Implement concrete leaf classes for different file types (e.g., TextFile, ImageFile, VideoFile) that extend the component class. These classes will provide specific implementations for opening, reading, and writing their respective file types.
+
+#### 3. Composite:
+Create a composite class (e.g., Folder) that also extends the component class. This class will represent folders in the file system. It can hold a collection of child components, which can be either files or other folders. The composite class will provide methods for adding and removing child components.
+
+### Advantages of Using the Composite Pattern:
+
+#### 1. Flexibility: 
+The Composite Pattern allows you to treat individual objects and compositions of objects uniformly. This means you can work with both individual files and folders in a consistent manner.
+
+#### 2. Nested Structures: 
+The pattern supports creating nested structures, making it suitable for representing hierarchical relationships like file systems with folders containing files.
+
+#### 3. Ease of Adding New Types: 
+Adding new file types is straightforward. You can create new leaf classes that implement the component interface and add them to the composite structure.
+
+#### 4. Code Reusability: 
+By defining common operations in the component interface, you ensure that these operations can be reused across different file types.
+
+#### 5. Client-Server Transparency: 
+Clients can treat individual files and folders in the same way. This simplifies the client code as it doesn't need to distinguish between the two.
+
+### Example Usage:
+
+Let's say you have a Folder object representing the root directory of your file system. Inside this folder, you can have instances of TextFile, ImageFile, and other Folder objects. The composite structure allows you to create nested folders, organize files, and perform operations on them uniformly.
+```java
+interface FileComponent {
+    void open();
+    void read();
+    void write();
+}
+
+class TextFile implements FileComponent { /* ... */ }
+class ImageFile implements FileComponent { /* ... */ }
+class VideoFile implements FileComponent { /* ... */ }
+
+class Folder implements FileComponent {
+    private List<FileComponent> children = new ArrayList<>();
+
+    void add(FileComponent fileComponent) { /* ... */ }
+    void remove(FileComponent fileComponent) { /* ... */ }
+
+    @Override
+    public void open() { /* ... */ }
+
+    @Override
+    public void read() { /* ... */ }
+
+    @Override
+    public void write() { /* ... */ }
+}
+```
+
+By using the Composite Pattern, you can create a flexible and extensible file system that supports multiple file types and maintains a hierarchical structure. This pattern ensures that clients can work with individual files and folders seamlessly, making it a suitable choice for building file systems
+
+### Other design patterns that could be used to implement a file system:
+
+#### 1. Adapter Pattern:
+The Adapter Pattern allows you to adapt the interface of one class to match the requirements of another. This pattern could be used to implement a file system that supports multiple file types by adapting the interface of each file type to match the requirements of the file system.
+
+#### 2. Decorator Pattern:
+The Decorator Pattern allows you to attach additional responsibilities to an object dynamically. This pattern could be used to implement a file system that supports multiple file types by decorating each file type with additional functionality.
+
+#### 3. Proxy Pattern:
+The Proxy Pattern provides a surrogate or placeholder for another object to control access to it. This pattern could be used to implement a file system that supports multiple file types by using a proxy object to control access to each file type.
+
+---
 
 ## Problem: Logging System
 You need to implement a logging system that records different types of log messages (info, warning, error) to different destinations (console, file, database). The system should be flexible to add new log destinations.
 
-### Design Pattern: Chain of Responsibility Pattern
-### Explanation: 
-The Chain of Responsibility Pattern allows you to pass a request along a chain of handlers. Each handler can process the request or pass it to the next handler. Implement different handlers for each log destination and chain them together to handle different log messages.
+### Design Pattern: Strategy Pattern
+
+### Explanation:
+
+The Strategy Pattern is a behavioral design pattern that defines a family of algorithms, encapsulates each algorithm in a separate class, and makes these classes interchangeable. It allows a client to choose an algorithm from a family of algorithms at runtime.
+
+For implementing a logging system that records different types of log messages to different destinations, the Strategy Pattern can be used effectively. Here's how the pattern can be applied to this problem:
+
+#### 1. Context:
+Define a context class that holds a reference to the current log strategy. This class provides methods for setting the log strategy and triggering log messages.
+
+#### 2. Strategy:
+Create an interface or an abstract class for the log strategy. This interface should declare methods like logInfo, logWarning, and logError that encapsulate the different types of log messages. Each strategy class (e.g., ConsoleLogStrategy, FileLogStrategy, DatabaseLogStrategy) will implement these methods based on the specific destination.
+
+#### 3. Concrete Strategies:
+Implement concrete strategy classes for different log destinations. Each concrete strategy class will provide its own implementation for writing log messages to the respective destination (console, file, database).
+
+### Advantages of Using the Strategy Pattern:
+
+#### 1. Flexibility: 
+The Strategy Pattern allows you to change the behavior of the logging system at runtime by swapping different log strategies. You can add new log strategies without modifying the existing code.
+
+#### 2. Separation of Concerns: 
+By encapsulating each log strategy in its own class, you achieve better separation of concerns. Changes in one log strategy won't affect others.
+
+#### 3. Easy Extensibility: 
+Adding new log destinations (e.g., sending logs to a remote server) is straightforward. You can create new strategy classes that implement the log strategy interface.
+
+#### 4. Code Reusability: 
+Similar to the previous point, if certain behaviors (e.g., logging error messages) are common across strategies, you can reuse code within the respective strategy classes.
+
+#### 5. Testability: 
+The Strategy Pattern facilitates testing, as you can create mock implementations of the log strategy interface for unit testing.
+
+### Example Usage:
+
+Let's say you have a Logger class that acts as the context for the strategy pattern. Clients can set the log strategy (e.g., ConsoleLogStrategy, FileLogStrategy) and trigger different types of log messages using the chosen strategy.
+```java
+interface LogStrategy {
+    void logInfo(String message);
+    void logWarning(String message);
+    void logError(String message);
+}
+
+class ConsoleLogStrategy implements LogStrategy { /* ... */ }
+class FileLogStrategy implements LogStrategy { /* ... */ }
+class DatabaseLogStrategy implements LogStrategy { /* ... */ }
+
+class Logger {
+    private LogStrategy logStrategy;
+
+    void setLogStrategy(LogStrategy logStrategy) { /* ... */ }
+    void logInfo(String message) { /* ... */ }
+    void logWarning(String message) { /* ... */ }
+    void logError(String message) { /* ... */ }
+}
+```
+
+By using the Strategy Pattern, you can implement a flexible logging system that supports different log destinations (console, file, database) and handles various types of log messages (info, warning, error). This pattern allows you to change the logging behavior dynamically and facilitates the addition of new log strategies in the future.
+
+### Other design patterns that could be used to implement a logging system:
+
+#### 1. Observer Pattern:
+The Observer Pattern defines a one-to-many dependency between objects so that when one object changes state, all of its dependents are notified and updated automatically. This pattern could be used to implement a logging system that notifies clients when new log messages are added.
+
+#### 2. Decorator Pattern:
+The Decorator Pattern allows you to attach additional responsibilities to an object dynamically. This pattern could be used to implement a logging system that adds additional functionality (e.g., timestamping) to log messages.
+
+#### 3. Proxy Pattern:
+The Proxy Pattern provides a surrogate or placeholder for another object to control access to it. This pattern could be used to implement a logging system that controls access to log messages (e.g., only allowing certain users to view error logs).
+
+---
 
 ## Problem: Object Persistence
 You are working on a system that needs to persist objects to different data sources like databases, files, and external services. The persistence mechanisms might change over time.
