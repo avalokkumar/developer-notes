@@ -1434,3 +1434,296 @@ PUT /reviews/_doc/4
   }
 }
 ```
+
+### Missing fields
+
+- All fields in Elasticsearch are optional
+- We can leave out a field while indexing documents
+- E.g. unlike relational database where we need to allow NULL
+- Some integrity checks need to be done at the application level
+- * e.g. having required fields
+- Adding a field mapping does not make a field required
+- Searches automatically handle missing fields
+
+
+### Mapping parameters
+
+#### * format parameter
+
+* - Used to customize the format of date fields
+* - I recommend using the default format whenever possible
+* - - "strict_date_optional_time||epoch_millis"
+* - - "yyyy/MM/dd HH:mm:ss||yyyy/MM/dd"
+* - - "yyyy/MM/dd HH:mm:ss||yyyy/MM/dd||epoch_millis"
+* - - "yyyy/MM/dd HH:mm:ss||yyyy/MM/dd||epoch_millis||strict_date_optional_time"
+* - - "yyyy/MM/dd HH:mm:ss||yyyy/MM/dd||epoch_millis||strict_date_optional_time||epoch_second"
+* - Using Java's Dateformatter syntax
+* - - E.g. "yyyy/MM/dd HH:mm:ss||yyyy/MM/dd||epoch_millis||strict_date_optional_time||epoch_second"
+* - Using build-in formats
+* - - e.g. "strict_date_optional_time||epoch_millis"
+* - - e.g. "epoch_second"
+
+#### * properties parameter
+
+* - Used to define object mappings
+
+* - - E.g. "properties": {"author": {"properties": {"first_name": {"type": "text"}}}}
+* - Defines nested fields for object and nested fields
+
+```bash
+PUT /sales
+{
+  "mappings": {
+    "properties": {
+      "created_at": {
+        "type": "date",
+        "format": "yyyy/MM/dd HH:mm:ss||yyyy/MM/dd||epoch_millis||strict_date_optional_time||epoch_second"
+      },
+      "author": {
+        "properties": {
+          "first_name": {"type": "text"},
+          "last_name": {"type": "text"},
+          "email": {"type": "keyword"}
+        }
+      }
+    }
+  }
+}
+```
+
+* - Example of nested fields
+
+```bash
+PUT /sales
+{
+  "mappings": {
+    "properties": {
+      "products": {
+        "type": "nested",
+        "properties": {
+          "name": {"type": "text"},
+          "price": {"type": "float"},
+          "in_stock": {"type": "integer"}
+        }
+      }
+    }
+  }
+}
+```
+
+#### * coerce parameter
+
+* - Used to enable or disable coercion of values (enabled by default)
+* - - E.g. "coerce": false
+
+Ex:
+
+```bash
+PUT /coercion_test
+{
+  "mappings": {
+    "properties": {
+      "price": {
+        "type": "integer",
+        "coerce": false
+      }
+    }
+  }
+}
+```
+
+```bash
+PUT /sales
+{
+  "settings: {
+    "index.mapping.coerce": false
+  },
+  "mappings": {
+    "properties": {
+      "price": {
+        "type": "integer",
+        "coerce": true
+      }
+    }
+  }
+}
+```
+
+#### * doc_value parameter
+
+* - Used to enable or disable doc values (enabled by default)
+* - Elasticsearch makes use of several data structures to enable fast searches
+
+* - - No single data structure is suitable for all use cases
+
+* - Enabled indices are excellent for searching text
+* - - They don't perform well for many other data access patterns
+
+* - "doc_values" is another data structure used by apache lucene
+* - - Optimized for a different data access pattern (document -> terms)
+
+* - It is an "uninverted" inverted index
+* - Used for sorting, aggregation, and scripting
+* - An additional data structure, not a replacement
+* - Elasticsearch automatically queries the appropriate data structure
+
+* Disabling doc values reduces disk usage
+* - But it also disables sorting, aggregations, and scripting
+* - Also, slightly increases the indexing throughput
+
+* Only disable doc_values if you won't use aggregation, sorting and scripting
+* - E.g. for logging use cases
+* Particularly useful for large indices; typically not worth it for small ones
+* - E.g. 100 million documents with 10 fields // example of large index
+
+* Cannot be changed without reindexing documents into new index
+* - Use with caution, and try to anticipate how fields will be queried
+
+>  doc_value parameter example
+  
+  ```bash
+  PUT /sales
+  {
+    "mappings": {
+      "properties": {
+        "price": {
+          "type": "integer",
+          "doc_values": false
+        }
+      }
+    }
+  }
+  ```
+
+  #### * norms
+
+  * Normalization factor used for relevance scoring
+  * - Disabled by default
+  * - - E.g. "norms": false
+
+  * Often we don't want to filter results, but also ranks them
+
+  * Norms can be disabled to save disk space
+  * - Useful for fields that won't be used for relevance scoring
+  * - The fields can still be used for filtering and aggregations
+
+
+> norms example
+
+```bash
+PUT /sales
+{
+  "mappings": {
+    "properties": {
+      "price": {
+        "type": "integer",
+        "norms": false
+      }
+    }
+  }
+}
+```
+
+#### * index parameter
+
+* Disbles indexing for a field
+* Values are still stored within _source
+* Useful if you won't use the field for search queries
+* Saves disk space and slightly improves indexing throughput
+* Often used for time series data
+* Fields with indexing disabled can still be used for aggregations
+
+
+> Examples: 
+
+```bash
+  PUT /server-metrics
+  {
+    "mappings": {
+      "properties": {
+        "cpu": {
+          "type": "float",
+          "index": false
+        },
+        "memory": {
+          "type": "float",
+          "index": false
+        },
+        "disk": {
+          "type": "float",
+          "index": false
+        },
+        "timestamp": {
+          "type": "date"
+        }
+      }
+    }
+  }
+```
+
+
+#### * null_value parameter
+
+* NULL values are not indexed by default and are not searchable
+* Use this value to replace NULL values with a different value
+* Only works with explicit null values
+* The replacement must be of the same data type as the field
+* Doesn't affect the values stored in _source
+
+> null_value parameter example
+
+```bash
+PUT /sales
+{
+  "mappings": {
+    "properties": {
+      "partner_id": {
+        "type": "keyword",
+        "null_value": "NULL"
+      }
+    }
+  }
+}
+```
+
+#### * copy_to parameter
+
+* Used to copy multiple field values into a "group field"
+* Simply specify the name of the target field as the value
+* E.g. first_name and last_name -> full_name
+* values are copied, not terms/tokens
+* - The analyzer of the target field is used for the values
+* The target field is not part of _source
+
+
+> Example of copy_to parameter
+
+```bash
+PUT /sales
+{
+  "mappings": {
+    "properties": {
+      "first_name": {
+        "type": "text",
+        "copy_to": "full_name"
+      },
+      "last_name": {
+        "type": "text",
+        "copy_to": "full_name"
+      },
+      "full_name": {
+        "type": "text"
+      }
+    }
+  }
+}
+``` 
+
+```bash
+POST /sales/_doc
+{
+  "first_name": "John",
+  "last_name": "Smith"
+}
+```
+
