@@ -261,4 +261,154 @@ Nmap offers a wide range of command-line options and customization features. Use
       nmap -p 161,162 example.com
       ```
 
+---
 
+## Masscan:
+Masscan is an extremely fast and versatile port scanner. It's known for its speed and the ability to scan large networks quickly.
+
+**1. Basic Masscan Scan:**
+   - Scan a target IP address or range of IP addresses using the default port range (1-65535):
+     ```
+     masscan -p1-65535 192.168.1.1
+     ```
+   - Explanation: This command scans the IP address 192.168.1.1 for open ports across the entire port range.
+
+**2. Scan Specific Ports:**
+   - Scan for specific ports only, such as 80 (HTTP) and 443 (HTTPS):
+     ```
+     masscan -p80,443 192.168.1.1
+     ```
+   - Explanation: This command scans the target for open ports 80 and 443 only.
+
+**3. Scan Multiple Targets:**
+   - Scan multiple IP addresses or ranges simultaneously:
+     ```
+     masscan -p80 192.168.1.1 192.168.1.2 192.168.1.3
+     ```
+   - Explanation: Masscan can scan multiple targets in a single command.
+
+**4. Specify Output Format:**
+   - Save scan results to a file in a specific format, such as XML:
+     ```
+     masscan -p80 192.168.1.1 -oX scan_results.xml
+     ```
+   - Explanation: This command saves scan results in XML format to the specified file.
+
+**5. Scan a Range of Ports:**
+   - Scan a specific range of ports, such as ports 1000 to 2000:
+     ```
+     masscan -p1000-2000 192.168.1.1
+     ```
+   - Explanation: This command scans the specified port range on the target.
+
+**6. Rate-Limited Scan:**
+   - Limit the scan rate (packets per second) to avoid overwhelming the target:
+     ```
+     masscan -p80 192.168.1.1 --rate 1000
+     ```
+   - Explanation: This command limits the scan rate to 1000 packets per second.
+
+**7. Banner Grabbing:**
+   - Enable banner grabbing to retrieve information about the services running on open ports:
+     ```
+     masscan -p80 --banners 192.168.1.1
+     ```
+   - Explanation: Banner grabbing helps identify services by capturing their banners or service banners.
+
+**8. Scan Top Ports:**
+   - Scan the top N ports (e.g., top 1000 ports) using the `--top-ports` option:
+     ```
+     masscan --top-ports 1000 192.168.1.1
+     ```
+   - Explanation: This command scans the top 1000 most commonly used ports.
+
+**9. Exclude Ports:**
+   - Exclude specific ports from the scan using the `--exclude-ports` option:
+     ```
+     masscan -p1-65535 --exclude-ports 80,443 192.168.1.1
+     ```
+   - Explanation: Ports 80 and 443 are excluded from the scan.
+
+**10. Scan IPv6 Targets:**
+    - Scan IPv6 targets using the `-6` option:
+      ```
+      masscan -p80 -6 2001:db8::1
+      ```
+    - Explanation: This command scans an IPv6 target for open port 80.
+
+**11. Show Help and Options:**
+    - Display the help message and available options:
+      ```
+      masscan --help
+      ```
+    - Explanation: Use this command to view Masscan's help documentation and command-line options.
+
+
+---
+
+## Zmap:
+Zmap is another fast network scanner designed for Internet-wide scanning. It's used for research and security assessments.
+
+---
+
+## Hping:
+Hping is a versatile tool for crafting and sending custom packets. It can be used for various network tasks, including port scanning and firewall testing.
+
+---
+
+## Nessus: Nessus is a comprehensive vulnerability scanning tool that not only identifies open ports but also checks for vulnerabilities on scanned hosts.
+
+---
+
+## OpenVAS: 
+OpenVAS (Open Vulnerability Assessment System) is an open-source vulnerability scanner that helps identify vulnerabilities in network services and applications.
+
+---
+
+## Netcat:
+Netcat, often referred to as the "Swiss Army knife" of networking, is a versatile tool for creating network connections, port scanning, and much more.
+
+---
+
+## Nikto:
+Nikto is a web server scanner that checks for known vulnerabilities and misconfigurations in web servers and web applications.
+
+---
+
+## Wireshark:
+While not a traditional port scanner, Wireshark is a powerful network protocol analyzer that can help identify network issues and vulnerabilities.
+
+---
+
+## Amap:
+Amap (Application Mapper) is designed for fingerprinting application protocols on network services. It helps identify the services running on open ports.
+
+---
+
+## Unicornscan:
+Unicornscan is an information gathering and penetration testing tool. It can be used for host discovery, port scanning, and service identification.
+
+---
+
+## Ncat:
+Ncat is Netcat's modern and improved version, providing additional features and better security.
+
+---
+
+## Superscan:
+Superscan is a Windows-based port scanner with a user-friendly interface, useful for both beginners and experts.
+
+---
+
+## Angry IP Scanner:
+Angry IP Scanner is a simple and lightweight open-source network scanner that's easy to use and cross-platform.
+
+---
+
+## LanScan: 
+LanScan is a macOS tool for scanning local networks to discover active hosts and open ports.
+
+---
+
+## SolarWinds Port Scanner: 
+SolarWinds offers a free Port Scanner tool for Windows that scans a range of IP addresses and checks for open ports.
