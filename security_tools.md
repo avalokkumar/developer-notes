@@ -356,7 +356,8 @@ Hping is a versatile tool for crafting and sending custom packets. It can be use
 
 ---
 
-## Nessus: Nessus is a comprehensive vulnerability scanning tool that not only identifies open ports but also checks for vulnerabilities on scanned hosts.
+## Nessus: 
+Nessus is a comprehensive vulnerability scanning tool that not only identifies open ports but also checks for vulnerabilities on scanned hosts.
 
 ---
 
