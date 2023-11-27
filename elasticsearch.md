@@ -1727,3 +1727,526 @@ POST /sales/_doc
 }
 ```
 
+### Updating existing field mappings
+
+* Suppose that product IDs now include letters
+* We need to change the product_id field's data type to either text or keyword
+* - We won't use the field or full text searches
+* - We will use it for filtering, so the keyword data type is ideal
+
+
+Ex:
+
+```bash
+PUT /reviews/_mapping
+{
+  "properties": {
+    "product_id": {"type": "keyword"}
+  }
+}
+```
+
+```bash
+PUT /reviews/_mapping
+{
+  "properties": {
+    "author": {
+      "properties": {
+        "email": {"type": "keyword"},
+        "ignore_above": 256
+      }
+    }
+  }
+}
+```
+
+### Reindexing Documents with the Reindex API
+```bash
+PUT /reviews_new
+{
+  "mappings": {
+    "properties": {
+      "product_id": {"type": "keyword"},
+      "author": {
+        "properties": {
+          "email": {"type": "keyword"},
+          "ignore_above": 256
+        },
+        "first_name": {"type": "text"},
+        "last_name": {"type": "text"}
+      },
+      "created_at": {
+        "type": "date",
+        "format": "yyyy/MM/dd HH:mm:ss||yyyy/MM/dd||epoch_millis||strict_date_optional_time||epoch_second"
+      },
+      "content": {"type": "text"},
+      "rating": {"type": "float"}
+      "product_id": {"type": "keyword"}
+    }
+  }
+}
+```
+
+```bash
+GET /reviews/_mapping
+```
+
+```bash
+POST /_reindex
+{
+  "source": {
+    "index": "reviews"
+  },
+  "dest": {
+    "index": "reviews_new"
+  }
+}
+```
+
+
+```bash
+GET /reviews_new/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+```
+
+```bash
+GET /reviews_new/_delete_by_query
+{
+  "query": {
+    "match_all": {}
+  }
+}
+```
+
+```bash
+POST /_reindex
+{
+  "source": {
+    "index": "reviews"
+  },
+  "dest": {
+    "index": "reviews_new"
+  },
+  "script": """
+      if(ctx._source.product_id != null) {
+        ctx._source.product_id = ctx._source.product_id.toString();
+      }
+  """
+}
+```
+
+
+### Batching and Throttling
+
+- The Reindex APIs performs operations in batches
+  - Just like the Update by query and delete by query APIs
+  - It uses the Scroll API internally
+  - This is how millions of documents can be reindexd efficiently
+
+- Throttling can be configured to limit the performance impact
+  - Useful for production clusters
+
+
+- - The default batch size is 1000 documents
+
+### Defining field aliases
+
+- Field names can be changed when reindexing document
+- - Not worth it for lots of documents
+- An alternative is to use field aliases
+- - Doesn't require documents to be reindexed
+- Lets add one pointing from comment to content
+- Aliases can be used within queries
+- Aliases are defined with a field mapping
+
+
+#### Creating the alias
+
+PUT /reviews/_mapping
+{
+  "properties": {
+    "comment": {
+      "type": "alias",
+      "path": "content"
+    }
+  }
+}
+
+
+#### Using the alias
+
+GET /reviews/_search
+{
+  "query": {
+    "match": {
+      "content": "great"
+    }
+  }
+}
+
+
+GET /reviews/_search
+{
+  "query": {
+    "match": {
+      "comment": "great"
+    }
+  }
+}
+
+
+- Field alias can actually be updated
+- - Only its target field though
+- Simply perform a mapping update with a new path value
+- Possible because aliases don't affect indexing
+- - Its a query level construct
+
+
+### Multi field mapping
+
+In Elasticsearch, a multi-field mapping is a way to index a field multiple times with different configurations to support various search use cases. This is particularly useful when you want to apply different analyzers, data types, or settings to the same field.
+
+#### key concepts involved in multi-field mapping:
+
+#### 1. Field Mapping:
+
+A field in Elasticsearch represents a unit of data. For instance, if you have a field named name in your document, it can be mapped in multiple ways using multi-field mapping.
+
+#### 2. Sub-Fields:
+
+When you define a multi-field mapping, you create sub-fields under the main field. Each sub-field has its own settings, such as the analyzer, data type, and index options.
+#### 3. Use Cases:
+
+#### 3.1 Full-Text Search vs. Keyword Search:
+
+You might want to perform full-text searches on a text field using analyzers like standard or english. Simultaneously, you might need the same field for exact keyword searches without any analysis. Multi-field mapping allows you to achieve both functionalities.
+
+#### 3.2 Sorting and Aggregations:
+
+For a field like timestamp, you might want to index it as a date type for sorting and date-based aggregations. Additionally, you may want to index it as a keyword to perform exact matches.
+
+```bash
+PUT /multi-field-mapping
+{
+  "mappings": {
+    "properties": {
+      "description": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "ingredients": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+#### 4. Examples:
+Here's a simplified example of a multi-field mapping for a name field:
+
+```json
+"name": {
+  "type": "text",
+  "fields": {
+    "keyword": {
+      "type": "keyword",
+      "ignore_above": 256
+    }
+  }
+}
+
+```
+
+#### 5. Mapping Configuration:
+The configuration of a multi-field mapping depends on your specific use case. You can define sub-fields with different types, analyzers, and other settings based on how you intend to search and analyze the data.
+Here's a basic example of using a multi-field mapping in an index mapping:
+
+```json
+{
+  "mappings": {
+    "properties": {
+      "title": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      }
+    }
+  }
+}
+
+```
+
+### Index Template
+
+```bash
+PUT /_template/access-logs
+{
+  "index_patterns": ["access-logs-*"],
+  "settings": {
+    "number_of_shards": 2,
+    "index.mapping.coerce": false
+  },
+  "mappings": {
+    "properties": {"
+      "ip_address": {"type": "ip"},
+      "@timestamp": {"type": "date"},
+      "url.original": {"type": "keyword"},
+      "http.request.referrer": {"type": "keyword"},
+      "http.response.status_code": {"type": "long"},
+      "request": {"type": "text"},
+      "response": {"type": "integer"},
+      "user_agent": {"type": "text"}
+    }
+  }
+}
+```
+
+
+```bash
+PUT /access-logs-2020-01-01
+```
+
+```bash
+GET /access-logs-2020-01-01
+```
+
+#### Response
+```json
+{
+  "access-logs-2020-01-01" : {
+    "aliases" : { },
+    "mappings" : {
+      "properties" : {
+        "@timestamp" : {
+          "type" : "date"
+        },
+        "http" : {
+          "properties" : {
+            "request" : {
+              "properties" : {
+                "referrer" : {
+                  "type" : "keyword"
+                }
+              }
+            },
+            "response" : {
+              "properties" : {
+                "status_code" : {
+                  "type" : "long"
+                }
+              }
+            }
+          }
+        },
+        "ip_address" : {
+          "type" : "ip"
+        },
+        "request" : {
+          "type" : "text"
+        },
+        "response" : {
+          "type" : "integer"
+        },
+        "url" : {
+          "properties" : {
+            "original" : {
+              "type" : "keyword"
+            }
+          }
+        },
+        "user_agent" : {
+          "type" : "text"
+        }
+      }
+    },
+    "settings" : {
+      "index" : {
+        "routing" : {
+          "allocation" : {
+            "include" : {
+              "_tier_preference" : "data_content"
+            }
+          }
+        },
+        "mapping" : {
+          "coerce" : "false"
+        },
+        "number_of_shards" : "2",
+        "provided_name" : "access-logs-2020-01-01",
+        "creation_date" : "1701105292704",
+        "number_of_replicas" : "1",
+        "uuid" : "YBfnueGOQVCdfhNiXg2BJQ",
+        "version" : {
+          "created" : "7150099"
+        }
+      }
+    }
+  }
+}
+```
+
+
+#### Priorities of Index Templates
+
+- A new index can match multiple index templates
+- The index template with the highest priority is used
+- An order parameter can be used to change the priority of index templates
+  - The value is simply an integer
+  - The default value is 0
+  - Templates with lower values are merged first
+
+#### Updating Index Templates
+
+```bash
+PUT /_template/access-logs
+{
+  "index_patterns": ["access-logs-*"],
+  "settings": {
+    "number_of_shards": 2,
+    "index.mapping.coerce": false
+  },
+  "mappings": {
+    "properties": {
+      "ip_address": {"type": "ip"},
+      "@timestamp": {"type": "date"},
+      "url.original": {"type": "keyword"},
+      "http.request.referrer": {"type": "keyword"},
+      "http.response.status_code": {"type": "long"},
+      "request": {"type": "text"},
+      "response": {"type": "integer"},
+      "user_agent": {"type": "text"}
+    }
+  }
+}
+```
+
+#### Retrieving Index Templates
+
+```bash
+GET /_template/access-logs
+```
+
+#### Deleting Index Templates
+
+```bash
+DELETE /_template/access-logs
+```
+
+
+### Elastic Common Schema (ECS)
+
+The Elastic Common Schema (ECS) is a standardized and extensible approach for organizing and naming fields in Elasticsearch indices. It is designed to make it easier to analyze data from diverse sources consistently. ECS provides a common vocabulary and structure for event fields, making it simpler to correlate and analyze data across different systems.
+
+### Key Concepts of ECS:
+
+1. Field Naming Convention:
+
+Fields in ECS follow a standardized naming convention. For example, event.module, source.ip, user.name, etc. The structure helps in easily identifying the purpose of each field.
+
+2. Categorization:
+
+ECS categorizes fields into common groups like agent, client, server, user, source, destination, event, etc. This grouping makes it clear which aspect of an event each field represents.
+
+3. Versioning:
+
+ECS versions are used to track changes to the schema over time. This helps users adapt to new versions while maintaining backward compatibility.
+
+4. Extensibility:
+
+While ECS provides a common set of fields, it is extensible. Users can add custom fields for their specific use cases while still adhering to the ECS structure.
+
+
+> Notes:
+
+- A specification for field names and data types and how they should be mapped
+- Before ECS there was no cohesion between field names and data types
+- Ingesting logs from nginx would give different field names than Apache
+
+- ECS is a specification, not a mapping template
+
+- ECS means than common fields are named the same thing
+  - Ex: timestamp, url, user_agent, etc
+- Use case independent
+  - E.g. web server logs, firewall logs, etc
+ - Groups of fields are referred to as field sets
+   - E.g. http, url, user_agent, etc
+
+
+#### Uses of ECS 
+- In ECS, documents are referred to as Events
+  - ECS doesn't provide fields for non-events (E.G PRODUCTS)
+- Mostly useful for standard events
+  - Ex: web server logs, firewall logs, etc
+- ECS is automatically handled by Elastic Stack products
+  - Ex: if you ingest the logs via fielbeat then it will automatically use ECS
+
+#### Example:
+
+Here's a simple example of ECS in action for an HTTP server log:
+```json
+{
+  "@timestamp": "2023-01-01T12:34:56.789Z",
+  "event": {
+    "module": "nginx",
+    "category": "web"
+  },
+  "source": {
+    "ip": "192.168.1.1",
+    "port": 80
+  },
+  "destination": {
+    "ip": "10.0.0.1",
+    "port": 443
+  },
+  "http": {
+    "request": {
+      "method": "GET",
+      "referrer": "https://example.com",
+      "user_agent": {
+        "original": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    "response": {
+      "status_code": 200,
+      "body": {
+        "bytes": 1024
+      }
+    }
+  },
+  "user": {
+    "name": "john_doe",
+    "id": "12345"
+  },
+  "ecs": {
+    "version": "1.8.0"
+  }
+}
+```
+
+In this example:
+
+* @timestamp: Represents the timestamp of the event.
+* event.module and event.category: Categorize the event as related to Nginx and falling under the "web" category.
+* source and destination: Indicate the source and destination of the event (IP addresses and ports).
+* http.request and http.response: Contain details about the HTTP request and response.
+* user: Contains information about the user making the request.
+* ecs.version: Specifies the ECS version used.
+
