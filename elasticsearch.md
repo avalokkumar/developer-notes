@@ -2250,3 +2250,366 @@ In this example:
 * user: Contains information about the user making the request.
 * ecs.version: Specifies the ECS version used.
 
+
+### Introduction to dynamic mapping
+
+Dynamic mapping in Elasticsearch is the automatic process of defining the mapping for fields based on the data that is indexed. When you index a document and there is no predefined mapping for the index, Elasticsearch dynamically creates the mapping based on the data it encounters.
+
+Here's an example to illustrate dynamic mapping:
+
+Let's say you start indexing documents in an index without a predefined mapping. The first document may look like this:
+
+```json
+{
+  "user": "John Doe",
+  "age": 30,
+  "location": {
+    "lat": 40.7128,
+    "lon": -74.0060
+  }
+}
+```
+
+In this case, Elasticsearch will dynamically create a mapping for the index based on the structure of this document. The mapping might look like:
+
+```json
+{
+  "mappings": {
+    "properties": {
+      "user": {
+        "type": "text"
+      },
+      "age": {
+        "type": "long"
+      },
+      "location": {
+        "properties": {
+          "lat": {
+            "type": "float"
+          },
+          "lon": {
+            "type": "float"
+          }
+        }
+      }
+    }
+  }
+}
+
+```
+
+#### Note: 
+- Elasticsearch ignores the long values for keyword mappings
+
+> Ex:
+
+```bash
+PUT /my-index/_doc
+{
+  "tags": ["electronics", "trending"],
+  "price": 45,
+  "in_stock": 3,
+  "created_at": "2019-01-01"
+}
+```
+
+> Dynamically created mapping
+
+```json
+{
+  "my-index" : {
+    "mappings" : {
+      "properties" : {
+        "created_at" : {
+          "type" : "date"
+        },
+        "in_stock" : {
+          "type" : "long"
+        },
+        "price" : {
+          "type" : "long"
+        },
+        "tags" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+
+### Combining explicite and dynamic mapping
+
+- Explicit mapping takes precedence over dynamic mapping
+
+```bash
+PUT /people
+{
+  "mappings": {
+    "properties": {
+      "first_name": {"type": "text"}
+    }
+  }
+}
+```
+
+
+```bash
+GET /people/_mapping
+```
+
+
+```bash
+PUT /people
+{
+  "mappings": {
+    "dynamic": false,
+    "properties": {
+      "first_name": {"type": "text"}
+    }
+  }
+}
+```
+
+```bash
+POST /people/_doc
+{
+  "first_name": "John",
+  "last_name": "Doe"
+}
+```
+
+```bash
+GET /people/_mapping
+```
+  
+```bash
+GET /people/_search
+{
+  "query": {
+    "match": {
+      "first_name": "John"
+    }
+  }
+}
+```
+
+```bash
+GET /people/_search
+{
+  "query": {
+    "match": {
+      "last_name": "Doe"
+    }
+  }
+}
+```
+
+```bash
+DELETE /people
+```
+
+
+#### Note:
+- Setting dynamic to false
+  - New Fields are ignored and not rejected
+  - Doesn't affect existing fields
+  - They are not indexed but part of _source object
+- No inverted index is created for the last_name field
+  - Querying the field gives no results
+- Fields cannot be indexed without a mapping
+  - When enabled, dynamic mapping creates one before indexing values
+- New fields must be mapped explicitly
+
+
+
+#### Strict mapping
+
+```bash
+PUT /people
+{
+  "mappings": {
+    "dynamic": "strict",
+    "properties": {
+      "first_name": {"type": "text"}
+    }
+  }
+}
+```
+
+```bash
+POST /people/_doc
+{
+  "first_name": "John",
+  "last_name": "Doe"
+}
+```
+
+> Error
+
+```json
+{
+  "error" : {
+    "root_cause" : [
+      {
+        "type" : "strict_dynamic_mapping_exception",
+        "reason" : "mapping set to strict, dynamic introduction of [last_name] within [_doc] is not allowed"
+      }
+    ],
+    "type" : "strict_dynamic_mapping_exception",
+    "reason" : "mapping set to strict, dynamic introduction of [last_name] within [_doc] is not allowed"
+  },
+  "status" : 400
+}
+```
+
+
+
+### Dynamic Templates
+
+```bash
+PUT /dynamic_templates_test
+{
+  "mappings": {
+    "dynamic_templates": [
+      {
+        "integer": {
+          "match_mapping_type": "long",
+          "mapping": {
+            "type": "integer"
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+
+#### match and unmatch parameters
+
+- Used to specify conditions for field names
+- Field names must match the conditions specified by the match parameter
+- unmatch is used to exclude fields that were matched by match parameter
+- Both parameters support patterns with wildcards (*)
+  - Hard coding field names wouldn't make any sense
+
+
+#### path_match and path_unmatch
+
+- These parameters evaluate the full field path
+  -  i.e not just the field names
+- This is the dot notation that you saw earlier
+  - e.g. name.first_name
+- wildcards are also supported
+
+
+
+```bash
+PUT /test_index
+{
+  "mappings": {
+    "dynamic_templates": {
+      "no_doc_values": {
+        "match_mapping_type": "*",
+        "mapping": {
+          "type": "{dynamic_type}",
+          "doc_values": false
+        }
+      }
+    }
+  }
+}
+```
+
+
+- The purpose of above template is to set index parameter to false
+- This example of disabling indexing could be used for timeseries data
+- This is a common optimization for timeseries data where we don't need to filter on specific values but rather aggregate on time intervals
+- Another optimization for timeseries data is to disable norms.
+
+
+
+#### Index template vs dynamic templates
+
+- Index templates apply mappings and index settings for matching indices
+  - This happens when indicies are created and their names match a pattern
+
+- Dynamic templates are evaluated when new fields are encountered
+  - and dynamic mapping is enabled
+  - The specific field mapping is added if the template condition match
+
+- Index templates define fixed mappings, dynamic templates are dynamic
+
+
+### Mapping recommendation
+
+- Dynamic mapping is convenient, but often not a good idea in production
+- Save disk space with optimized mappings when storing many documents
+- Set dynamic to 'strict', and not 'false'
+  - Setting it to false will enable us to add fields for which there are no mappings. The fields are then simply ignored in terms of indexing. Unexpected results
+
+
+#### Mapping of text fields
+- Don' always map strings as both text and keyword
+  - Typically only one is needed
+  - Each mapping requires disk space
+
+- Do you need to perform full text searches on the field?
+  - If yes, map it as text
+  - If no, map it as keyword
+
+
+#### Disable coercion
+- Always use correct data type whenever possible
+- Coercion is enabled by default
+- - Supplying a floating point for an integer field will truncate it to an Integer
+- - Supplying a string for an integer field will attempt to parse it as an integer
+- - Supplying a string for a date field will attempt to parse it as a date
+
+
+#### Use appropriate numeric data types
+- For the whole numbers, integers data type might be enough
+- - long can store larger numbers but requires more disk space
+
+- For decimal numbers, float data type might be precise enough
+- - double can store larger numbers but requires 2x disk space
+
+#### Mapping parameters
+- Set doc_values to false if you don't need sorting or aggregations and scripting
+- Set norms to false if you don't need relevance scoring
+- Set index to false if you don't need to search on the field values
+- - You can still use the field for aggregations and Sorting. e.g. for time series data
+
+- Probably only worth the effort when storing lots of documents
+- - Otherwise it's probably an over complication
+- Worst case scenario, you will need to reindex your documents
+
+
+
+### Stemming and stop words
+
+
+#### Stemming
+
+- Stemming is the process of reducing a word to its root form
+- - e.g. "running" -> "run", "swimming" -> "swim"
+
+
+#### Stop words
+
+- Words that are filtered out before or after processing of natural language data
+- -  Common words such as "the", "a", "an", "in", "at", "on", "is", "are", "were", "was", "will", "would", "can", "could", "should", "of", "for", "to", "from", "with", "without", "and", "or", "not", "but", "this", "that", "these", "those", "my", "your", "his", "her", "their", "our", "its", "about", "after", "before", "between", "under", "over", "above", "below", "up", "down", "again", "then", "once", "here", "there", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "too", "very", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now", etc
+
+- They provide little to no value for search queries and also for relevance scoring
+- Fairly common to remove such words
+- - Less common in elasticsearch today than in the past
+- - The relevance algorithm has been improved significantly
+- Not removed by default and generally not recommended to remove it
