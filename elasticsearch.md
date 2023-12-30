@@ -2613,3 +2613,222 @@ PUT /test_index
 - - Less common in elasticsearch today than in the past
 - - The relevance algorithm has been improved significantly
 - Not removed by default and generally not recommended to remove it
+
+---
+
+### Analyzers and Search Queries
+
+- Analyzers are used to process text before indexing
+- - They are also used to process search queries
+
+
+In Elasticsearch, analyzers and search queries are fundamental components for handling and searching data. Let's explore each concept:
+
+### Analyzers in Elasticsearch:
+
+An analyzer in Elasticsearch is a process that converts text into terms. It consists of three main parts: character filters, tokenizers, and token filters. Analyzers play a crucial role in breaking down text into individual terms, and they are essential for efficient searching.
+
+#### Example Analyzer:
+
+Here's a simple example of creating a custom analyzer named "my_analyzer" in Elasticsearch using the RESTful API:
+
+```json
+PUT /my_index
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": ["lowercase", "my_synonym_filter"]
+        }
+      },
+      "filter": {
+        "my_synonym_filter": {
+          "type": "synonym",
+          "synonyms": ["quick, fast"]
+        }
+      }
+    }
+  }
+}
+```
+
+In this example:
+- We create an index named "my_index" with a custom analyzer named "my_analyzer."
+- The analyzer uses the standard tokenizer and applies lowercase filtering.
+- Additionally, we define a synonym filter to replace "quick" with "fast."
+
+### Search Queries in Elasticsearch:
+
+Search queries in Elasticsearch are used to retrieve data from the index. Elasticsearch supports a variety of queries for different use cases, such as term queries, match queries, bool queries, and more.
+
+#### Example Search Query:
+
+Here's an example of a simple search query using the RESTful API:
+
+```json
+GET /my_index/_search
+{
+  "query": {
+    "match": {
+      "description": "quick brown fox"
+    }
+  }
+}
+```
+
+In this example:
+- We search for documents in the "my_index" index where the "description" field contains the phrase "quick brown fox."
+
+#### Combining Analyzer and Search Query:
+
+You can use the custom analyzer created earlier in the search query:
+
+```json
+GET /my_index/_search
+{
+  "query": {
+    "match": {
+      "description": {
+        "query": "Quick Fox",
+        "analyzer": "my_analyzer"
+      }
+    }
+  }
+}
+```
+
+In this example:
+- We specify the custom analyzer "my_analyzer" to analyze the search query, allowing it to match synonyms like "fast" for "quick."
+
+
+---
+
+### Built in analyzers
+
+#### Standard Analyzers
+
+- Split texts at word boundaries and removes punctuation
+- - Done by the standard tokenizer
+- Lowercases letters with lowercase token filter
+- Contains the stop token filter (disable by default)
+
+
+#### Simple Analyzers
+
+- Similar to standard analyzers
+- - Split into tokens when encountering anything else than letters
+- Lowercase letters with the lowercase tokenizer
+- - Unusual and a performance hack
+
+#### White space analyzers
+
+- Splits text into tokens whenever it encounters whitespace
+- Does not lowercase letters
+
+#### Keyword analyzers
+
+- No-op analyzers that leaves the input text intact
+- - It simply outputs it as a single token
+- Used for keyword fields by default
+- - Used for exact matching
+
+#### Pattern analyzers
+
+- Uses a regular expression to split text into tokens
+- - It should match whatever should split the text into tokens
+- - The regular expression is defined by the pattern parameter
+- - The default pattern is \W+
+- - - This means that the text is split whenever it encounters a non-word character
+- - - This is similar to the simple analyzer
+
+- This analyzer is very flexible
+- Lowercase letters by default
+
+
+
+### Creating a Custom Analyzers
+
+```bash
+PUT /analyzer_test
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_custom_analyzer": {
+            "type": "custom",
+            "char_filter": ["html_strip"],
+            "tokenizer": "standard",
+            "filter": ["lowercase", "my_synonym_filter", "stop", "lowercase", "asciifolding"]
+        }
+      }
+    }
+  }
+}
+```
+
+
+```bash
+POST /_analyze
+{
+  "analyzer": "standard",
+  "text": "I&am;m in a <em>good</em> mood"
+}
+```
+
+
+```bash
+POST /_analyze
+{
+  "char_filter": ["html_strip"],
+  "text": "I&am;m in a <em>good</em> mood"
+}
+```
+
+
+#### Using Custom Analyzer
+
+```bash
+POST /analyzer_test/_analyze
+{
+  "analyzer": "my_custom_analyzer",
+  "text": "I&am;m in a <em>good</em> mood"
+}
+```
+
+
+#### Creating a Custom Analyzer for danish language stop words
+
+```bash
+PUT /analyzer_test
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "danish_stop": {
+            "type": "stop",
+            "stopwords": "_danish_"
+          },
+        }
+      }
+      "analyzer": {
+        "my_custom_analyzer": {
+            "type": "custom",
+            "char_filter": ["html_strip"],
+            "tokenizer": "standard",
+            "filter": [
+              "danish_stop", 
+              "lowercase", 
+              "my_synonym_filter", 
+              "stop", 
+              "lowercase", 
+              "asciifolding"
+            ]
+        }
+      }
+    }
+  }
+}
+```
