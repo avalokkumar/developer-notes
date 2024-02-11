@@ -2832,3 +2832,775 @@ PUT /analyzer_test
   }
 }
 ```
+
+
+### Updating Analyzers
+
+#### Creating analyzer_test index
+
+```bash
+PUT /analyzer_test
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_custom_analyzer": {
+          "type": "custom",
+          "char_filter": ["html_strip"],
+          "tokenizer": "standard",
+          "filter": ["lowercase", "my_synonym_filter", "stop", "lowercase", "asciifolding"]
+        }
+      }
+    }
+  }
+}
+```
+
+Ex:
+
+```bash
+PUT /analyzer_test/_mapping
+{
+  "properties": {
+    "description": {
+      "type": "text",
+      "analyzer": "my_custom_analyzer"
+    }
+  }
+}
+```
+
+```bash
+
+POST /analyzer_test/_doc
+{
+  "description": "Is that Peter's book?"
+}
+```
+
+```bash
+GET /analyzer_test/_search
+{
+  "query": {
+    "match": {
+      "description": {
+        "query": "that",
+        "analyzer": "keyword" //This will override the default analyzer
+      }
+    }
+  }
+}
+```
+
+```bash
+POST /analyzer_test/_close
+```
+
+```bash
+PUT /analyzer_test/_settings
+{
+  "analysis": {
+    "analyzer": {
+      "my_custom_analyzer": {
+        "type": "custom",
+        "char_filter": ["html_strip"],
+        "tokenizer": "standard",
+        "filter": ["lowercase", "my_synonym_filter", "stop", "lowercase", "asciifolding"]
+      }
+    }
+  }
+}
+
+```
+
+```bash
+POST /analyzer_test/_open
+```
+
+```bash
+GET /analyzer_test/_settings
+```
+
+```bash
+```
+
+```bash
+POST /analyzer_test/_analyze
+{
+  "analyzer": "my_custom_analyzer",
+  "text": "I&am;m in a <em>good</em> mood"
+}
+```
+
+
+#### Summary:
+
+- Analyzers can be updated
+- Pay attension to existing documents
+- - They were analyzed with the old version of the analyzer
+- - Reindex documents to avoid inconsistencies
+- Try to get analyzers right from the start before indexing documents
+- - Not always possible. in which case you know what to do
+
+---
+
+## Searching the data
+
+### Introduction to Searching
+
+- Searching is the process of retrieving documents from an index
+- - It is done using queries
+- - Queries are sent to the _search endpoint
+- - The response contains the documents that match the query
+
+
+### Query DSL
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "match_all": {}   // this query will match all documents in the index
+  }
+}
+```
+
+> Response
+
+```json
+{
+  "took" : 3, // represents the time it took to execute the query
+  "timed_out" : false,  // represents whether the query timed out
+  "_shards" : { // represents the number of shards that were searched
+    "total" : 1,  // represents the total number of shards that were searched
+    "successful" : 1, // represents the number of shards that were successfully searched
+    "skipped" : 0,  // represents the number of shards that were skipped
+    "failed" : 0  // represents the number of shards that failed
+  },
+  "hits" : {  // represents the search results
+    "total" : { // represents the total number of documents that match the query
+      "value" : 1,  // represents the total number of documents that match the query
+      "relation" : "eq" // represents the relation between the value and the total number of documents that match the query
+    },
+    "max_score" : 1.0,  // represents the maximum score of the documents that match the query
+    "hits" : [  // represents the documents that match the query
+      {
+        "_index" : "products",  // represents the index of the document
+        "_type" : "_doc", // represents the type of the document
+        "_id" : "100",  // represents the ID of the document
+        "_score" : 1.0, // represents the score of the document
+        "_source" : { // represents the source of the document
+          "name" : "Toaster", 
+          "price" : 45,
+          "in_stock" : 3
+        }
+      }
+    ]
+  }
+}
+```
+
+
+### Term level queries
+
+- One group of Elasticsearch queries is called term level queries
+- Term level queries are used to search for exact values (filtering)
+- - E.g. searching for documents where the price is 45 or finding products where brand name is "Sony"
+- Term level queries are not analyzed
+- - The search value is used exactly as is for inverted index lookups
+- Can be used with data types such as keyword, numbers, dates, etc
+
+
+
+> Example of term level queries
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "term": {
+      "brand": "Sony"
+    }
+  }
+}
+```
+
+
+### Searching for terms
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "term": {
+      "tag.keyword": "vegetable"
+    }
+  }
+}
+```
+
+> In the above query, documents will be matched if the tag.keyword field contains the exact term "vegetable".
+
+
+#### Booleans
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "term": {
+      "is_active": true
+    }
+  }
+}
+```
+
+
+#### Numbers
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "term": {
+      "price": 45
+    }
+  }
+}
+```
+
+#### Dates
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "term": {
+      "created_at": "2023-01-01"
+    }
+  }
+}
+```
+
+
+#### Timestamp
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "term": {
+      "created_at": "2023-01-01T12:34:56"
+    }
+  }
+}
+```
+
+#### Shorthand Syntax
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "term": {
+      "tags.keyword": "Vegetable"
+    }
+  }
+}
+```
+
+#### Explicit Syntax
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "term": {
+      "tags.keyword": {
+        "value": "Vegetable"
+      }
+    }
+  }
+}
+
+```
+
+#### Term level query search with case insensitivity
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "term": {
+      "tags.keyword": {
+        "value": "vegetable",
+        "case_insensitive": true
+      }
+    }
+  }
+}
+```
+
+#### Term query for multiple values
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "terms": {
+      "tags.keyword": ["vegetable", "fruit"]
+    }
+  }
+}
+```
+
+> In the above query, a document will be matched if the tags.keyword field contains either "vegetable" or "fruit".
+
+
+> Summary:
+- Used too query several different data types
+- - Keyword, numbers, dates, etc
+- Case Sensitive by default
+- - A case_insensitive parameter was added in v7.1.0
+- Use the term query to search for multiple terms
+
+
+
+### Retreiving documents by IDs
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "ids": {
+      "values": ["100", "101", "102"]
+    }
+  }
+}
+```
+
+
+### Range Searches
+
+- Range queries are used to search for a range of values
+- - E.g. searching for products where the price is between 20 and 50
+- Range queries can be used with data types such as numbers, dates, etc
+- - They can also be used with text fields, but the results might not be as expected
+
+#### Querying numeric ranges
+  
+```bash
+GET /products/_search
+{
+  "query": {
+    "range": {
+      "price": {
+        "gte": 20,
+        "lte": 50
+      }
+    }
+  }
+}
+```
+
+SQL equivalent
+
+```sql
+SELECT * FROM products WHERE price >= 20 AND price <= 50
+```
+
+
+#### Different Parameters
+
+- gte: Greater than or equal to
+- gt: Greater than
+- lte: Less than or equal to
+- lt: Less than
+- - The parameters can be used in combination
+- - - E.g. gte and lte, gt and lt, etc
+
+
+#### Querying dates
+
+
+- Dates without time
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "range": {
+      "created_at": {
+        "gte": "2023-01-01",
+        "lte": "2023-01-31"
+      }
+    }
+  }
+}
+```
+
+- Dates with time
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "range": {
+      "created_at": {
+        "gte": "2023-01-01T12:34:56",
+        "lte": "2023-01-31T12:34:56"
+      }
+    }
+  }
+}
+```
+
+#### Specifying a date format
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "range": {
+      "created_at": {
+        "gte": "2023-01-01",
+        "lte": "2023-01-31",
+        "format": "yyyy-MM-dd"
+      }
+    }
+  }
+}
+```
+
+- Default date format
+  - yyyy-MM-dd'T'HH:mm:ss.SSSZ | yyyy-MM-dd HH:mm:ss.SSS | YYYY/MM/dd | epoch_millis
+  - - This is the default date format used by Elasticsearch
+  - - It is used when the format parameter is not specified
+
+
+#### Specifying a UTC offset
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "range": {
+      "created_at": {
+        "gte": "2023-01-01",
+        "lte": "2023-01-31",
+        "format": "yyyy-MM-dd",
+        "time_zone": "+01:00"
+      }
+    }
+  }
+}
+```
+
+- In above query, we specify the time_zone parameter to "+01:00" to specify the UTC offset. 
+- This is useful when the date is stored in UTC and you want to search for documents based on a specific time zone.
+- Elastic search will compare the date with the UTC offset specified in the time_zone parameter.
+
+
+#### Summary
+- Range queries are used to search for a range of values
+- - E.g. searching for products where the price is between 20 and 50
+- Range queries can be used with data types such as numbers, dates, etc
+Specify one or more of the gt, gte, lt, and lte parameters
+- Dates are automatically handled for the date fields
+- - You can specify the date format and the UTC offset
+- - Custom formats can be used
+
+
+### Prefixes, Wildcards and Regular expressions
+
+- Term level queries are used to search for exact values
+- - Query non-analyzed values with queries that are not analyzed
+- There are a few exceptions
+- - Query by prefix, wildcard, and regular expression
+- - Remember to still query keyword fields with keyword queries
+
+#### Prefix queries
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "prefix": {
+      "name.keyword": {
+        "value": "Toast"
+      }
+    }
+  }
+}
+```
+
+- It will match documents where the name.keyword field starts with "Toast"
+- - E.g. "Toaster", "Toasting Machine", etc
+
+
+#### Wildcard queries
+
+- Wildcard queries are used to search for a pattern in a field 
+- - They can be used to search for a pattern in text fields
+
+
+**Patterns and Terms**
+
+- The wildcard query supports two special characters: * and ?
+- - The * character matches zero or more characters
+- - The ? character matches exactly one character
+- - E.g. "Toa*" will match "Toaster", "Toasting Machine", etc
+- - E.g. "Toa?er" will match "Toaster", "Toaster", etc
+
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "wildcard": {
+      "name.keyword": {
+        "value": "Toa*"
+      }
+    }
+  }
+}
+```
+
+- It will match documents where the name.keyword field contains the pattern "Toa*"
+- - E.g. "Toaster", "Toasting Machine", etc
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "wildcard": {
+      "name.keyword": {
+        "value": "Past?"
+      }
+    }
+  }
+}
+```
+
+- It will match documents where the name.keyword field contains the pattern "Past?" 
+- - E.g. "Pasta", "Paste", etc
+
+> Note: Avoid placing the wildcard character at the beginning of a query. It will slow down the query significantly and causes performance issues.
+
+
+### Regular expression queries
+
+- Regular expression queries are used to search for a pattern in a field
+- The regex query matches terms that match a regular expression
+- Regular expressions are used for matching strings
+- Allows more complex queries than the wildcard query
+
+- - They can be used to search for a pattern in text fields
+- - They are more powerful than prefix and wildcard queries
+- - They are also slower and can cause performance issues
+
+
+#### Regular expression examples
+
+* Patterns
+  - The regex query supports regular expressions
+  - Bee(t|r)+
+  - - This pattern will match "beet", "beer", "beetroot
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "regexp": {
+      "name.keyword": {
+        "value": "Bee(t|r)+"
+      }
+    }
+  }
+}
+```
+
+* Patterns II
+  - Bee[a-zA-Z]
+  - - This pattern will match "beet", "beer", "beetroot
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "regexp": {
+      "name.keyword": {
+        "value": "Bee[a-zA-Z]"
+      }
+    }
+  }
+}
+```
+
+#### Engine comparisons
+
+Other engines       Apache Lucene
+- ^Beer             Beer.*
+- Beer$             .*Beer
+- Bee[a-zA-Z]+$     Bee[a-zA-Z]+.*
+
+> Note: All the queries are case sensitive by default. You can use the case_insensitive parameter to make the queries case insensitive.
+
+
+### Querying by field existance
+
+* How empty values are indexed
+- NULL -  N/A
+- [] -  N/A
+- "" -  ""
+
+
+#### Reasons for no indexed value
+- Empty value provided (NULL or [])
+- - The value null_value parameter is an exception for NULL values
+- No value was provided for the field
+- The index mapping parameter is set to false for the field
+- The values length is greater than the ignore_above parameter
+- Malformed value with the ignore_malformed mapping parameter is set to true
+
+
+#### Inverting the query
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "bool": {
+      "must_not": {
+        "exists": {
+          "field": "tags.keyword"
+        }
+      }
+    }
+  }
+}
+```
+
+**SQL equivalent**
+
+```sql
+SELECT * FROM products WHERE tags IS NULL
+```
+
+> The above query will match documents where values of the tags.keyword field does not exist in the index documents.
+
+
+#### Summary
+- The exists query matches fields that have an indexed value
+- Field values are only indexed if they are considered non-empty
+- - NULL or [] are not indexed and are empty values
+- The exists query can be inverted by using the bool query's must_not occurance
+
+
+
+### Intro to Full Text Queries
+
+- Term level queries are used for exact matching on structured data
+- Full term queries are used for searching on unstructured text data
+- - E.g. Website content, news articles, emails, chats, transcripts, etc
+- - Often used for long texts
+- Full text queries are analyzed
+
+
+#### Query
+
+```
+GET /products/_search
+{
+  "query": {
+    "match": {
+      "body": "SHARDING"
+    }
+  }
+}
+```
+
+> SHARDING -> Analyzer -> sharding
+
+**Inverted index**
+
+Term -> Document #1
+- sharding -> 1
+- shard -> 1
+- distributed -> 1
+- system -> 1
+
+
+#### Full text queries vs term level queries
+- Full text queries are used for searching on unstructured text data
+- - E.g. Website content, news articles, emails, chats, transcripts, etc
+
+- Term level queries are used for exact matching on structured data
+- - E.g. Searching for products where the price is 45 or finding products where brand name is "Sony"
+
+- The main difference is full text queries are analyzed and term level queries are not and are therefore used for exact matching
+
+- Don't use full text queries on keyword fields
+- - That compares analyzed value with non-analyzed value
+
+
+#### Summary
+- Full text queries are used for searching on unstructured text data
+- Use full text queries to search unstuctured text data
+- - E.g. Website content, news articles, emails, chats, transcripts, etc
+- Full text queries are not used for exact matching
+- - They match values that include a term, often being one of many
+- Full text queries are analyzed in the same way as the fields that are queried
+
+
+### Intro to match query
+
+- The match query is the most commonly used full text query
+- Matches documents that contains one or more of the specified terms
+- The search term is analyzed and the result is looked up in the field's inverted index
+
+
+> Sample search query
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "match": {
+      "name": "PASTA CHICKEN" //searches in inverted index with values "pasta" OR "chicken"
+    }
+  }
+}
+```
+
+> The above query will match documents where the name field contains the terms "pasta" or "chicken".
+
+
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "match": {
+      "name": {
+        "query": "PASTA CHICKEN", //searches in inverted index with values "pasta" AND "chicken",
+        "operator": "AND"
+      }
+    }
+  }
+}
+```
+
+> The above query will match documents where the name field contains the terms "pasta" and "chicken".
+
+
+#### Summary
+- The match query is the fundamental query in elasticsearch
+- Used for most full text searches
+- Powerful and flexible when using advanced parameters
+- Supports most data types
+- - Text, keyword, numbers, dates, etc
+- - Recommendation: Use term level queries if you know the input value
+- If the analyzer outputs multiple terms, at least one must match by default
+- - This can be changed by setting the operator parameter to "AND"
+  
