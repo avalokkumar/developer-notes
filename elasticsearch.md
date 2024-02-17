@@ -3604,3 +3604,421 @@ GET /products/_search
 - If the analyzer outputs multiple terms, at least one must match by default
 - - This can be changed by setting the operator parameter to "AND"
   
+
+
+### Intro to Relevant Scoring
+
+- The match query returns documents in order of relevance
+- - The relevance score is calculated for each document
+- - The score is based on how well the document matches the query
+
+- With full text search, we don't just care about if the term matches. We also care about how well it matches
+
+For Ex:
+
+> Query
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "match": {
+      "name": "PASTA CHICKEN"
+    }
+  }
+}
+```
+
+### Matching documents
+
+```json
+{
+  "name": "Pasta Penna",
+  "_score": 3.2876821
+}
+
+{
+  "name": "Chicken Pasta",
+  "_score": 4.2876821
+}
+
+{
+  "name": "Pasta with Chicken",
+  "_score": 2.2876821
+}
+
+{
+  "name": "Chicken",
+  "_score": 1.2876821
+}
+```
+
+> Query Results (Sorted by _score)
+
+```json
+{
+  "name": "Chicken Pasta",
+  "_score": 4.2876821
+}
+
+{
+  "name": "Pasta with Chicken",
+  "_score": 4.0876821
+}
+
+{
+  "name": "Pasta Penna",
+  "_score": 3.2876821
+}
+
+{
+  "name": "Chicken",
+  "_score": 1.2876821
+}
+```
+
+
+#### Summary
+- Query results are sorted by relevance score (_score metadata field)
+- - A floating point number of how well the document matches the query
+- Documents matching term level queries are generally scored 1.0
+- - Either a document matches or it doesn't
+- Full text queries are not for exact matching
+- - How well a document matches is now a factor
+
+
+### Searching multiple fields
+
+- The match query can be used to search multiple fields
+
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "multi_match": {
+      "query": "PASTA CHICKEN",
+      "fields": ["name", "description"]
+    }
+  }
+}
+```
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "multi_match": {
+      "query": "PASTA CHICKEN",
+      "fields": ["name", "description"],
+      "type": "cross_fields"
+    }
+  }
+}
+```
+
+```bash
+GET /products_new/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+```
+
+```bash
+GET /products_new/_search
+{
+  "query": {
+    "multi_match": {
+      "query": "kitchen",
+      "fields": ["name", "tags"]
+    }
+  }
+}
+```
+
+
+Response:
+
+
+```json
+{
+  "took" : 6,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 6,
+      "relation" : "eq"
+    },
+    "max_score" : 1.1921031,
+    "hits" : [
+      {
+        "_index" : "products_new",
+        "_type" : "_doc",
+        "_id" : "upcJuI0BZW6NGeIagL6j",
+        "_score" : 1.1921031,
+        "_source" : {
+          "name" : "Kitchen Blender",
+          "price" : 1510,
+          "in_stock" : 51,
+          "tags" : [
+            "appliances"
+          ]
+        }
+      },
+      {
+        "_index" : "products_new",
+        "_type" : "_doc",
+        "_id" : "-erslo0Bh1-Bhwq-ibeF",
+        "_score" : 0.29624987,
+        "_source" : {
+          "name" : "Toaster",
+          "price" : 45,
+          "in_stock" : 3,
+          "tags" : [
+            "kitchen",
+            "appliances"
+          ]
+        }
+      }
+    ]
+  }
+}
+```
+
+
+> Note: A very useful feature of multi search is adjusting the relevant score of the fields. For example, you can give more weight to the name field than the description field.
+
+Example:
+
+```bash
+GET /products_new/_search
+{
+  "query": {
+    "multi_match": {
+      "query": "kitchen",
+      "fields": ["name^3", "tags"] // this means that the name field is 3 times more important than the description field
+    }
+  }
+}
+```
+
+#### How the multi match query works
+
+- The elastic search internally creates a query for each field
+- - It then combines the results of the queries
+
+For ex:
+
+```bash
+GET /products_new/_search
+{
+  "query": {
+    "multi_match": {
+      "query": "kitchen",
+      "fields": ["name", "tags"]
+    }
+  }
+}
+```
+
+- The above query will create a query for the name field and a query for the tags field
+- The results of the queries are then combined and the documents are sorted by relevance score
+
+The internally converted query:
+
+```bash
+GET /products_new/_search
+{
+  "query": {
+    "match": {
+      "name": "kitchen"
+    }
+  }
+}
+```
+
+```bash
+GET /products_new/_search
+{
+  "query": {
+    "match": {
+      "tags": "kitchen"
+    }
+  }
+}
+```
+
+
+#### Specifying the tie breaker
+
+- By default, the multi match query uses the best matching field(one field) to calculate the relevance score
+- We can "reward" documents where multiple fields match the   tie_breaker parameter
+- - Each field's score is multiplied by the tie_breaker parameter. The default value is 0.3. The result is then added to the final score
+- - The tie_breaker parameter is a floating point number between 0 and 1
+- - A value of 0 means that the best matching field is used
+- - A value of 1 means that all matching fields are used equally
+
+> Example:
+
+```bash
+GET /products_new/_search
+{
+  "query": {
+    "multi_match": {
+      "query": "kitchen",
+      "fields": ["name", "tags"],
+      "tie_breaker": 0.3
+    }
+  }
+}
+```
+
+#### Summary
+- The multi match query performs full text search on multiple fields
+- - A document matches if at least one field matches
+- The individual fields can be relevance boosted by modifying the field name (e.g. name^3)
+- - It creates a query for each field and combines the results
+- By default, the best matching field is used to calculate the relevance score
+- - Can be configured with the type parameter
+- The tie_breaker parameter is used to reward documents where multiple fields match
+- - The default value is 0.3
+- - A value of 0 means that the best matching field is used
+- - A value of 1 means that all matching fields are used equally
+
+
+### Phrase Searches
+
+- The match query is used to search for documents that contain one or more of the specified terms
+
+
+Ex:
+
+* Query #1
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "match": {
+      "name": "Fanta Zero"
+    }
+  }
+}
+```
+
+* Query #2
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "match": {
+      "name": "Zero Fanta"
+    }
+  }
+}
+```
+
+* Query #3
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "match": {
+      "description": "Fanta Zero"
+    }
+  }
+}
+```
+
+> Output JSON
+
+```json
+{
+  "name": "Fanta Zero",
+  "description": "Like the regular Fanta, but with zero sugar"
+}
+```
+
+
+* Phrase searches has many similarities with the match query. 
+* A Phrase is a sequence of one or more words. Such as "Browse the web" or "Search for a product".
+* In elastic search, we use match_phrase query to search for phrases. When doing so, the order of the words in the phrase matters which differs from how the match query works.
+
+
+#### Examples to illustrate the difference between match and match_phrase queries
+
+* Query #1
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "match": {
+      "name": "Fanta Zero"
+    }
+  }
+}
+```
+
+* Query #2
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "match_phrase": {
+      "name": "Fanta Zero"
+    }
+  }
+}
+```
+
+- The match_phrase query is analyzed same as the match query usually with the standard analyzer
+- - The match_phrase query is used to search for a sequence of words in a field. The order of the words in the phrase matters and the phrase must match exactly with the field value in the inverted index.
+
+
+#### How match_phrase query works
+
+- The match_phrase query is used to search for a sequence of words in a field
+- The elasticsearch keeps track of the position of each term in the field value in the inverted index. This allows the match_phrase query to search for phrases in the field values.
+- This information is recorded during the analysis process by default
+- When a string is indexed into a text field, the analyzer will record the position of each term in the field value
+- Specifically this task is taken care by analyzer and tokenizer
+- These positions are then stored within the inverted index fields positions
+
+Ex: 
+
+```bash
+
+GET /products/_search
+{
+  "query": {
+    "match_phrase": {
+      "description": "Elasticsearch guide"
+    }
+  }
+}
+```
+
+["elasticsearch", "guide"] -> [1, 2]
+
+- The above query will match documents where the description field contains the phrase "Elasticsearch guide".
+
+
+#### Summary
+- The match_phrase query is used to search for a sequence of words in a field
+- The order of the words in the phrase matters
+- Terms must appear in the field in the same order as the phrase
+- The standard token analyzer's tokenizer records the position of each term in the field value
+- - These positions are then stored within the inverted index fields positions 
+- - This allows the match_phrase query to search for phrases in the field values
