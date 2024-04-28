@@ -4022,3 +4022,330 @@ GET /products/_search
 - The standard token analyzer's tokenizer records the position of each term in the field value
 - - These positions are then stored within the inverted index fields positions 
 - - This allows the match_phrase query to search for phrases in the field values
+
+
+### Leaf vs Compund Queries
+
+- Leaf queries searches for values and are independent queries
+- - E.g `term` and `match` queries
+- Compund queries wrap other queries to produce a result
+- - A compound query can be nested inside another compound query
+
+
+## Querying with boolean logic
+
+> Example 1
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "name": "Fanta Zero"
+          }
+        },
+        {
+          "match": {
+            "description": "sugar"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+> Example 2
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "name": "Fanta Zero"
+          }
+        },
+        {
+          "match": {
+            "description": "sugar"
+          }
+        }
+      ],
+      "should": [
+        {
+          "match": {
+            "tags": "sugar"
+          }
+        }
+      ],
+      "must_not": [
+        {
+          "match": {
+            "tags": "diet"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+> Example 3
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "name": "Fanta Zero"
+          }
+        },
+        {
+          "match": {
+            "description": "sugar"
+          }
+        }
+      ],
+      "should": [
+        {
+          "term": {
+            "tags.keyword": "sugar"
+          }
+        },
+        {
+          "match": {
+            "tags": "sugar"
+          }
+        },
+        {
+          "match": {
+            "name": "sweet"
+          }
+        },
+        {
+          "match": {
+            "description": "sweet"
+          }
+        }
+      ],
+      "minimum_should_match": 1
+    }
+  }
+}
+```
+
+
+> Sample Queries
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "term": {
+            "tags.keyword": "Alcohol"
+          }
+        }
+      ],
+      "must_not": [
+        {
+          "term": {
+            "tags.keyword": "Wine"
+          }
+        }
+      ],
+      "should": [
+        {
+          "term": {
+            "tags.keyword": "Beer"
+          }
+        },
+        {
+          "match": {
+            "name": "Beer"
+          }
+        },
+        {
+          "match": {
+            "description": "Beer"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+> Return Documents:
+
+```json
+{
+  "name": "Beer",
+  "description": "A cold beer is the best thing on a hot day",
+  "tags": ["Alcohol", "Beer"]
+}
+
+{
+  "name": "Beer",
+  "description": "cold beer can be refreshing",
+  "tags": ["Alcohol", "Beer"]
+}
+
+{
+  "name": "Beer",
+  "description": "its beer time",
+  "tags": ["Alcohol", "Beer"]
+}
+```
+
+**Important thing about should clause**
+- If a bool query only contains should clauses, at least one must match
+- Useful if we want something to match and reward matching documents
+- - If nothing were required to match, we would get irrelevant results
+- If a query exists for must, must_not, or filter, no should clause is required to match
+- - Any should clauses are only used to boost relevance scores
+- should clauses are optional
+- "minimum_should_match": 1 can be used to require at least one should clause to match
+- "percentage" can be used to require a percentage of should clauses to match
+- - E.g. "minimum_should_match": 75%
+
+> Example:
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "bool": {
+      "should": [
+        {
+          "term": {
+            "tags.keyword": "Alcohol"
+          }
+        },
+        {
+          "match": {
+            "name": "Wine"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+### The filter occurrence type
+- A filter clause is used to filter documents and does not affect the relevance score
+- A Query clause must match and affects the relevance score
+- Similar to the must occurence type
+- Ignores relevance score
+- - This improves the performance of the query
+- Query results can be cached and reused
+
+
+Occurrence                         Description
+
+must                    -          Query clauses are required to match and will contribute to the relevance score
+
+filter                  -          Query clauses are required to match but will not contribute to the relevance score
+
+must_not                -          Query clauses are required not to match and will not contribute to the relevance score. Query clauses may therefore be cached and improve performance
+
+should                  -          Query clauses are not required to match but will contribute to the relevance score. Behaviour can be controlled with the minimum_should_match parameter
+
+
+
+
+
+- Required ot match? 
+* must - yes
+* filter - yes
+* must_not - no
+* should - conditional
+
+- Affects relevance score?
+* must - yes
+* filter - no
+* must_not - no
+* should - yes
+
+- Can be cached?
+* must - no
+* filter - yes
+* must_not - yes
+* should - no
+
+
+
+### SQL Query
+wher (tags IN ("Beer") or names LIKE %Beer% AND in_stock <= 100)
+
+### Corresponding Elastic Search Query using `filter`
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "bool": {
+      "should": [
+        {
+          "term": {
+            "tags.keyword": "Beer"
+          }
+        },
+        {
+          "match": {
+            "name": "Beer"
+          }
+        }
+      ],
+      "filter": {
+        "range": {
+          "in_stock": {
+            "lte": 100
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "bool": {
+      "should": [
+        {
+          "term": {
+            "tags.keyword": "Beer"
+          }
+        },
+        {
+          "match": {
+            "name": "Beer"
+          }
+        }
+      ],
+      "filter": {
+        "range": {
+          "in_stock": {
+            "lte": 100
+          }
+        }
+      }
+    }
+  }
+}
+```
