@@ -4349,3 +4349,223 @@ GET /products/_search
   }
 }
 ```
+
+
+## Query Execution Context
+
+* Answer two questions
+- - Does this document match? (yes/no)
+- - How well does this document match (`_score` metadata field)
+
+* Query results are sorted by `_score` descendingly
+- - The most relevant document appears at the top
+
+### Identifying the query context
+
+```bash
+GET /products/_search
+{
+  "query": {    //it indicates that the query clauses nested in this key are executed in a query context meaning documents are rated based on relevance
+    "match": {
+      "name": "Fanta Zero"
+    }
+  }
+}
+```
+
+### Filter query context
+* Only answers the question "Does this document match? (yes/no)"
+- - No relevance scores are calculated
+
+* Used to filter data, typically on structured data (dates, numbers, keywords)
+- - Relevance scoring is irrelevant if we want to filter out documents
+
+* Improves performance
+- - No resources are spent calculating relevance scores
+- - Query results can be cached
+
+### Changing the execution context
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "name": "Fanta Zero"
+          }
+        }
+      ],
+      "must_not": [
+        {
+          "term": {
+            "tags.keyword": "Diet"
+          }
+        }
+      ],
+      "filter": [
+        {
+          "range": {
+            "price": {
+              "lte": 100
+            }
+          }
+        }
+      ],
+      "should": [
+        {
+          "match": {
+            "description": "sugar"
+          }
+        }
+      ]
+      ]
+    }
+  }
+}
+```
+
+
+* In situations where we don't need relevance scoring, its a good optimization to move query clauses from "must" to "filter" or "must_not" to "filter"
+* Its sometimes possible to change the execution context
+- - Only a few query support it
+
+* Typically done with the `bool` query and `filter` aggregation
+* Queries that support this generally have a filter parameter
+
+
+Summary:
+* The query execution context calculates relevance scores
+* The filter execution context does not calculate relevance scores
+- - Used for filtering data, typically with structured data (e.g by date)
+* The filter execution context improves performance
+- - No resources spent calculating relevance scores
+- - Queries can be cached
+* Only a few queries support changing the execution context
+- - Look for a `filter` parameter
+
+
+## Boosting query
+- The bool query enables us to increase relevance scores with should
+
+* What if we want to decrease relevance scores for some documents?
+- - This can be done with the `boosting` query
+
+```bash
+GET /products/_search
+{
+  "size": 20,
+  "query": {
+    "match": {
+      "name": "juice"
+    }
+  }
+}
+```
+
+> The above query will match documents where the name field contains the term "juice" and the results will be sorted by relevance score.
+
+### Boosting query example
+
+```bash
+GET /product/_search
+{
+  "size": 20,
+  "query": {
+    "boosting": {
+      "positive": {
+        "match": {
+          "name": "juice"
+        }
+      },
+      "negative": {
+        "term": {
+          "tags.keyword": "diet"
+        }
+      },
+      "negative_boost": 0.2 // this means that the negative query will have 20% less relevance score than the positive query
+    }
+  }
+}
+```
+
+
+### Example 2
+
+```bash
+GET /products/_search
+{
+  "size": 20,
+  "query": {
+    "boosting": {
+      "positive": {
+        "match_all": {}
+      },
+      "negative": {
+        "term": {
+          "tags.keyword": "diet"
+        }
+      },
+      "negative_boost": 0.2
+    }
+  }
+}
+```
+
+
+### Example 3 - Increase relevance scoring of recipe containing pasta
+
+```bash
+GET /products/_search
+{
+  "size": 20,
+  "query": {
+    "bool" : {
+      "must": [
+        {"match_all": {}}
+      ]
+    },
+    "should": [
+      {
+        "term": {
+          "ingredients.name.keyword": "Pasta"
+        }
+      }
+    ]
+  }
+}
+```
+
+### Example 4 - Reduce the relevance score of recipes containing bacon
+
+
+```bash
+GET /recipes/_search
+{
+  "query": {
+    "boosting": {
+      "positive": {
+        "match_all": {}
+      },
+      "negative": {
+        "term": {
+          "ingredients.name.keyword": "Bacon"
+        }
+      },
+      "negative_boost": 0.5
+    }
+  }
+}
+```
+
+
+### Summary
+
+- The bool query can increase the relevance score with should
+- The boosting query can decrease relevance scores with negative
+- - Document must match the positive query clause
+- - Document that match the negative query clause will have a lower relevance score
+- - Use `match_all` query for positive if you don't want to filter documents
+- - Can be used with any query (including compound queries, such as bool)
