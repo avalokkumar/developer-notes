@@ -4569,3 +4569,64 @@ GET /recipes/_search
 - - Document that match the negative query clause will have a lower relevance score
 - - Use `match_all` query for positive if you don't want to filter documents
 - - Can be used with any query (including compound queries, such as bool)
+
+
+## Disjunction Max (dis_max)
+
+* dis_max query is used to search for documents that contain one or more of the specified terms
+
+```bash
+GET /products/_search
+{
+  "query": {
+    "dis_max": {
+      "queries": [
+        {
+          "match": {
+            "name": "Fanta Zero"
+          }
+        },
+        {
+          "match": {
+            "description": "sugar"
+          }
+        }
+      ],
+      "tie_breaker": 0.3
+    }
+  }
+}
+```
+
+> Score calculation using tie breaker
+
+* Documents:
+
+{
+  "name": "Fanta Zero",
+  "description": "Like the regular Fanta, but with zero sugar"
+}
+
+* Score Calculation
+
+- name: 2.46
+- description: 5.653
+
+- 2.46 + 5.653 * 0.3 = 4.0876821 // this is the final score of the document
+
+> This query will match documents where the name field contains the term "Fanta Zero" or the description field contains the term "sugar". The tie_breaker parameter is used to reward documents where multiple fields match. The value lies between 0 and 1. A value of 0 means that the best matching field is used and a value of 1 means that all matching fields are used equally.
+
+* Documents:
+
+{
+  "name": "Fanta Zero", (2.46)
+  "description": "Like the regular Fanta, but with zero sugar" (5.653)
+}
+
+
+### Summary
+- The `dis_max` query is a compound query
+- - A document matches if at least one leaf query matches
+- The best matching matching query clause's relevance score is used for a document's _score
+- tie_breaker can be used to "reward" documents that match multiple queries
+- `multi_match` queries are often translated into dis_max queries internally
