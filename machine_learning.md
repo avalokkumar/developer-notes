@@ -212,3 +212,264 @@ X = dataset.iloc[:, :-1].values # This will select all rows and all columns exce
 y = dataset.iloc[:, -1].values # This will select all rows and the last column
 ```
 
+## Handling Missing Data
+
+Missing data is a common problem in real-world datasets. It can occur due to various reasons, such as data corruption, human error, or system failures. Handling missing data is an essential step in the data preprocessing pipeline to ensure the quality and reliability of the data.
+
+### Strategies for Handling Missing Data
+
+1. **Remove Rows with Missing Data**
+- Pros: Simple and straightforward
+- Cons: May lose valuable information
+
+2. **Impute Missing Data**
+- Pros: Retains valuable information
+- Cons: May introduce bias or inaccuracies
+
+3. **Use Advanced Techniques**
+- Pros: Handles missing data more effectively
+- Cons: Requires more computational resources
+
+### Techniques for Imputing Missing Data
+
+1. **Mean/Median Imputation**
+- Replace missing values with the mean or median of the column
+- Suitable for continuous numerical data
+
+> Example:
+    
+```py
+from sklearn.impute import SimpleImputer
+
+imputer = SimpleImputer(strategy='mean')
+X[:, 1:] = imputer.fit_transform(X[:, 1:])
+```
+
+
+2. **Mode Imputation**
+- Replace missing values with the mode (most frequent value) of the column
+- Suitable for categorical data
+
+> Example:
+    
+```py
+from sklearn.impute import SimpleImputer
+
+imputer = SimpleImputer(strategy='most_frequent')
+X[:, 0] = imputer.fit_transform(X[:, 0])
+```
+
+3. **K-Nearest Neighbors (KNN) Imputation**
+- Replace missing values with the average of the K-nearest neighbors
+- Suitable for both numerical and categorical data
+
+> Example: 
+        
+```py
+from sklearn.impute import KNNImputer
+
+imputer = KNNImputer(n_neighbors=2)
+X = imputer.fit_transform(X)
+```
+
+4. **Multiple Imputation**
+- Generate multiple imputed datasets and combine the results
+- Suitable for complex datasets with missing data
+
+> Example:
+        
+```py
+from sklearn.experimental import enable_iterative_imputer
+from sklearn.impute import IterativeImputer
+
+imputer = IterativeImputer(max_iter=10, random_state=0)
+X = imputer.fit_transform(X)
+```
+
+5. **Predictive Imputation**
+- Use machine learning models to predict missing values
+- Suitable for datasets with complex relationships
+
+> Example:
+        
+```py
+from sklearn.experimental import enable_iterative_imputer
+from sklearn.impute import IterativeImputer
+
+imputer = IterativeImputer(max_iter=10, random_state=0)
+X = imputer.fit_transform(X)
+```
+
+
+## Encoding Categorical Data Step 1
+
+Categorical data refers to data that represents categories or groups. It can take on a limited number of values and is often represented as text or labels. Machine learning models require numerical input, so we need to encode categorical data into a numerical format.
+
+Example:
+
+```
+Country          Age          Salary          Purchased
+
+France           44           72000           No
+Spain            27           48000           Yes
+Germany          30           54000           No
+Spain            38           61000           No
+Germany          40           63777.78        Yes
+France           35           58000           Yes
+Spain            38.77777778 52000           No
+France           48           79000           Yes
+```
+
+In above example, Country and Purchased are categorical variables. We need to encode these variables into numerical format before using them in a machine learning model.
+The country names (France, Spain, Germany) are nominal categorical variables and to use it in a machine learning model, we need to encode them into numerical format.
+THe way to encode these variables is to use One-Hot Encoding.
+
+### One-Hot Encoding
+
+One-Hot Encoding is a technique used to convert categorical data into a numerical format. It creates binary columns for each category and assigns a 1 or 0 to indicate the presence of a category.
+
+```py
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+```
+
+Example:
+
+```
+Country_France    Country_Spain    Country_Germany    Purchased
+
+1                 0                0                  0
+0                 1                0                  1
+0                 0                1                  0
+0                 1                0                  0
+0                 0                1                  1
+1                 0                0                  1
+0                 1                0                  0
+1                 0                0                  1
+```
+
+## Encoding Categorical Data Step 2
+
+After applying One-Hot Encoding to the categorical variables, we need to handle the issue of multicollinearity. Multicollinearity occurs when two or more independent variables are highly correlated, leading to redundancy in the data.
+
+### Encoding Independent Variables
+
+To avoid multicollinearity, we need to drop one of the binary columns created by One-Hot Encoding. This is known as the dummy variable trap.
+
+```py
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+
+ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(), [0])], remainder='passthrough')
+X = np.array(ct.fit_transform(X))
+```
+
+Output:
+    
+```
+    Country_Spain    Country_Germany    Country_France        Age    Salary     Purchased
+    
+    1.0                0.0                  0.0                    44     72000      No
+    0.0                0.0                  1.0                    27     48000      Yes
+    0.0                1.0                  0.0                    30     54000      No
+    0.0                0.0                  1.0                    38     61000      No
+    0.0                1.0                  0.0                    40     63777.78   Yes
+    1.0                0.0                  0.0                    35     58000      Yes
+    0.0                0.0                  1.0                    38.77777778 52000 No
+    1.0                0.0                  0.0                    48     79000      Yes
+    0.0                1.0                  0.0                    50     83000      No
+    1.0                0.0                  0.0                    37     67000      Yes
+```
+
+### Encoding Dependent Variables
+
+For the dependent variable, we can use Label Encoding to convert categorical labels into numerical format.
+
+```py
+from sklearn.preprocessing import LabelEncoder
+
+le = LabelEncoder()
+y = le.fit_transform(y)
+```
+
+Output:
+    
+```
+    0
+    1
+    0
+    0
+    1
+    1
+    0
+    1
+    0
+    1
+```
+
+
+Excercise:
+
+titanic.csv
+
+```
+PassengerId,Survived,Pclass,Name,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked
+2,1,1,"Cumings, Mrs. John Bradley (Florence Briggs Thayer)",female,38.0,1,0,PC 17599,71.2833,C85,C
+4,1,1,"Futrelle, Mrs. Jacques Heath (Lily May Peel)",female,35.0,1,0,113803,53.1,C123,S
+7,0,1,"McCarthy, Mr. Timothy J",male,54.0,0,0,17463,51.8625,E46,S
+11,1,3,"Sandstrom, Miss. Marguerite Rut",female,4.0,1,1,PP 9549,16.7,G6,S
+12,1,1,"Bonnell, Miss. Elizabeth",female,58.0,0,0,113783,26.55,C103,S
+22,1,2,"Beesley, Mr. Lawrence",male,34.0,0,0,248698,13.0,D56,S
+24,1,1,"Sloper, Mr. William Thompson",male,28.0,0,0,113788,35.5,A6,S
+28,0,1,"Fortune, Mr. Charles Alexander",male,19.0,3,2,19950,263.0,C23 C25 C27,S
+53,1,1,"Harper, Mrs. Henry Sleeper (Myna Haxtun)",female,49.0,1,0,PC 17572,76.7292,D33,C
+55,0,1,"Ostby, Mr. Engelhart Cornelius",male,65.0,0,1,113509,61.9792,B30,C
+```
+
+
+```py
+# Importing the necessary libraries
+import numpy as np
+import pandas as pd
+
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+
+# Load the dataset
+dataset = pd.read_csv('titanic.csv')
+
+
+# Identify the categorical data
+categorical_features = ['Sex', 'Embarked', 'Pclass']
+# categorical_indices = [dataset.columns.get_loc(col) for col in categorical_columns]
+
+
+# Implement an instance of the ColumnTransformer class
+ct = ColumnTransformer(
+    transformers=[
+        ('encoder', OneHotEncoder(), categorical_features)
+    ],
+    remainder='passthrough'
+)
+
+
+# Apply the fit_transform method on the instance of ColumnTransformer
+X = ct.fit_transform(dataset)
+
+
+# Convert the output into a NumPy array
+X = np.array(X)
+
+
+# Use LabelEncoder to encode binary categorical data
+
+le = LabelEncoder()
+y = le.fit_transform(dataset['Survived'])
+
+
+# Print the updated matrix of features and the dependent variable vector
+
+print("Updated matrix of features: \n", X)
+print("Updated dependent variable vector: \n", y)
+```
+
