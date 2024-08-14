@@ -473,3 +473,219 @@ print("Updated matrix of features: \n", X)
 print("Updated dependent variable vector: \n", y)
 ```
 
+
+## Splitting the dataset into the Training set and Test set
+
+To evaluate the performance of a machine learning model, we need to split the dataset into two parts: the training set and the test set. The training set is used to train the model, while the test set is used to evaluate its performance on unseen data.
+
+
+Q. Do we need to apply feature scaling before splitting the dataset into the training set and test set or after splitting the dataset?
+
+A. It is recommended to apply feature scaling after splitting the dataset into the training set and test set. This is because feature scaling should be done on the training set only to prevent data leakage from the test set. If feature scaling is applied before splitting the dataset, information from the test set may leak into the training set, leading to biased results.
+
+
+```py
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+```
+
+Excercise:
+
+```py
+# Import necessary libraries
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+import pandas as pd
+
+# Load the Iris dataset
+data = pd.read_csv('iris.csv')
+
+# Separate features and target
+X = data.iloc[:, :-1]
+Y = data.iloc[:, -1]
+
+# Split the dataset into an 80-20 training-test set
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+
+# Apply feature scaling on the training and test sets
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train) # scaler.fit_transform is used for training set. it will learn the parameters from the training set.
+X_test = scaler.transform(X_test)
+
+# Print the scaled training and test sets
+print(X_train)
+print(X_test)
+```
+
+## Feature Scaling
+
+Feature scaling is a technique used to standardize the range of independent variables or features of data. In data processing, it is also known as data normalization and is generally performed during the data preprocessing step.
+
+### Why do we need Feature Scaling?
+
+1. **Machine Learning Algorithms**
+- Many machine learning algorithms use Euclidean distance to make predictions.
+- Features with larger scales may dominate the distance calculation.
+- Feature scaling ensures that all features contribute equally to the model.
+
+2. **Convergence Speed**
+- Gradient descent converges faster on scaled features.
+- It reduces the number of iterations required to reach the minimum.
+
+3. **Regularization**
+- Regularization techniques like Lasso and Ridge are sensitive to feature scales.
+- Feature scaling helps in regularization by penalizing large coefficients.
+
+4. **Distance-Based Algorithms**
+- Distance-based algorithms like K-Nearest Neighbors (KNN) are sensitive to feature scales.
+- Feature scaling ensures that the algorithm is not biased towards features with larger scales.
+
+### Types of Feature Scaling
+
+1. **Standardization (Z-score normalization)**
+- Scales the data to have a mean of 0 and a standard deviation of 1.
+- Suitable for algorithms that assume normally distributed data.
+- Equation: `z = (x - mean) / std_dev`
+- - mean is the mean of the data.
+- - std_dev is the standard deviation of the data. It is calculated as the square root of the variance which is the average of the squared differences from the mean.
+- Its value will be in the range of +3 and -3
+- It works well when the data follows a Gaussian distribution. It is not sensitive to outliers in the data.
+
+2. **Normalization (Min-Max scaling)**
+- Scales the data to a fixed range, usually between 0 and 1.
+- Suitable for algorithms that require data to be on the same scale.
+- Equation: `x_norm = (x - min) / (max - min)`
+- - min is the minimum value of the data.
+- - max is the maximum value of the data.
+- It always result in the range of 0 to 1
+- It is recommended to use Min-Max scaling when the data follows a Gaussian distribution. It is sensitive to outliers in the data which means that it can be affected by outliers in the data. Outliers are data points that are significantly different from other data points in the dataset.
+
+3. **Robust Scaling**
+- Scales the data based on the interquartile range (IQR).
+- Suitable for datasets with outliers.
+- Equation: `x_robust = (x - Q1) / (Q3 - Q1)`
+- - Q1 is the first quartile (25th percentile).
+- - Q3 is the third quartile (75th percentile).
+
+
+4. **MaxAbs Scaling**
+- Scales the data based on the maximum absolute value.
+- Suitable for sparse datasets.
+- Equation: `x_maxabs = x / max(abs(x))`
+- - max(abs(x)) is the maximum absolute value of the data.
+
+5. **Quantile Transformation**
+- Maps the data to a uniform or normal distribution.
+- Suitable for non-Gaussian data.
+- Equation: `x_quantile = F(x)`
+- - F(x) is the cumulative distribution function of the data.
+
+
+Example:
+
+```py
+from sklearn.preprocessing import StandardScaler
+
+sc = StandardScaler()
+X_train[:, 3:] = sc.fit_transform(X_train[:, 3:]) # Apply feature scaling to the training set. It will scale the columns from 3 to the end.
+X_test[:, 3:] = sc.transform(X_test[:, 3:]) # Apply feature scaling to the test set. It will scale the columns from 3 to the end.
+```
+
+Note:
+We are performing `fit_transform` on the training set and `transform` on the test set. This is because we want to scale the test set based on the parameters learned from the training set. This ensures that the scaling is consistent across both sets. If we were to use `fit_transform` on the test set, it would learn new parameters and the scaling would be different from the training set.
+
+
+#### Excercise:
+
+> Coding exercise: Feature scaling for Machine Learning
+
+```py
+# Import necessary libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+# Load the Wine Quality Red dataset
+# dataset = pd.read_csv('wineqality-red.csv', sep=';')
+dataset = pd.read_csv('winequality-red.csv', delimiter=';')
+
+# Separate features and target
+X = dataset.iloc[:, :-1]
+y = dataset.iloc[:, -1]
+
+# Split the dataset into an 80-20 training-test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create an instance of the StandardScaler class
+scaler = StandardScaler()
+
+# Fit the StandardScaler on the features from the training set and transform it
+X_train = scaler.fit_transform(X_train)
+
+# Apply the transform to the test set
+X_test = scaler.transform(X_test)
+
+# Print the scaled training and test datasets
+print(X_train)
+print(X_test)
+```
+
+## Regressions
+
+Regression is a fundamental concept in statistics and machine learning, used to model and analyze relationships between variables. The primary goal of regression is to predict the value of a dependent variable (often called the "target" or "outcome") based on one or more independent variables (also known as "predictors" or "features"). Regression models are particularly useful when the dependent variable is continuous, like predicting house prices, stock prices, or temperatures.
+
+### Key Concepts in Regression
+* Dependent Variable: The outcome or the variable you are trying to predict. It's also known as the response variable.
+* Independent Variables: The predictors or features that are used to predict the dependent variable.
+* Regression Line: A line that best fits the data points in a regression model. In simple linear regression, it is represented as y=mx+b, where m is the slope, and b is the y-intercept.
+* Residuals: The differences between observed and predicted values. Residuals are used to assess the accuracy of the regression model.
+
+### 1. Simple Linear Regression
+- One independent variable
+- Linear relationship between variables
+- Equation: `y = b0 + b1 * x1`
+- - y is the dependent variable
+- - x1 is the independent variable
+- - b0 is the y-intercept
+- - b1 is the slope of the line
+
+#### Ordinary Least Squares (OLS) Method
+- Minimizes the sum of squared differences between observed and predicted values
+- Finds the best-fitting line that minimizes the sum of squared residuals
+
+```py
+from sklearn.linear_model import LinearRegression
+
+dataset = pd.read_csv('Data.csv')
+X = dataset.iloc[:, :-1].values
+y = dataset.iloc[:, -1].values
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+regressor = LinearRegression()
+regressor.fit(X_train, y_train)
+```
+
+> Formula for OLS
+```
+b1 = sum((x - x_mean) * (y - y_mean)) / sum((x - x_mean)^2)
+b0 = y_mean - b1 * x_mean
+```
+
+y = b0 + b1 * x1 where b0 is the y-intercept and b1 is the slope of the line.
+
+
+
+### 2. Multiple Linear Regression
+
+- Multiple independent variables
+- Linear relationship between variables
+- Equation: `y = b0 + b1 * x1 + b2 * x2 + ... + bn * xn`
+
+### 3. Polynomial Regression
+
+- Non-linear relationship between variables
+- Equation: `y = b0 + b1 * x1 + b2 * x1^2 + ... + bn * x1^n`
+
+
