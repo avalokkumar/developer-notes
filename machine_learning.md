@@ -632,6 +632,8 @@ print(X_test)
 ```
 
 ## Regressions
+<img width="652" alt="image" src="https://github.com/user-attachments/assets/72114b95-a17f-4124-9925-38842b75d338">
+
 
 Regression is a fundamental concept in statistics and machine learning, used to model and analyze relationships between variables. The primary goal of regression is to predict the value of a dependent variable (often called the "target" or "outcome") based on one or more independent variables (also known as "predictors" or "features"). Regression models are particularly useful when the dependent variable is continuous, like predicting house prices, stock prices, or temperatures.
 
@@ -641,7 +643,12 @@ Regression is a fundamental concept in statistics and machine learning, used to 
 * Regression Line: A line that best fits the data points in a regression model. In simple linear regression, it is represented as y=mx+b, where m is the slope, and b is the y-intercept.
 * Residuals: The differences between observed and predicted values. Residuals are used to assess the accuracy of the regression model.
 
+---
+
 ### 1. Simple Linear Regression
+
+<img width="305" alt="image" src="https://github.com/user-attachments/assets/a3756d73-a8ce-4b9d-856a-e3c31bb9633b">
+
 - One independent variable
 - Linear relationship between variables
 - Equation: `y = b0 + b1 * x1`
@@ -675,13 +682,131 @@ b0 = y_mean - b1 * x_mean
 
 y = b0 + b1 * x1 where b0 is the y-intercept and b1 is the slope of the line.
 
-
+---
 
 ### 2. Multiple Linear Regression
 
-- Multiple independent variables
-- Linear relationship between variables
-- Equation: `y = b0 + b1 * x1 + b2 * x2 + ... + bn * xn`
+<img width="531" alt="image" src="https://github.com/user-attachments/assets/ff3e497b-dde3-406e-a45a-fdef12085932">
+
+
+Multiple Linear Regression is a statistical method used to understand the relationship between one dependent variable (the outcome you want to predict) and two or more independent variables (the predictors or factors that influence the outcome). It’s like extending simple linear regression, which deals with just one predictor, to handle multiple predictors.
+
+#### Key Concepts of Multiple Linear Regression
+
+1. **Dependent Variable (Target/Outcome)**: This is the variable you want to predict or explain. For example, predicting house prices.
+   
+2. **Independent Variables (Predictors/Features)**: These are the variables that are used to predict the dependent variable. For example, predicting house prices based on the size of the house, number of bedrooms, location, etc.
+
+3. **Equation**: The relationship can be represented with a linear equation:
+
+   \[
+   y = b_0 + b_1x_1 + b_2x_2 + \ldots + b_nx_n + \epsilon
+   \]
+
+   - \( y \): Dependent variable (e.g., house price)
+   - \( x_1, x_2, \ldots, x_n \): Independent variables (e.g., size, bedrooms, location)
+   - \( b_0 \): Intercept (the value of \( y \) when all \( x \)'s are zero)
+   - \( b_1, b_2, \ldots, b_n \): Coefficients (they show how much \( y \) changes with a change in each \( x \))
+   - \( \epsilon \): Error term (captures the variation in \( y \) not explained by the predictors)
+
+4. **Objective**: The goal is to find the best-fitting line (or plane, or hyperplane) that minimizes the difference between the predicted values and the actual values of the dependent variable. This is done by adjusting the coefficients (\( b_1, b_2, \ldots, b_n \)).
+
+#### How It Works
+
+1. **Fit the Model**: The model is trained on a dataset by finding the best coefficients that minimize the difference between the predicted values and actual values. This is usually done using a method called **Least Squares** which minimizes the sum of squared errors.
+
+2. **Prediction**: Once the coefficients are determined, you can use the model to make predictions on new data by plugging the values of independent variables into the equation.
+
+#### Example
+
+Suppose you want to predict the price of a house based on its size (in square feet), the number of bedrooms, and the distance to the city center.
+
+#### Data Example
+
+| Size (sq ft) | Bedrooms | Distance to City Center (miles) | House Price ($) |
+|--------------|----------|---------------------------------|-----------------|
+| 2000         | 3        | 5                               | 300,000         |
+| 1600         | 2        | 3                               | 250,000         |
+| 2400         | 4        | 8                               | 350,000         |
+| 3000         | 4        | 6                               | 400,000         |
+
+#### Building the Model
+
+1. **Define the variables**:
+   - Dependent variable: House Price (\( y \))
+   - Independent variables: Size (\( x_1 \)), Bedrooms (\( x_2 \)), Distance to City Center (\( x_3 \))
+
+2. **Formulate the equation**:
+   
+   \[
+   \text{House Price} = b_0 + b_1 \times \text{Size} + b_2 \times \text{Bedrooms} + b_3 \times \text{Distance to City Center}
+   \]
+
+3. **Training the Model**:
+   - Using the given data, the model learns the coefficients (\( b_0, b_1, b_2, b_3 \)) that best predict the house prices.
+
+4. **Making Predictions**:
+   - For a house that is 2200 sq ft, with 3 bedrooms, and 4 miles from the city center, plug in the values into the equation:
+
+   \[
+   \text{Predicted Price} = b_0 + b_1 \times 2200 + b_2 \times 3 + b_3 \times 4
+   \]
+
+### Assumptions of Multiple Linear Regression
+
+1. **Linearity**: The relationship between dependent and independent variables is linear.
+2. **Independence**: The observations are independent of each other.
+3. **Homoscedasticity**: The variance of residual errors is constant across all levels of the independent variables.
+4. **Normality**: The residuals (errors) of the model should be normally distributed.
+5. **No Multicollinearity**: The independent variables should not be too highly correlated with each other.
+
+### Advantages and Limitations
+
+- **Advantages**:
+  - Easy to understand and implement.
+  - Works well when the relationship is linear and the assumptions are met.
+  - Can handle multiple predictors.
+
+- **Limitations**:
+  - Not suitable for non-linear relationships.
+  - Performance can be affected if the assumptions are violated.
+  - Sensitive to outliers which can skew the results.
+
+
+#### Assumptions of linear regression
+
+1. **Linearity**(Linear relationship between Y and each X): The relationship between the independent and dependent variables is linear.
+    - The relationship between the independent and dependent variables can be represented by a straight line.
+    - It can be checked using a scatter plot of the data.
+
+2. **Homoscedasticity**(Equal Variance): The variance of the residuals is constant.
+    - The residuals are equally spread across all values of the independent variables.
+    - The residuals are not dependent on the independent variables.
+    - It can be checked using a scatter plot of the residuals.
+
+3. **MultiVariate Normality**(Normality of error distribution): The residuals are normally distributed.
+    - The residuals are normally distributed.
+    - The residuals have a mean of zero.
+    - The residuals are independent of each other.
+    - It can be checked using a Q-Q plot or a histogram of the residuals.
+
+4. **Independence**(of observations. includes "no autocorrelation"): The residuals are independent of each other.
+    - The residuals are independent of each other.
+    - There is no correlation between the residuals.
+    - It is important to check for autocorrelation in time series data.
+    - It can be checked using a scatter plot of the residuals.
+
+5. **Lack of Multicollienarity**(Predictors are not correlated with each other): The independent variables are not highly correlated with each other.
+    - The independent variables are not highly correlated with each other.
+    - Multicollinearity can lead to unstable coefficients and inaccurate predictions.
+    - It can be checked using a correlation matrix or a variance inflation factor (VIF).
+
+6. **The outlier check**: The presence of outliers can significantly affect the regression model.
+    - Outliers are data points that are significantly different from other data points in the dataset.
+    - Outliers can affect the regression coefficients and the model's accuracy.
+    - It can be checked using box plots or scatter plots of the data.
+
+---
 
 ### 3. Polynomial Regression
 
