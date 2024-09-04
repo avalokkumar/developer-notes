@@ -1411,6 +1411,8 @@ Suppose you have data on car prices and want to predict prices using the followi
 - It ensures that the final model is optimal in terms of fit and complexity, avoiding overfitting and underfitting. 
 - The method is computationally intensive for datasets with many predictors but provides a thorough evaluation of model performance.
 
+> **Note**: The choice of criterion (AIC, BIC, Adjusted R-squared) is crucial in determining the best model. It should reflect the trade-off between model fit and complexity that best suits the dataset and research question.
+
 ---
 
 
