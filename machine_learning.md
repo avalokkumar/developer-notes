@@ -1416,3 +1416,130 @@ Suppose you have data on car prices and want to predict prices using the followi
 ---
 
 
+## Multiple Linear Regression
+
+```py
+### Importing the libraries
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+### Importing the dataset
+
+dataset = pd.read_csv('50_Startups.csv')
+X = dataset.iloc[:, :-1].values
+y = dataset.iloc[:, -1].values
+
+print(X)
+
+### Encoding categorical data
+
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(), [3])], remainder='passthrough')
+X = np.array(ct.fit_transform(X))
+
+print(X)
+
+### Splitting the dataset into the Training set and Test set
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+
+### Training the Multiple Linear Regression model on the Training set
+
+from sklearn.linear_model import LinearRegression
+regressor = LinearRegression()
+regressor.fit(X_train, y_train)
+
+### Predicting the Test set results
+
+y_pred = regressor.predict(X_test)
+np.set_printoptions(precision=2)
+print(np.concatenate((y_pred.reshape(len(y_pred),1), y_test.reshape(len(y_test),1)),1))
+```
+
+
+> In multilinear regression, we don't have to apply feature scaling because the coefficients will adjust to balance the scales of the variables.
+
+For example:
+- If we have two variables, one ranging from 0 to 10 and the other from 0 to 1000, the coefficients will adjust to balance the scales of the variables.
+
+---
+
+### Polynomial Regression
+
+Polynomial Regression is a form of regression analysis in which the relationship between the independent variable \( x \) and the dependent variable \( y \) is modeled as an \( n \)-th degree polynomial. It is used when the relationship between the variables is not linear and can be better approximated by a polynomial function.
+
+```
+y = b0 + b1*x1 + b2*x1^2 + b3*x1^3 + ... + bn*x1^n
+```
+
+### **Understanding Polynomial Regression**
+
+#### **Problem and Motivation**:
+   - **Motivation**: Linear regression is great for straight-line relationships, but what if the data shows a curved trend? For instance, predicting the growth of a plant based on time, where growth might accelerate and then plateau.
+   - **Problem**: Linear regression struggles with such non-linear data patterns, often leading to inaccurate predictions.
+
+#### **Analogy**:
+   - Imagine you’re riding a bike up and down hills (representing the curve of the data). Linear regression is like trying to draw a straight path from start to finish, cutting through the hills without following the ups and downs. Polynomial regression, however, lets you trace the actual path over the hills, accounting for every rise and fall.
+
+#### **Explanation**:
+
+   - **Overview**:
+     - **Polynomial Regression** is a type of regression that models the relationship between the independent variable (x) and the dependent variable (y) as an nth-degree polynomial. It allows for curves in the relationship, fitting the data more flexibly than a straight line.
+
+   - **Detailed Explanation**:
+     1. **Linear Regression Recap**: In linear regression, the model predicts \( y \) as \( y = b_0 + b_1x \). This works for straight-line trends.
+     2. **Polynomial Regression**: Extends this idea to include powers of x. For example, a quadratic (second-degree) polynomial regression models \( y = b_0 + b_1x + b_2x^2 \). For a cubic (third-degree), it’s \( y = b_0 + b_1x + b_2x^2 + b_3x^3 \), and so on.
+     3. **Key Intuition**: The additional terms (\( x^2, x^3, \ldots \)) enable the curve to bend and fit the data better than a straight line.
+
+   - **Visuals**:
+     - To be added later
+
+#### **Practical Applications**:
+   - **Example**: Predicting housing prices where the effect of square footage on price is not just linear; larger houses might increase in value exponentially. Polynomial regression captures this non-linear relationship.
+   - **Example**: Modeling the trajectory of a ball thrown in the air, where gravity makes the path parabolic (a curve).
+
+#### **Comparison and Contrast with Similar Concepts**:
+   - **Versus Linear Regression**: Linear regression is simpler but less flexible for non-linear trends. Polynomial regression handles curves by fitting multiple terms.
+   - **Versus Other Non-Linear Models**: Unlike complex models like neural networks, polynomial regression remains interpretable and easier to implement, but can struggle with extreme curves or overfitting on too high degrees.
+
+#### **Practical Tip**:
+   - Be cautious of overfitting: as the degree of the polynomial increases, the model might fit the training data too closely, missing the true trend. It’s like drawing a path that tries too hard to hit every small bump.
+
+### **Example of Polynomial Regression**:
+
+```python
+# Import necessary libraries
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+
+# Example data: X (years of experience), y (salary)
+X = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).reshape(-1, 1)
+y = np.array([15000, 18000, 21000, 26000, 33000, 40000, 48000, 58000, 69000, 81000])
+
+# Fit linear regression
+linear_model = LinearRegression()
+linear_model.fit(X, y)
+linear_predictions = linear_model.predict(X)
+
+# Fit polynomial regression (degree 2 for a curve)
+poly_model = make_pipeline(PolynomialFeatures(degree=2), LinearRegression())
+poly_model.fit(X, y)
+poly_predictions = poly_model.predict(X)
+
+# Plot results
+plt.scatter(X, y, color='blue', label='Data Points')
+plt.plot(X, linear_predictions, color='red', label='Linear Fit')
+plt.plot(X, poly_predictions, color='green', label='Polynomial Fit (Degree 2)')
+plt.title('Linear vs Polynomial Regression')
+plt.xlabel('Years of Experience')
+plt.ylabel('Salary')
+plt.legend()
+plt.show()
+```
