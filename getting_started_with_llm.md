@@ -73,14 +73,47 @@ print(tokenizer.decode(output[0], skip_special_tokens=True))
 
 2. **Question-Answering**
    ```python
-   from transformers import pipeline
-
-   qa_pipeline = pipeline("question-answering", model="distilbert-base-cased-distilled-squad")
-   context = "Hugging Face is creating open-source tools for developers using state-of-the-art machine learning models."
-   question = "What is Hugging Face known for?"
-
-   result = qa_pipeline(question=question, context=context)
-   print(f"Answer: {result['answer']}")
+      import torch
+      from transformers import LlamaForCausalLM, LlamaTokenizer, AutoTokenizer
+      
+      # Model and tokenizer ID from Hugging Face Hub
+      MODEL_ID = "meta-llama/Meta-Llama-3.1-8B-Instruct"
+      
+      # Load the tokenizer (use AutoTokenizer for flexibility)
+      tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, use_fast=True)
+      
+      # Load the model with appropriate device settings
+      device = "cuda" if torch.cuda.is_available() else "cpu"
+      model = LlamaForCausalLM.from_pretrained(MODEL_ID, torch_dtype=torch.float16).to(device)
+      
+      def ask_question(question):
+          # Tokenize input and move tensors to the appropriate device
+          inputs = tokenizer(question, return_tensors="pt").to(device)
+      
+          print(f"Tokenized Input: {inputs}")
+      
+          # Generate a response from the model
+          with torch.no_grad():
+              output = model.generate(
+                  inputs["input_ids"],
+                  max_length=256,  # Adjust max response length
+                  temperature=0.7,  # Controls randomness
+                  top_k=50,  # Limits sampling to top k tokens
+                  top_p=0.9,  # Nucleus sampling
+                  eos_token_id=tokenizer.eos_token_id,  # Ensure proper end-of-sequence token
+              )
+      
+          print(f"Raw Output: {output}")
+      
+          # Decode and clean up the output text
+          answer = tokenizer.decode(output[0], skip_special_tokens=True, clean_up_tokenization_spaces=False)
+          return answer
+      
+      if __name__ == "__main__":
+          # Test the model with a sample question
+          question = "What are the benefits of using AI in education?"
+          answer = ask_question(question)
+          print(f"Q: {question}\nA: {answer}")
    ```
 
 3. **Translation**
